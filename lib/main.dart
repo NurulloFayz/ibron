@@ -9,8 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Retrieve saved userId from SharedPreferences
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? userId = prefs.getString('id');
 
@@ -32,8 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // Check if userId is available
-      home:
-      userId != null && userId!.isNotEmpty ? const MainPages() : const SignUpPage(),
+      home: userId != null && userId!.isNotEmpty ? const MainPages() : const SignUpPage(),
       routes: {
         MainPages.id: (context) => const MainPages(),
         SignUpPage.id: (context) => const SignUpPage(),

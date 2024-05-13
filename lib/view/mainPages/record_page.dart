@@ -36,7 +36,7 @@ class _RecordPageState extends State<RecordPage> {
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               fontSize: screenHeight / 40,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),

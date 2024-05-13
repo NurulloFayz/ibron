@@ -17,19 +17,22 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('Поиск',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 40,fontWeight: FontWeight.w500)),),
+        title: Text('Поиск',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 40,fontWeight: FontWeight.w400)),),
       ),
       body: Column(
         children: [
           Container(
             margin: EdgeInsets.only(right: screenWidth / 40,left: screenWidth / 40),
             child: TextField(
+              style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45)),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(screenHeight / 90),
                 filled: true,
                 fillColor: Colors.grey.withOpacity(0.2),
+                hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey)),
+                hintText: 'Поиск',
                 prefixIcon: const Icon(Icons.search_outlined,color: Colors.grey,),
-                suffixIcon: const Icon(Icons.account_tree_outlined,color: Colors.grey,),
+                suffixIcon: const Icon(Icons.sort,color: Colors.grey,),
                   border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(10),
