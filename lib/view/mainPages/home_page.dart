@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ibron/controller/profilePage_controller.dart';
+import 'package:ibron/models/user_model.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'homePage';
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final ProfilePageController _profilePageController = ProfilePageController();
+  late Future<User> _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+      final user = await _profilePageController.fetchUserData();
+      setState(() {
+        _userData = Future.value(user);
+      });
+    } catch (e) {
+      // Handle error gracefully
+      print('Error fetching user data: $e');
+      // Show error message to user if needed
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -19,28 +43,42 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             SizedBox(height: screenHeight / 15,),
-            Row(
-              children: [
-                SizedBox(width: screenWidth / 40,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('MyName',style: GoogleFonts.roboto(textStyle: TextStyle(
-                        fontSize: screenHeight / 45,fontWeight: FontWeight.w500
-                    )),),
-                    Text('Планируйте развлечения',style: GoogleFonts.roboto(textStyle: TextStyle(
-                        fontSize: screenHeight / 45,fontWeight: FontWeight.w700
-                    )),) ,
-                  ],
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-
-                  },
-                  child: Image.asset('assets/homePage_images/Frame 262.png',height: screenHeight / 25,),
-                )
-              ],
+            FutureBuilder<User>(
+              future: _userData,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return  const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final user = snapshot.data!;
+                  return Row(
+                    children: [
+                      SizedBox(width: screenWidth / 40,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${user.firstName}',
+                            style: GoogleFonts.roboto(textStyle: TextStyle(
+                              fontSize: screenHeight / 45,fontWeight: FontWeight.w500,
+                            )),
+                          ),
+                          Text('Планируйте развлечения',
+                            style: GoogleFonts.roboto(textStyle: TextStyle(
+                              fontSize: screenHeight / 45,fontWeight: FontWeight.w700,
+                            )),
+                          ) ,
+                        ],
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Image.asset('assets/homePage_images/Frame 262.png',height: screenHeight / 25,),
+                      )
+                    ],
+                  );
+                }
+              },
             ),
             SizedBox(height: screenHeight / 30,),
             Row(

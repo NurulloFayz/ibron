@@ -2,11 +2,11 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:ibron/view/auth_pages/info_page.dart';
-
-import '../view/auth_pages/otp_page.dart';
+import 'package:ibron/view/mainPages/profile_pages/edit_page.dart';
 
 class OtpPageController extends ChangeNotifier {
   String typedText = '';
@@ -44,7 +44,7 @@ class OtpPageController extends ChangeNotifier {
     );
     if (response.statusCode == 200) {
       print(response.body);
-      Navigator.pushNamed(context, InfoPage.id);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => InfoPage(number)));
     } else {
       print('Login failed: ${response.body}');
       return;

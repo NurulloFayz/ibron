@@ -30,7 +30,7 @@ class _OtpPageState extends State<OtpPage> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    Color fabColor = controller.typedText.length < 4 ? Colors.blue.withOpacity(0.3) : Colors.blue;
+    Color fabColor = controller.typedText.length < 4 ? Colors.green.withOpacity(0.3) : Colors.green;
     final defaultTheme = PinTheme(
         width: screenWidth / 3,
         height: screenHeight / 15,
@@ -83,7 +83,7 @@ class _OtpPageState extends State<OtpPage> {
                 Row(
                   children: [
                     SizedBox(width: screenWidth / 25,),
-                    Text('+998 ${widget.number}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 40,fontWeight: FontWeight.w400)),),
+                    Text('${widget.number}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 40,fontWeight: FontWeight.w400)),),
                   ],
                 ),
                 SizedBox(height: screenHeight / 30,),

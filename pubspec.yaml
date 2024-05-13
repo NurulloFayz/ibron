@@ -40,6 +40,8 @@ dependencies:
   provider:
   custom_navigation_bar:
   http:
+  image_picker: any
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

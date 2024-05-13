@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/mainPages_controller.dart';
 import 'package:ibron/view/mainPages/home_page.dart';
-import 'package:ibron/view/mainPages/profile_page.dart';
+import 'package:ibron/view/mainPages/profile_pages/profile_page.dart';
 import 'package:ibron/view/mainPages/record_page.dart';
 import 'package:ibron/view/mainPages/search_page.dart';
 
@@ -29,6 +29,11 @@ class _MainPagesState extends State<MainPages> {
     return Scaffold(
       body: PageView(
         controller: controller.controller,
+        onPageChanged: (index) {
+          setState(() {
+            controller.selected = index;
+          });
+        },
         children: const [
           HomePage(),
           SearchPage(),
@@ -39,7 +44,7 @@ class _MainPagesState extends State<MainPages> {
       bottomNavigationBar: CustomNavigationBar(
         elevation: 5,
         iconSize: screenHeight / 28,
-        selectedColor: Colors.blue,
+        selectedColor: Colors.green,
         strokeColor: Colors.white,
         unSelectedColor: Colors.grey,
         backgroundColor: Colors.white,
@@ -47,37 +52,37 @@ class _MainPagesState extends State<MainPages> {
           CustomNavigationBarItem(
             icon: const Icon(Icons.home_filled),
             title: Text("Главная",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400
+                fontWeight: FontWeight.w500
             )),),
             selectedTitle: Text("Главная",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400,color: Colors.blue
+                fontWeight: FontWeight.w500,color: Colors.green
             )),)
           ),
           CustomNavigationBarItem(
             icon: const Icon(Icons.search_outlined),
             title: Text("Поиск",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400
+                fontWeight: FontWeight.w500
             ))),
             selectedTitle: Text("Поиск",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400,color: Colors.blue
+                fontWeight: FontWeight.w500,color: Colors.green
             ))),
           ),
           CustomNavigationBarItem(
             icon: const Icon(Icons.calendar_month),
             title: Text("Мои записи",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400
+                fontWeight: FontWeight.w500
             ))),
             selectedTitle: Text("Мои записи",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400,color: Colors.blue
+                fontWeight: FontWeight.w500,color: Colors.green
             ))),
           ),
           CustomNavigationBarItem(
             icon: const Icon(Icons.person_outline_outlined),
             title: Text("Профиль",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400
+                fontWeight: FontWeight.w500
             ))),
             selectedTitle: Text("Профиль",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400,color: Colors.blue
+                fontWeight: FontWeight.w500,color: Colors.green
             ))),
           ),
         ],

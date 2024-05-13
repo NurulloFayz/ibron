@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ibron/controller/infoPage_controller.dart';
 
 class InfoPage extends StatefulWidget {
   static const String id = 'infoPage';
-  const InfoPage({super.key});
+  final String number;
+
+  const InfoPage(this.number, {Key? key}) : super(key: key);
 
   @override
   State<InfoPage> createState() => _InfoPageState();
 }
 
 class _InfoPageState extends State<InfoPage> {
+  InfoPageController controller = InfoPageController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.number);
+  }
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -47,6 +57,7 @@ class _InfoPageState extends State<InfoPage> {
             Container(
               margin: EdgeInsets.only(right: screenWidth / 40, left: screenWidth / 40),
               child: TextField(
+                controller: controller.firstname,
                 decoration: InputDecoration(
                     hintText: 'Введите имя',
                     hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,
@@ -75,6 +86,7 @@ class _InfoPageState extends State<InfoPage> {
             Container(
               margin: EdgeInsets.only(right: screenWidth / 40, left: screenWidth / 40),
               child: TextField(
+                controller: controller.lastname,
                 decoration: InputDecoration(
                     hintText: 'Введите фамилию',
                     hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,
@@ -103,6 +115,7 @@ class _InfoPageState extends State<InfoPage> {
             Container(
               margin: EdgeInsets.only(right: screenWidth / 40, left: screenWidth / 40),
               child: TextField(
+                controller: controller.birthday,
                 decoration: InputDecoration(
                     hintText: 'Выберите дата рождения ',
                     hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,
@@ -133,40 +146,61 @@ class _InfoPageState extends State<InfoPage> {
             SizedBox(height: screenHeight / 70,),
             Row(
               children: [
-        
                 IconButton(
                   onPressed: () {
-        
+                    setState(() {
+                      controller.gender = 'Мужчина';
+                      print(controller.gender);
+                    });
                   },
-                  icon: const Icon(Icons.radio_button_unchecked),
+                  icon: Icon(controller.gender == 'Мужчина' ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    color: Colors.green,
+                  ),
                 ),
-                Text('Мужчина',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w400
-                )),)
+                Text('Мужчина', style: GoogleFonts.roboto(
+                  textStyle: TextStyle(
+                      fontSize: screenHeight / 50,
+                      fontWeight: FontWeight.w400
+                  ),
+                )),
               ],
             ),
             Row(
               children: [
                 IconButton(
                   onPressed: () {
-        
+                    setState(() {
+                      controller.gender = 'Женщина';
+                      print(controller.gender);
+                    });
                   },
-                  icon: const Icon(Icons.radio_button_unchecked),
+                  icon: Icon(controller.gender == 'Женщина' ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    color: Colors.green,
+                  ),
                 ),
-                Text('Женщина',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                    fontWeight: FontWeight.w400
-                )),)
+                Text('Женщина', style: GoogleFonts.roboto(
+                  textStyle: TextStyle(
+                      fontSize: screenHeight / 50,
+                      fontWeight: FontWeight.w400
+                  ),
+                )),
               ],
             ),
+
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         elevation: 0,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.green,
         onPressed: () {
-
+          controller.addUserInfo(context, widget.number);
+          print(controller.gender);
+          print(controller.birthday);
+          print(controller.lastname);
+          print(controller.firstname);
+          print(widget.number);
         },
         label: SizedBox(
           width: screenWidth * .8,

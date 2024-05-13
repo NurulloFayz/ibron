@@ -21,7 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    Color fabColor = controller.typedText.length < 13 ? Colors.blue.withOpacity(0.3) : Colors.blue;
+    Color fabColor = controller.typedText.length < 13 ? Colors.green.withOpacity(0.3) : Colors.green;
     return Scaffold(
       body: Column(
         children: [
@@ -63,7 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(13)
                   ],
-                  keyboardType: TextInputType.number,
+
                   style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45)),
                   autofocus: true,
                   controller: controller.phone,
