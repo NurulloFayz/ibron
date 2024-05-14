@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ProfilePageController _profilePageController = ProfilePageController();
-  late Future<User> _userData;
+  Future<User>? _userData;
 
   @override
   void initState() {
@@ -47,9 +47,9 @@ class _HomePageState extends State<HomePage> {
               future: _userData,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return  const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError || snapshot.data == null) {
+                  return Center(child: Text('Error fetching user data'));
                 } else {
                   final user = snapshot.data!;
                   return Row(
