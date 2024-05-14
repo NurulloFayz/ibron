@@ -13,7 +13,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final ProfilePageController controller = ProfilePageController();
-  Future<User>? _userData;
+  late Future<User> _userData;
 
   @override
   void initState() {
@@ -22,16 +22,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _fetchUserData() async {
-    try {
-      final user = await controller.fetchUserData();
-      setState(() {
-        _userData = Future.value(user);
-      });
-    } catch (e) {
-      // Handle error gracefully
-      print('Error fetching user data: $e');
-      // Show error message to user if needed
-    }
+    setState(() {
+      _userData = controller.fetchUserData();
+    });
   }
 
   @override
@@ -56,152 +49,156 @@ class _ProfilePageState extends State<ProfilePage> {
         future: _userData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError || snapshot.data == null) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             final user = snapshot.data!;
-            return Column(
-              children: [
-                SizedBox(height: screenHeight / 30),
-                GestureDetector(
-                  onTap: () {
-                    controller.navigateToEditPage(context,user.phoneNumber);
-                  },
-                  child: Row(
-                    children: [
-                      SizedBox(width: screenWidth / 30),
-                      CircleAvatar(
-                        radius: screenHeight / 20,
-                        backgroundColor: Colors.grey.withOpacity(0.2),
-                        // Display user's profile image here
-                        // backgroundImage: NetworkImage(user.profileImageUrl),
-                      ),
-                      SizedBox(width: screenWidth / 40),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${user.firstName} ${user.lastName}',
-                            style: GoogleFonts.roboto(
-                              textStyle: TextStyle(
-                                fontSize: screenHeight / 45,
-                                fontWeight: FontWeight.w500,
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight / 30),
+                  GestureDetector(
+                    onTap: () {
+                      controller.navigateToEditPage(context);
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(width: screenWidth / 30),
+                        CircleAvatar(
+                          radius: screenHeight / 20,
+                          backgroundColor: Colors.grey.withOpacity(0.2),
+                          // Display user's profile image here
+                          // backgroundImage: NetworkImage(user.profileImageUrl),
+                        ),
+                        SizedBox(width: screenWidth / 40),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${user.firstName} ${user.lastName}',
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                  fontSize: screenHeight / 45,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: screenWidth / 70),
-                          Text(
-                            user.phoneNumber ?? '',
-                            style: GoogleFonts.roboto(
-                              textStyle: TextStyle(
-                                fontSize: screenHeight / 45,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey,
+                            SizedBox(width: screenWidth / 70),
+                            Text(
+                              user.phoneNumber ?? '',
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                  fontSize: screenHeight / 45,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      const Icon(Icons.navigate_next),
-                      SizedBox(width: screenWidth / 18),
-                    ],
-                  ),
-                ),
-                SizedBox(height: screenHeight / 20),
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: screenHeight / 30,
-                    backgroundColor: Colors.grey.withOpacity(0.1),
-                    child: Icon(Icons.bookmark_outline_rounded, color: Colors.green),
-                  ),
-                  title: Text(
-                    'Избранные',
-                    style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                        fontSize: screenHeight / 45,
-                        fontWeight: FontWeight.w500,
-                      ),
+                          ],
+                        ),
+                        const Spacer(),
+                        const Icon(Icons.navigate_next),
+                        SizedBox(width: screenWidth / 18),
+                      ],
                     ),
                   ),
-                  trailing: const Icon(Icons.navigate_next),
-                ),
-                SizedBox(height: screenHeight / 100),
-                Divider(
-                  color: Colors.grey.withOpacity(0.2),
-                  indent: screenWidth / 20,
-                ),
-                SizedBox(height: screenHeight / 60),
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: screenHeight / 30,
-                    backgroundColor: Colors.grey.withOpacity(0.1),
-                    child: Icon(Icons.headphones, color: Colors.green),
-                  ),
-                  title: Text(
-                    'Обратная связь',
-                    style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                        fontSize: screenHeight / 45,
-                        fontWeight: FontWeight.w500,
+                  // Other ListTile items...
+                  SizedBox(height: screenHeight / 20),
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: screenHeight / 30,
+                      backgroundColor: Colors.grey.withOpacity(0.1),
+                      child: Icon(Icons.bookmark_outline_rounded, color: Colors.green),
+                    ),
+                    title: Text(
+                      'Избранные',
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                          fontSize: screenHeight / 45,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
+                    trailing: const Icon(Icons.navigate_next),
                   ),
-                  trailing: const Icon(Icons.navigate_next),
-                ),
-                SizedBox(height: screenHeight / 100),
-                Divider(
-                  color: Colors.grey.withOpacity(0.2),
-                  indent: screenWidth / 20,
-                ),
-                SizedBox(height: screenHeight / 60),
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: screenHeight / 30,
-                    backgroundColor: Colors.grey.withOpacity(0.1),
-                    child: Icon(Icons.language, color: Colors.green),
+                  SizedBox(height: screenHeight / 100),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.2),
+                    indent: screenWidth / 20,
                   ),
-                  title: Text(
-                    'Язык',
-                    style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                        fontSize: screenHeight / 45,
-                        fontWeight: FontWeight.w500,
+                  SizedBox(height: screenHeight / 60),
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: screenHeight / 30,
+                      backgroundColor: Colors.grey.withOpacity(0.1),
+                      child: Icon(Icons.headphones, color: Colors.green),
+                    ),
+                    title: Text(
+                      'Обратная связь',
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                          fontSize: screenHeight / 45,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
+                    trailing: const Icon(Icons.navigate_next),
                   ),
-                  trailing: const Icon(Icons.navigate_next),
-                ),
-                SizedBox(height: screenHeight / 100),
-                Divider(
-                  color: Colors.grey.withOpacity(0.2),
-                  indent: screenWidth / 20,
-                ),
-                SizedBox(height: screenHeight / 60),
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: screenHeight / 30,
-                    backgroundColor: Colors.grey.withOpacity(0.1),
-                    child: Icon(Icons.logout, color: Colors.green),
+                  SizedBox(height: screenHeight / 100),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.2),
+                    indent: screenWidth / 20,
                   ),
-                  title: Text(
-                    'Выйти',
-                    style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                        fontSize: screenHeight / 45,
-                        fontWeight: FontWeight.w500,
+                  SizedBox(height: screenHeight / 60),
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: screenHeight / 30,
+                      backgroundColor: Colors.grey.withOpacity(0.1),
+                      child: Icon(Icons.language, color: Colors.green),
+                    ),
+                    title: Text(
+                      'Язык',
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                          fontSize: screenHeight / 45,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
+                    trailing: const Icon(Icons.navigate_next),
                   ),
-                  trailing: const Icon(Icons.navigate_next),
-                ),
-                SizedBox(height: screenHeight / 100),
-                Divider(
-                  color: Colors.grey.withOpacity(0.2),
-                  indent: screenWidth / 20,
-                ),
-              ],
+                  SizedBox(height: screenHeight / 100),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.2),
+                    indent: screenWidth / 20,
+                  ),
+                  SizedBox(height: screenHeight / 60),
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: screenHeight / 30,
+                      backgroundColor: Colors.grey.withOpacity(0.1),
+                      child: Icon(Icons.logout, color: Colors.green),
+                    ),
+                    title: Text(
+                      'Выйти',
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                          fontSize: screenHeight / 45,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    trailing: const Icon(Icons.navigate_next),
+                  ),
+                  SizedBox(height: screenHeight / 100),
+                  Divider(
+                    color: Colors.grey.withOpacity(0.2),
+                    indent: screenWidth / 20,
+                  ),
+
+                ],
+              ),
             );
           }
         },

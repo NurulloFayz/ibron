@@ -10,7 +10,7 @@ class InfoPageController {
   var lastname = TextEditingController();
   String? gender;
 
-  Future<void> addUserInfo(BuildContext context,String number) async {
+  Future<void> addUserInfo(BuildContext context, String phoneNumber) async {
     var url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/user');
     var response = await http.post(
       url,
@@ -22,15 +22,17 @@ class InfoPageController {
         "first_name": firstname.text,
         "gender": gender, // Use selected gender here
         "last_name": lastname.text,
-        "phone_number": number,
+        "phone_number": phoneNumber,
       }),
     );
     if (response.statusCode == 201) {
       print(response.body);
 
-      // Save the ID to shared preferences
+      // Save the phone number to shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('id', json.decode(response.body)['id']);
+      prefs.setString('phone', phoneNumber);
+
+      // Navigate to the main pages
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainPages()), (route) => false);
     } else {
       print(response.statusCode);

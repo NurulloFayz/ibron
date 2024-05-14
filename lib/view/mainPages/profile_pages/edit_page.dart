@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/editPage_controller.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -15,6 +18,17 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   EditPageController controller = EditPageController();
   late String id;
+  String? pickedImagePath;
+
+// Inside the openGallery method, update the pickedImagePath
+  void openGallery() async {
+    var pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        pickedImagePath = pickedImage.path;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -47,11 +61,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
               SizedBox(height: screenHeight / 50,),
               GestureDetector(
                 onTap: () {
-                  controller.openGallery();
+                  openGallery();
                 },
-                child: CircleAvatar(
-                  radius: screenHeight / 13,
-                  backgroundColor: Colors.grey.withOpacity(0.2),
+                child: ClipOval(
+                  child: CircleAvatar(
+                    radius: screenHeight / 13,
+                    backgroundColor: Colors.transparent,
+                    child: pickedImagePath != null
+                        ? Image.file(
+                      File(pickedImagePath!),
+                      fit: BoxFit.cover, // Set BoxFit.cover here
+                    )
+                        : Icon(
+                      Icons.camera_alt,
+                      size: screenHeight / 13,
+                      color: Colors.grey[400],
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: screenHeight / 30,),
@@ -236,7 +262,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
         elevation: 0,
         backgroundColor: Colors.green,
         onPressed: () {
-          controller.updateUserInfo(context, id,);
+          if (pickedImagePath != null) {
+            // Pass the picked image file to the uploadImage method
+            controller.uploadImage(File(pickedImagePath!));
+            controller.updateUserInfo(context, id);
+          } else {
+            // Handle case where no image is selected
+            print('No image selected.');
+          }
         },
         label: SizedBox(
           width: screenWidth * .8,
