@@ -3,13 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/profilePage_controller.dart';
 import 'package:ibron/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 import '../../controller/homePage_controller.dart';
 import '../detail_page.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'homePage';
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -19,13 +19,21 @@ class _HomePageState extends State<HomePage> {
   final ProfilePageController _profilePageController = ProfilePageController();
   final HomePageController homePageController = HomePageController();
   Future<User>? _userData;
+  late List<MapObject<dynamic>> mapObjects = []; // Changed type to MapObject<dynamic>
 
   @override
   void initState() {
     super.initState();
     _fetchUserData();
-    homePageController.postData(41.333787, 69.301298);
+    homePageController.postData(41.333787, 69.301298).then((value) {
+      setState(() {
+        mapObjects = homePageController.mapObjects
+            .map((obj) => obj as MapObject<dynamic>)
+            .toList(); // Casting each element
+      });
+    });
   }
+
 
   Future<void> _fetchUserData() async {
     try {
@@ -122,10 +130,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: screenHeight / 50),
                           Text(
-                            'Поблизости',
+                            'На карте',
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
-                                  fontSize: screenHeight / 45,
+                                  fontSize: screenHeight / 50,
                                   fontWeight: FontWeight.w500),
                             ),
                           )
@@ -157,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                             'Выходные',
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
-                                  fontSize: screenHeight / 45,
+                                  fontSize: screenHeight / 50,
                                   fontWeight: FontWeight.w500),
                             ),
                           )
@@ -188,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                             'Рекомендуем',
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
-                                  fontSize: screenHeight / 45,
+                                  fontSize: screenHeight / 50,
                                   fontWeight: FontWeight.w500),
                             ),
                           )
@@ -200,7 +208,23 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(width: screenWidth / 60),
               ],
             ),
+            SizedBox(height: screenHeight / 20),
+            Container(
+              height: screenHeight / 5,
+              width: screenWidth,
+              clipBehavior: Clip.antiAlias,
+              margin: EdgeInsets.only(right: screenWidth / 30,left: screenWidth / 30),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Image.asset('assets/homePage_images/fotball.jpg',fit: BoxFit.cover,),
+            ),
             SizedBox(height: screenHeight / 50),
+            ListTile(
+              title: Text('Активный отдых',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
+                  fontWeight: FontWeight.w500
+              )),),
+            ),
             FutureBuilder<SharedPreferences>(
               future: SharedPreferences.getInstance(),
               builder: (context, snapshot) {
@@ -212,91 +236,89 @@ class _HomePageState extends State<HomePage> {
                   var prefs = snapshot.data!;
                   var business_name = prefs.getString('business_name') ?? '';
                   var distance = prefs.getDouble('distance') ?? '';
+                  var address = prefs.getString('address') ?? '';
                   return GestureDetector(
                     onTap: () {
                       // Fetch the necessary data from SharedPreferences
                       var prefs = snapshot.data!;
                       var description = prefs.getString('description') ?? '';
                       var distance = prefs.getDouble('distance') ?? '';
+                      var address = prefs.getString('address') ?? '';
+
+                      // Convert mapObjects to the desired type
+                      List<MapObject<dynamic>> convertedMapObjects =
+                      mapObjects.map((obj) => obj as MapObject<dynamic>).toList();
 
                       // Navigate to the DetailPage and pass the data as arguments
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailPage(
-                            description: description, address: distance.toString()
+                            description: description,
+                            distanceMile: distance.toString(),
+                            address: address,
+                            mapObjects: convertedMapObjects,
                           ),
                         ),
                       );
                     },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: screenWidth / 10),
-                      child: Row(
+                    child: SizedBox(
+                      height: screenHeight / 4,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
                         children: [
-                          Column(
-                            children: [
-                              Container(
-                                height: screenHeight / 5,
-                                width: screenWidth / 2,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      spreadRadius: 2,
-                                      blurRadius: 2,
-                                      offset: Offset(0, 1), // changes position of shadow
-                                    ),
-                                  ],
+                          SizedBox(width: screenWidth / 30,),
+                          Container(
+                            height: screenHeight / 5,
+                            width: screenWidth / 2,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(0,3),
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  blurStyle: BlurStyle.normal
+                                )
+                              ]
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: screenHeight / 8,
+                                  width: screenWidth,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Image.asset('assets/homePage_images/fotball.jpg',fit: BoxFit.cover,),
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                SizedBox(height: screenHeight / 50,),
+                                Row(
                                   children: [
-                                    Icon(Icons.image_outlined),
-                                    SizedBox(height: screenHeight / 50),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.location_on_outlined,color: Colors.grey,),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                            right: screenWidth / 60,
-                                            left: screenWidth / 60,
-                                          ),
-                                          child: Text(
-                                            business_name,
-                                            textAlign: TextAlign.center,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: screenHeight / 55,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: screenHeight / 100),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(width: screenWidth / 20),
-                                        Icon(Icons.navigation_rounded, color: Colors.grey),
-                                        SizedBox(width: screenWidth / 100),
-                                        Text(
-                                          distance.toString(),
-                                          style: TextStyle(
-                                            fontSize: screenHeight / 55,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    SizedBox(width: screenWidth / 50,),
+                                    const Icon(Icons.location_on_outlined,color: Colors.grey,),
+                                    SizedBox(width: screenWidth / 100,),
+                                    Text(business_name,style: GoogleFonts.roboto(textStyle: TextStyle(
+                                      fontSize: screenHeight / 50,fontWeight: FontWeight.w500,color: Colors.grey,
+                                    )),)
                                   ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: screenHeight / 80,),
+                                Row(
+                                  children: [
+                                    SizedBox(width: screenWidth / 50,),
+                                    const Icon(Icons.navigation_outlined,color: Colors.grey,),
+                                    SizedBox(width: screenWidth / 100,),
+                                    Text(distance.toString(),style: GoogleFonts.roboto(textStyle: TextStyle(
+                                        fontSize: screenHeight / 50,fontWeight: FontWeight.w500,color: Colors.grey,
+                                    )),)
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

@@ -27,7 +27,7 @@ class InfoPageController {
     );
     if (response.statusCode == 201) {
       print(response.body);
-
+      print(response.statusCode);
       // Save the phone number to shared preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('phone', phoneNumber);

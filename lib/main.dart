@@ -31,12 +31,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // Check if userId is available
-      home:
-      userId != null && userId!.isNotEmpty ? const MainPages() : const SignUpPage(),
+      home: userId != null && userId!.isNotEmpty ? const MainPages() : const SignUpPage(),
       routes: {
         MainPages.id: (context) => const MainPages(),
         SignUpPage.id: (context) => const SignUpPage(),
-        DetailPage.id: (context) => const DetailPage( description: '', address: '',),
+        DetailPage.id: (context) => const DetailPage( description: '', distanceMile: '',address: '', mapObjects: [],),
         InfoPage.id: (context) => const InfoPage(''),
         HomePage.id: (context) => const HomePage(),
         EditProfilePage.id: (context) => const EditProfilePage(),

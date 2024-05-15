@@ -36,6 +36,8 @@ class ProfilePageController {
         final userData = jsonDecode(response.body);
         return User.fromJson(userData);
       } else {
+        print(response.body);
+        print(response.statusCode);
         print('Failed to fetch user data, HTTP status code: ${response.statusCode}');
         throw Exception('Failed to fetch user data, HTTP status code: ${response.statusCode}');
       }
