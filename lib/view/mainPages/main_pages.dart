@@ -2,7 +2,7 @@ import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/mainPages_controller.dart';
-import 'package:ibron/view/mainPages/home_page.dart';
+import 'package:ibron/view/mainPages/home_pages/home_page.dart';
 import 'package:ibron/view/mainPages/profile_pages/profile_page.dart';
 import 'package:ibron/view/mainPages/record_page.dart';
 import 'package:ibron/view/mainPages/search_page.dart';

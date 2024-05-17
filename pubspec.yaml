@@ -70,7 +70,7 @@ flutter:
 
   assets:
       - assets/uz_flag/
-      - assets/homePage_images/
+      - assets/images/
       - assets/detailPage/
 
   # An image asset can refer to one or more resolution-specific "variants", see

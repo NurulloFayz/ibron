@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/profilePage_controller.dart';
 import '../../../models/user_model.dart';
 
@@ -19,6 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _fetchUserData();
+    getId();
   }
 
   Future<void> _fetchUserData() async {
@@ -26,7 +28,12 @@ class _ProfilePageState extends State<ProfilePage> {
       _userData = controller.fetchUserData();
     });
   }
-
+  String getUserId = '';
+  getId() async {
+    var prefs = await SharedPreferences.getInstance();
+    getUserId = prefs.getString('id') ?? 'no id';
+    print(getUserId);
+  }
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -49,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
         future: _userData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError || snapshot.data == null) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
@@ -175,6 +182,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: screenHeight / 60),
                   ListTile(
+                    onTap: () {
+                      controller.logout(context,);
+                    },
                     leading: CircleAvatar(
                       radius: screenHeight / 30,
                       backgroundColor: Colors.grey.withOpacity(0.1),

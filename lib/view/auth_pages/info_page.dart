@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/infoPage_controller.dart';
@@ -14,16 +15,19 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   InfoPageController controller = InfoPageController();
+  DateTime dateTime = DateTime.now();
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print(widget.number);
   }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -60,9 +64,7 @@ class _InfoPageState extends State<InfoPage> {
                 controller: controller.firstname,
                 decoration: InputDecoration(
                     hintText: 'Введите имя',
-                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,
-                        fontWeight: FontWeight.w400
-                    )),
+                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,fontWeight: FontWeight.w400)),
                     contentPadding: EdgeInsets.all(screenHeight / 60),
                     filled: true,
                     fillColor: Colors.grey.withOpacity(0.2),
@@ -89,9 +91,7 @@ class _InfoPageState extends State<InfoPage> {
                 controller: controller.lastname,
                 decoration: InputDecoration(
                     hintText: 'Введите фамилию',
-                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,
-                        fontWeight: FontWeight.w400
-                    )),
+                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,fontWeight: FontWeight.w400)),
                     contentPadding: EdgeInsets.all(screenHeight / 60),
                     filled: true,
                     fillColor: Colors.grey.withOpacity(0.2),
@@ -115,20 +115,30 @@ class _InfoPageState extends State<InfoPage> {
             Container(
               margin: EdgeInsets.only(right: screenWidth / 40, left: screenWidth / 40),
               child: TextField(
-                controller: controller.birthday,
+                                controller: controller.birthday,
                 decoration: InputDecoration(
-                    hintText: 'Выберите дата рождения ',
-                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,
-                        fontWeight: FontWeight.w400
-                    )),
+                    hintText: 'Выберите дату рождения',
+                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,fontWeight: FontWeight.w400)),
                     contentPadding: EdgeInsets.all(screenHeight / 60),
                     filled: true,
                     fillColor: Colors.grey.withOpacity(0.2),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                      },
-                      icon: const Icon(Icons.calendar_month,color: Colors.grey,),
-                    ),
+                    // suffixIcon: IconButton(
+                    //   onPressed: () async {
+                    //     final DateTime? picked = await showDatePicker(
+                    //       context: context,
+                    //       initialDate: dateTime,
+                    //       firstDate: DateTime(1900),
+                    //       lastDate: DateTime.now(),
+                    //     );
+                    //     if (picked != null && picked != dateTime) {
+                    //       setState(() {
+                    //         dateTime = picked;
+                    //         controller.birthday.text = "${picked.day}/${picked.month}/${picked.year}"; // Update the text field with the selected date
+                    //       });
+                    //     }
+                    //   },
+                    //   icon: const Icon(Icons.calendar_month, color: Colors.grey), // Calendar icon
+                    // ),
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(10)
@@ -186,7 +196,6 @@ class _InfoPageState extends State<InfoPage> {
                 )),
               ],
             ),
-
           ],
         ),
       ),

@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:ibron/view/auth_pages/info_page.dart';
 import 'package:ibron/view/auth_pages/otp_page.dart';
 import 'package:ibron/view/auth_pages/signUp_page.dart';
-import 'package:ibron/view/detail_page.dart';
-import 'package:ibron/view/mainPages/home_page.dart';
+import 'package:ibron/view/detail_pages/detail_page.dart';
+import 'package:ibron/view/detail_pages/select_time_page.dart';
+import 'package:ibron/view/mainPages/home_pages/home_page.dart';
+import 'package:ibron/view/mainPages/home_pages/notification_page.dart';
 import 'package:ibron/view/mainPages/main_pages.dart';
 import 'package:ibron/view/mainPages/profile_pages/edit_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,15 +35,18 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // Check if userId is available
-      home: userId != null && userId!.isNotEmpty ? const MainPages() : const SignUpPage(),
+      home:
+      userId != null && userId!.isNotEmpty ? const MainPages() :
+      const SignUpPage(),
       routes: {
         MainPages.id: (context) => const MainPages(),
         SignUpPage.id: (context) => const SignUpPage(),
-        DetailPage.id: (context) => const DetailPage( description: '', distanceMile: '',address: '', mapObjects: [],),
         InfoPage.id: (context) => const InfoPage(''),
         HomePage.id: (context) => const HomePage(),
         EditProfilePage.id: (context) => const EditProfilePage(),
         OtpPage.id: (context) => const OtpPage(''),
+        SelectTimePage.id: (context) => const SelectTimePage(),
+        NotificationPage.id: (context) => const NotificationPage(),
       },
     );
   }

@@ -1,29 +1,29 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:yandex_mapkit/yandex_mapkit.dart';
+import '../view/mainPages/home_pages/notification_page.dart';
 
-class MyMapObject {
-  final double latitude;
-  final double longitude;
+class ServiceModel {
+  final String name;
+  final String address;
+  final int price;
+  final double distance;
+  final num lat;
+  final num long;
 
-  MyMapObject({
-    required this.latitude,
-    required this.longitude,
+  ServiceModel({
+    required this.name,
+    required this.address,
+    required this.price,
+    required this.distance,
+    required this.lat,
+    required this.long,
   });
-
-  factory MyMapObject.fromJson(Map<String, dynamic> json) {
-    return MyMapObject(
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-    );
-  }
 }
 
 class HomePageController {
-  List<MyMapObject> mapObjects = [];
-
-  Future<void> postData(double latitude, double longitude) async {
-    var url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/closest-business');
+  Future<List<ServiceModel>> postData(double latitude, double longitude) async {
+    var url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/closest-service');
 
     var data = {
       'latitude': latitude,
@@ -42,17 +42,29 @@ class HomePageController {
 
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
-      if (responseData != null && responseData is List && responseData.isNotEmpty) {
-        for (var businessInfo in responseData) {
-          mapObjects.add(MyMapObject.fromJson(businessInfo)); // Use MyMapObject instead of MapObject
-        }
-        print('Data posted successfully');
-        print(mapObjects);
-      } else {
-        print('Response data is not in the expected format');
+      print(responseData);
+      print(responseData);
+      List<ServiceModel> services = [];
+      for (var item in responseData) {
+        ServiceModel service = ServiceModel(
+          name: item['name'],
+          address: item['address'],
+          price: item['price'],
+          distance: item['distance'],
+          lat: item['latitude'],
+          long: item['longitude']
+        );
+        services.add(service);
       }
+      return services;
     } else {
       print('Failed to post data, HTTP status code: ${response.statusCode}');
+      throw Exception('Failed to load services');
     }
   }
+
+  void navigateToNotificationPage(BuildContext context) {
+    Navigator.pushNamed(context, NotificationPage.id);
+  }
+
 }
