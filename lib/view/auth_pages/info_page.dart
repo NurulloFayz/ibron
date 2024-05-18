@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/infoPage_controller.dart';
+import 'package:intl/intl.dart';  // Import the intl package for date formatting
 
 class InfoPage extends StatefulWidget {
   static const String id = 'infoPage';
@@ -21,6 +22,22 @@ class _InfoPageState extends State<InfoPage> {
   void initState() {
     super.initState();
     print(widget.number);
+    controller.gender = 'Мужчина';
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(1900, 1),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != dateTime) {
+      setState(() {
+        dateTime = picked;
+        controller.birthday = picked;
+      });
+    }
   }
 
   @override
@@ -39,7 +56,7 @@ class _InfoPageState extends State<InfoPage> {
             SizedBox(height: screenHeight / 40,),
             ListTile(
               title: Text(
-                'Введите свои данные',
+                "Malumotlarni kiriting",
                 style: GoogleFonts.roboto(
                     textStyle: TextStyle(
                         fontSize: screenHeight / 28,
@@ -52,7 +69,7 @@ class _InfoPageState extends State<InfoPage> {
             Row(
               children: [
                 SizedBox(width: screenWidth / 30,),
-                Text('Имя',style: GoogleFonts.roboto(textStyle: TextStyle(
+                Text('Ism',style: GoogleFonts.roboto(textStyle: TextStyle(
                     fontSize: screenHeight / 50,fontWeight: FontWeight.w400
                 ))),
               ],
@@ -63,7 +80,7 @@ class _InfoPageState extends State<InfoPage> {
               child: TextField(
                 controller: controller.firstname,
                 decoration: InputDecoration(
-                    hintText: 'Введите имя',
+                    hintText: 'Ismingizni kiriting',
                     hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,fontWeight: FontWeight.w400)),
                     contentPadding: EdgeInsets.all(screenHeight / 60),
                     filled: true,
@@ -79,7 +96,7 @@ class _InfoPageState extends State<InfoPage> {
             Row(
               children: [
                 SizedBox(width: screenWidth / 30,),
-                Text('Фамилия',style: GoogleFonts.roboto(textStyle: TextStyle(
+                Text('Familiya',style: GoogleFonts.roboto(textStyle: TextStyle(
                     fontSize: screenHeight / 50,fontWeight: FontWeight.w400
                 ))),
               ],
@@ -90,7 +107,7 @@ class _InfoPageState extends State<InfoPage> {
               child: TextField(
                 controller: controller.lastname,
                 decoration: InputDecoration(
-                    hintText: 'Введите фамилию',
+                    hintText: 'Familiyangizni kiritng',
                     hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,fontWeight: FontWeight.w400)),
                     contentPadding: EdgeInsets.all(screenHeight / 60),
                     filled: true,
@@ -106,51 +123,49 @@ class _InfoPageState extends State<InfoPage> {
             Row(
               children: [
                 SizedBox(width: screenWidth / 30,),
-                Text('Дата рождения',style: GoogleFonts.roboto(textStyle: TextStyle(
+                Text("Tug'ilgan sana",style: GoogleFonts.roboto(textStyle: TextStyle(
                     fontSize: screenHeight / 50,fontWeight: FontWeight.w400
                 ))),
               ],
             ),
             SizedBox(height: screenHeight / 100,),
             Container(
-              margin: EdgeInsets.only(right: screenWidth / 40, left: screenWidth / 40),
-              child: TextField(
-                                controller: controller.birthday,
-                decoration: InputDecoration(
-                    hintText: 'Выберите дату рождения',
-                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,fontWeight: FontWeight.w400)),
-                    contentPadding: EdgeInsets.all(screenHeight / 60),
-                    filled: true,
-                    fillColor: Colors.grey.withOpacity(0.2),
-                    // suffixIcon: IconButton(
-                    //   onPressed: () async {
-                    //     final DateTime? picked = await showDatePicker(
-                    //       context: context,
-                    //       initialDate: dateTime,
-                    //       firstDate: DateTime(1900),
-                    //       lastDate: DateTime.now(),
-                    //     );
-                    //     if (picked != null && picked != dateTime) {
-                    //       setState(() {
-                    //         dateTime = picked;
-                    //         controller.birthday.text = "${picked.day}/${picked.month}/${picked.year}"; // Update the text field with the selected date
-                    //       });
-                    //     }
-                    //   },
-                    //   icon: const Icon(Icons.calendar_month, color: Colors.grey), // Calendar icon
-                    // ),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-              ),
+                margin: EdgeInsets.only(right: screenWidth / 40, left: screenWidth / 40),
+                child: Container(
+                  height: screenHeight / 15,
+                  width: screenWidth,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.withOpacity(0.2)
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(width: screenWidth / 30,),
+                      Text(
+                        controller.birthday == null
+                            ? "Tug'ilgan sana kiriting"
+                            : DateFormat('yyyy-MM-dd').format(controller.birthday!),
+                        style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                                fontSize: screenHeight / 45,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w400)),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () => _selectDate(context),
+                        icon: const Icon(Icons.calendar_month, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
             ),
             SizedBox(height: screenHeight / 40,),
             Row(
               children: [
                 SizedBox(width: screenWidth / 30,),
-                Text("Пол",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w400)),),
+                Text("Jins",style: GoogleFonts.roboto(textStyle: TextStyle(
+                    fontSize: screenHeight / 45,fontWeight: FontWeight.w400)),),
               ],
             ),
             SizedBox(height: screenHeight / 70,),
@@ -167,7 +182,7 @@ class _InfoPageState extends State<InfoPage> {
                     color: Colors.green,
                   ),
                 ),
-                Text('Мужчина', style: GoogleFonts.roboto(
+                Text('Erkak', style: GoogleFonts.roboto(
                   textStyle: TextStyle(
                       fontSize: screenHeight / 50,
                       fontWeight: FontWeight.w400
@@ -184,11 +199,11 @@ class _InfoPageState extends State<InfoPage> {
                       print(controller.gender);
                     });
                   },
-                  icon: Icon(controller.gender == 'Женщина' ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                  icon: Icon(controller.gender == 'Ayol' ? Icons.radio_button_checked : Icons.radio_button_unchecked,
                     color: Colors.green,
                   ),
                 ),
-                Text('Женщина', style: GoogleFonts.roboto(
+                Text('Ayol', style: GoogleFonts.roboto(
                   textStyle: TextStyle(
                       fontSize: screenHeight / 50,
                       fontWeight: FontWeight.w400
@@ -196,6 +211,7 @@ class _InfoPageState extends State<InfoPage> {
                 )),
               ],
             ),
+            SizedBox(height: screenHeight / 10,)
           ],
         ),
       ),
@@ -214,7 +230,7 @@ class _InfoPageState extends State<InfoPage> {
         label: SizedBox(
           width: screenWidth * .8,
           child: Center(
-            child: Text('Продолжить',style: GoogleFonts.roboto(textStyle: TextStyle(
+            child: Text('Davom Ettirish',style: GoogleFonts.roboto(textStyle: TextStyle(
                 fontSize: screenHeight / 45,color: Colors.white,fontWeight: FontWeight.w400
             )),),
           ),

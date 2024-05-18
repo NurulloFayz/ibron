@@ -55,7 +55,7 @@ class _OtpPageState extends State<OtpPage> {
                 SizedBox(height: screenHeight / 40,),
                 ListTile(
                   title: Text(
-                    'Ваш номер телефона',
+                    "Telefo'n raqamingiz",
                     style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                             fontSize: screenHeight / 28,
@@ -68,7 +68,7 @@ class _OtpPageState extends State<OtpPage> {
                   children: [
                     SizedBox(width: screenWidth / 25,),
                     Text(
-                      'Введите 4-значный код из SMS',
+                      "4 xonali ko'dni kiriting",
                       style: GoogleFonts.roboto(
                           textStyle: TextStyle(
                               fontSize: screenHeight / 40,
@@ -83,7 +83,7 @@ class _OtpPageState extends State<OtpPage> {
                 Row(
                   children: [
                     SizedBox(width: screenWidth / 25,),
-                    Text('${widget.number}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 40,fontWeight: FontWeight.w400)),),
+                    Text('+998 ${widget.number}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 40,fontWeight: FontWeight.w400)),),
                   ],
                 ),
                 SizedBox(height: screenHeight / 30,),
@@ -114,7 +114,7 @@ class _OtpPageState extends State<OtpPage> {
 
                   },
                   child: Text(
-                    '${controller.decrement == 0 ? 'Отправить еще раз' :
+                    '${controller.decrement == 0 ? "Qayta yuborish" :
                     '${controller.minutes.toString().padLeft(2, '0')}:${controller.seconds.toString().padLeft(2, '0')}'}',
                     style: GoogleFonts.roboto(
                       textStyle: controller.decrement != 0 ?TextStyle(
@@ -140,7 +140,7 @@ class _OtpPageState extends State<OtpPage> {
         label: SizedBox(
           width: screenWidth * .8,
           child: Center(
-            child: Text('Продолжить',style: GoogleFonts.roboto(textStyle: TextStyle(
+            child: Text('Davom Ettirish',style: GoogleFonts.roboto(textStyle: TextStyle(
                 fontSize: screenHeight / 45,color: Colors.white,fontWeight: FontWeight.w400
             )),),
           ),

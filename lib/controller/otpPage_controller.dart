@@ -39,7 +39,7 @@ class OtpPageController extends ChangeNotifier {
         },
         body: jsonEncode(<String,String> {
           "code": verifyCode.text,
-          "phone_number": number,
+          "phone_number": '+998$number',
         })
     );
     if (response.statusCode == 200) {

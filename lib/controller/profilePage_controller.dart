@@ -32,7 +32,7 @@ class ProfilePageController {
 
   Future<User> fetchUserByPhoneNumber(String phoneNumber) async {
     try {
-      final encodedPhoneNumber = Uri.encodeComponent(phoneNumber);
+      final encodedPhoneNumber = Uri.encodeComponent('+998$phoneNumber');
       final response = await http.get(Uri.parse("https://ibron.onrender.com/ibron/api/v1/user/by-phone-number?phone_number=$encodedPhoneNumber"));
 
       if (response.statusCode == 200) {
@@ -75,11 +75,11 @@ class ProfilePageController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Выйти',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w500 )),),
+          title: Text('Chiqish',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w500 )),),
           backgroundColor: Colors.white,
           elevation: 5,
           content: Text(
-              'Вы хотите выйти',
+              'Chiqshni xohlaysizmi',
               style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w500,
                   color: Colors.grey
               ))
@@ -100,7 +100,7 @@ class ProfilePageController {
                           borderRadius: BorderRadius.circular(10)
                       ),
                       child: Center(
-                        child:  Text('Нет',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w500 ,
+                        child:  Text("Yo'q",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w500 ,
                           
                         ))),
                       ),
@@ -120,7 +120,7 @@ class ProfilePageController {
                           borderRadius: BorderRadius.circular(10)
                       ),
                       child: Center(
-                        child: Text('Да',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w500,
+                        child: Text('Ha',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w500,
                         color: Colors.white
                         ))),
                       ),

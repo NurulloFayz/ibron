@@ -21,14 +21,14 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    Color fabColor = controller.typedText.length < 13 ? Colors.green.withOpacity(0.3) : Colors.green;
+    Color fabColor = controller.typedText.length < 9 ? Colors.green.withOpacity(0.3) : Colors.green;
     return Scaffold(
       body: Column(
         children: [
           SizedBox(height: screenHeight / 20,),
           ListTile(
             title: Text(
-              'Ваш номер телефона',
+              "Telefo'n raqamingiz",
               style: GoogleFonts.roboto(
                   textStyle: TextStyle(
                       fontSize: screenHeight / 28,
@@ -39,7 +39,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           ListTile(
             title: Text(
-              'Мы отправим код подтверждения на ваш номер',
+              "Raqamingizga tasdiqlovchi sms ko'd yuboramiz",
               style: GoogleFonts.roboto(
                   textStyle: TextStyle(
                       fontSize: screenHeight / 40,
@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           SizedBox(height: screenHeight / 30,),
           ListTile(
-            title: Text('Номер телефона',style: GoogleFonts.roboto(textStyle: TextStyle(
+            title: Text("Telefon raqamingiz",style: GoogleFonts.roboto(textStyle: TextStyle(
               fontSize: screenHeight / 50,fontWeight: FontWeight.w400
             )),),
           ),
@@ -81,6 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderSide: const BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(20)
                       ),
+                      prefixText: '+998',
                       border: OutlineInputBorder(
                           borderSide: const BorderSide(),
                           borderRadius: BorderRadius.circular(20)
@@ -88,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 SizedBox(height: screenHeight / 30), // Adjust as needed
-                if (controller.typedText.length >= 13 )
+                if (controller.typedText.length >= 9 )
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -106,7 +107,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       Expanded(
                         flex: 9,
-                        child: Text('Регистрируясь, вы соглашаетесь с нашими Условиями использования и Политикой конфиденциальности',
+                        child: Text("Ro'yxatdan o'tish orqali siz Foydalanish shartlari va Maxfiylik siyosatimizga rozilik bildirasizmi",
                           style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                               fontWeight: FontWeight.w400,color: Colors.grey
                           )),),
@@ -123,12 +124,16 @@ class _SignUpPageState extends State<SignUpPage> {
         elevation: 0,
         backgroundColor: fabColor,
         onPressed: () {
-          controller.registerUser(context, controller.phone.text);
+          if(!checkbox) {
+            return;
+          } else {
+            controller.registerUser(context, controller.phone.text);
+          }
         },
         label: SizedBox(
           width: screenWidth * .8,
           child: Center(
-            child: Text('Подтвердить номер телефона',style: GoogleFonts.roboto(textStyle: TextStyle(
+            child: Text('Raqamni tasdiqlash',style: GoogleFonts.roboto(textStyle: TextStyle(
               fontSize: screenHeight / 45,color: Colors.white,fontWeight: FontWeight.w400
             )),),
           ),

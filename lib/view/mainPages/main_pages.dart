@@ -51,37 +51,37 @@ class _MainPagesState extends State<MainPages> {
         items: [
           CustomNavigationBarItem(
             icon: const Icon(Icons.home_filled),
-            title: Text("Главная",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
+            title: Text("Bosh sahifa",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500
             )),),
-            selectedTitle: Text("Главная",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
+            selectedTitle: Text("Bosh sahifa",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500,color: Colors.green
             )),)
           ),
           CustomNavigationBarItem(
             icon: const Icon(Icons.search_outlined),
-            title: Text("Поиск",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
+            title: Text("Qidiruv",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500
             ))),
-            selectedTitle: Text("Поиск",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
+            selectedTitle: Text("Qidiruv",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500,color: Colors.green
             ))),
           ),
           CustomNavigationBarItem(
             icon: const Icon(Icons.calendar_month),
-            title: Text("Мои записи",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
+            title: Text("Jadval",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500
             ))),
-            selectedTitle: Text("Мои записи",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
+            selectedTitle: Text("Jadval",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500,color: Colors.green
             ))),
           ),
           CustomNavigationBarItem(
             icon: const Icon(Icons.person_outline_outlined),
-            title: Text("Профиль",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
+            title: Text("Profil",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500
             ))),
-            selectedTitle: Text("Профиль",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
+            selectedTitle: Text("Profil",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500,color: Colors.green
             ))),
           ),

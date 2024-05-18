@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ibron/view/mainPages/profile_pages/language_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/profilePage_controller.dart';
 import '../../../models/user_model.dart';
@@ -20,7 +21,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _fetchUserData();
-    getId();
   }
 
   Future<void> _fetchUserData() async {
@@ -28,12 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _userData = controller.fetchUserData();
     });
   }
-  String getUserId = '';
-  getId() async {
-    var prefs = await SharedPreferences.getInstance();
-    getUserId = prefs.getString('id') ?? 'no id';
-    print(getUserId);
-  }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -43,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'Профиль',
+          'Profil',
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               fontSize: screenHeight / 40,
@@ -75,6 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         CircleAvatar(
                           radius: screenHeight / 20,
                           backgroundColor: Colors.grey.withOpacity(0.2),
+                          child: Icon(Icons.person,color: Colors.grey,size: screenHeight / 20,),
                           // Display user's profile image here
                           // backgroundImage: NetworkImage(user.profileImageUrl),
                         ),
@@ -93,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             SizedBox(width: screenWidth / 70),
                             Text(
-                              user.phoneNumber ?? '',
+                              '+998 ${user.phoneNumber}' ?? '',
                               style: GoogleFonts.roboto(
                                 textStyle: TextStyle(
                                   fontSize: screenHeight / 45,
@@ -119,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Icon(Icons.bookmark_outline_rounded, color: Colors.green),
                     ),
                     title: Text(
-                      'Избранные',
+                      'Saqlanganlar',
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                           fontSize: screenHeight / 45,
@@ -142,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Icon(Icons.headphones, color: Colors.green),
                     ),
                     title: Text(
-                      'Обратная связь',
+                      "Biz bilan bog'lanish",
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                           fontSize: screenHeight / 45,
@@ -159,13 +155,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: screenHeight / 60),
                   ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, LanguagePage.id);
+                    },
                     leading: CircleAvatar(
                       radius: screenHeight / 30,
                       backgroundColor: Colors.grey.withOpacity(0.1),
                       child: Icon(Icons.language, color: Colors.green),
                     ),
                     title: Text(
-                      'Язык',
+                      'Til',
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                           fontSize: screenHeight / 45,
@@ -191,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Icon(Icons.logout, color: Colors.green),
                     ),
                     title: Text(
-                      'Выйти',
+                      'Chiqish',
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                           fontSize: screenHeight / 45,

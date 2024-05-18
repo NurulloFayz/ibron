@@ -4,14 +4,15 @@ import 'package:ibron/view/auth_pages/signUp_page.dart';
 import 'package:ibron/view/mainPages/main_pages.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart'; // Import the intl package for date formatting
 
 class InfoPageController {
-  var birthday = TextEditingController();
   var firstname = TextEditingController();
   var lastname = TextEditingController();
   String? gender;
   String id ='';
-  //DateTime birthday;
+  DateTime? birthday;
+
   Future<void> addUserInfo(BuildContext context, String phoneNumber) async {
     var url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/user');
     var response = await http.post(
@@ -20,11 +21,11 @@ class InfoPageController {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        "birthday": birthday.text,
+        "birthday": birthday != null ? DateFormat('yyyy-MM-dd').format(birthday!) : null,
         "first_name": firstname.text,
-        "gender": gender, // Use selected gender here
+        "gender": gender,
         "last_name": lastname.text,
-        "phone_number": phoneNumber,
+        "phone_number": '+998$phoneNumber',
       }),
     );
     if (response.statusCode == 201) {
@@ -33,16 +34,23 @@ class InfoPageController {
       var responseData = jsonDecode(response.body);
       var userId = responseData['id'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('phone', phoneNumber);
-      prefs.setString('id', id);
-      // Navigate to the main pages
+      prefs.setString('phone_number', phoneNumber);
+      print('phone saved $phoneNumber');
+      prefs.setString('id', userId);
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainPages()), (route) => false);
     } else {
-      Navigator.pushReplacementNamed(context,SignUpPage.id);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('phone', phoneNumber);
+      print(response.body);
+      print(response.statusCode);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error'),
+          backgroundColor: Colors.red,
+        ),
+      );
       print('<<<${response.statusCode}');
       print('Adding user info failed: ${response.body}');
-      // Handle error here, show error message to user
-      // Example: ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to add user info')));
     }
   }
 }

@@ -134,7 +134,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             ListTile(
               title: Text(
-                'Футбольная поля',
+                'Futbol maydoni',
                 style: GoogleFonts.roboto(
                   textStyle: TextStyle(
                     fontSize: screenHeight / 45,
@@ -170,7 +170,7 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     Text(
-                      '(${widget.distanceMile} от вас)',
+                      'Sizdan (${widget.distanceMile}) km uzoqlikda',
                       maxLines: null,
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
@@ -232,7 +232,7 @@ class _DetailPageState extends State<DetailPage> {
               children: [
                 SizedBox(width: screenWidth / 20,),
                 Text(
-                  'Удобства',
+                  'Qulayliklar',
                   style: GoogleFonts.roboto(
                     textStyle: TextStyle(
                       fontSize: screenHeight / 45,
@@ -245,6 +245,7 @@ class _DetailPageState extends State<DetailPage> {
             Container(
               margin: EdgeInsets.only(top: screenHeight / 100, bottom: screenHeight / 80, left: screenWidth / 20, right: screenWidth / 20),
               child: GridView.count(
+                primary: false,
                 shrinkWrap: true,
                 crossAxisCount: 2,
                 crossAxisSpacing: screenWidth / 100,
@@ -272,7 +273,7 @@ class _DetailPageState extends State<DetailPage> {
                     children: [
                       ListTile(
                         title: Text(
-                          'Телевизор',
+                          'Televizor',
                           maxLines: null,
                           style: GoogleFonts.roboto(
                             textStyle: TextStyle(
@@ -290,7 +291,7 @@ class _DetailPageState extends State<DetailPage> {
                       ListTile(
                         leading: const Icon(Icons.local_parking, color: Colors.green),
                         title: Text(
-                          'Бесплатная парковка',
+                          'Tekin avtoturargoh',
                           maxLines: null,
                           style: GoogleFonts.roboto(
                             textStyle: TextStyle(
@@ -307,7 +308,7 @@ class _DetailPageState extends State<DetailPage> {
                       ListTile(
                         leading: const Icon(Icons.local_parking, color: Colors.green),
                         title: Text(
-                          'Платная парковка',
+                          'Avtoturargoh',
                           maxLines: null,
                           style: GoogleFonts.roboto(
                             textStyle: TextStyle(
@@ -325,7 +326,7 @@ class _DetailPageState extends State<DetailPage> {
             SizedBox(height: screenHeight / 40),
             ListTile(
               title: Text(
-                'Описание',
+                'Tavsif',
                 style: GoogleFonts.roboto(
                   textStyle: TextStyle(
                     fontSize: screenHeight / 45,
@@ -365,7 +366,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             ListTile(
               title: Text(
-                'Расположение',
+                'Manzil',
                 style: GoogleFonts.roboto(
                   textStyle: TextStyle(
                     fontSize: screenHeight / 45,
@@ -461,7 +462,7 @@ class _DetailPageState extends State<DetailPage> {
                                 width: screenWidth / 40,
                               ),
                               Text(
-                                '${widget.distanceMile} км от вас',
+                                'Sizdan ${widget.distanceMile} km uzoqlikda',
                                 maxLines: null,
                                 style: GoogleFonts.roboto(
                                   textStyle: TextStyle(
@@ -529,7 +530,7 @@ class _DetailPageState extends State<DetailPage> {
                               width: screenWidth / 30,
                             ),
                             Text(
-                              'Позвонить',
+                              "Bog'lanish",
                               style: GoogleFonts.roboto(
                                   textStyle: TextStyle(
                                       fontSize: screenHeight / 50,
@@ -592,7 +593,7 @@ class _DetailPageState extends State<DetailPage> {
                             textStyle: TextStyle(fontSize: screenHeight / 47)),
                       ),
                       Text(
-                        'За час',
+                        'Soatiga',
                         style: GoogleFonts.roboto(
                             textStyle: TextStyle(
                                 fontSize: screenHeight / 50,
@@ -618,7 +619,7 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   child: Center(
                     child: Text(
-                      'Забронировать',
+                      'Bron qilish',
                       style: GoogleFonts.roboto(
                           textStyle: TextStyle(
                               fontSize: screenHeight / 50,

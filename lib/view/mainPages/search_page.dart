@@ -36,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          'Поиск',
+          'Qidiruv',
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               fontSize: screenHeight / 40,
@@ -60,7 +60,7 @@ class _SearchPageState extends State<SearchPage> {
                 hintStyle: GoogleFonts.roboto(
                   textStyle: TextStyle(fontSize: screenHeight / 45, color: Colors.grey),
                 ),
-                hintText: 'Поиск',
+                hintText: 'Qidiruv',
                 prefixIcon: const Icon(Icons.search_outlined, color: Colors.grey),
                 suffixIcon: const Icon(Icons.tune_rounded, color: Colors.grey),
                 border: OutlineInputBorder(
@@ -90,7 +90,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   child: Center(
                     child: Text(
-                      'Поблизости',
+                      'Atrofdagilar',
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(fontSize: screenHeight / 45, fontWeight: FontWeight.w500),
                         color: isNearbySelected ? Colors.white : Colors.black,
@@ -116,7 +116,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   child: Center(
                     child: Text(
-                      'Рекомендуем',
+                      'Tavsiya',
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(fontSize: screenHeight / 45, fontWeight: FontWeight.w500),
                         color: isRecommendedSelected ? Colors.white : Colors.black,
@@ -132,11 +132,14 @@ class _SearchPageState extends State<SearchPage> {
             children: [
               SizedBox(width: screenWidth / 30),
               Text(
-                'Рекомендуем',
+                'Tavsiya',
                 style: GoogleFonts.roboto(
                   textStyle: TextStyle(fontSize: screenHeight / 45, fontWeight: FontWeight.w500),
                 ),
               ),
+              const Spacer(),
+              const Icon(Icons.navigate_next_outlined,color: Colors.grey,),
+              SizedBox(width: screenWidth / 30,)
             ],
           ),
           SizedBox(height: screenHeight / 100),

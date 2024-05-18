@@ -18,7 +18,7 @@ class SignUpPageController {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String,String> {
-          "phone_number": phone.text,
+          "phone_number": '+998${phone.text}',
         })
     );
     if (response.statusCode == 200) {

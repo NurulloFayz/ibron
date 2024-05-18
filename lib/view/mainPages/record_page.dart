@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/recordPage_controller.dart';
 
@@ -21,7 +19,7 @@ class _RecordPageState extends State<RecordPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    isFirstTextSelected = true;
+    isSecondTextSelected = true;
   }
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class _RecordPageState extends State<RecordPage> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'Мои записи',
+          'Jadval',
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               fontSize: screenHeight / 40,
@@ -72,7 +70,7 @@ class _RecordPageState extends State<RecordPage> {
                         ),
                         child: Center(
                           child: Text(
-                            'История',
+                            'Tarix',
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
                                 fontSize: screenHeight / 45,
@@ -101,7 +99,7 @@ class _RecordPageState extends State<RecordPage> {
                         ),
                         child: Center(
                           child: Text(
-                            'Предстоящие',
+                            'Kelgusi',
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
                                 fontSize: screenHeight / 45,
@@ -116,6 +114,165 @@ class _RecordPageState extends State<RecordPage> {
                 ],
               ),
             ),
+            SizedBox(height: screenHeight / 40,),
+            isSecondTextSelected ?  Container(
+              margin: EdgeInsets.only(right: screenWidth / 50,left: screenWidth / 50),
+              height: screenHeight / 2.7,
+              width: screenWidth,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(0, 2),
+                    blurRadius: 5,
+                    blurStyle: BlurStyle.normal,
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight / 40,),
+                  Row(
+                    children: [
+                      SizedBox(width: screenWidth / 30,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Football',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 40,fontWeight: FontWeight.w500)),),
+                          Container(
+                            height: screenHeight / 28,
+                            width: screenWidth / 4,
+                            decoration:BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.green.withOpacity(0.3)
+                            ),
+                            child: Center(
+                              child: Text('Kutilmoqda',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 52,fontWeight: FontWeight.w500,
+                              color: Colors.green
+                              )),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Container(
+                        height: screenHeight / 22,
+                        width: screenWidth / 6,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.grey
+                          )
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.more_horiz,color: Colors.grey,),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth / 50,),
+                    ],
+                  ),
+                  SizedBox(height: screenHeight / 40,),
+                  Row(
+                    children: [
+                      SizedBox(width: screenWidth / 30,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Kun',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: Colors.grey)),),
+                          Text('Ertaga',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
+                          fontWeight: FontWeight.w500
+                          )),),
+                        ],
+                      ),
+                      Container(
+                        height: screenHeight / 20, // Adjust the height as needed
+                        child: VerticalDivider(color: Colors.grey.withOpacity(0.3), thickness: 1),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Vaqt',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: Colors.grey)),),
+                          Text('17:00',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
+                              fontWeight: FontWeight.w500
+                          )),),
+                        ],
+                      ),
+                      Container(
+                        height: screenHeight / 20, // Adjust the height as needed
+                        child: VerticalDivider(color: Colors.grey.withOpacity(0.3), thickness: 1),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Davomiylik',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: Colors.grey)),),
+                          Text('60 мин',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
+                              fontWeight: FontWeight.w500
+                          )),),
+                        ],
+                      ),
+                      Container(
+                        height: screenHeight / 20, // Adjust the height as needed
+                        child: VerticalDivider(color: Colors.grey.withOpacity(0.3), thickness: 1),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Narxi',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: Colors.grey)),),
+                          Text('200 000 сум',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
+                              fontWeight: FontWeight.w500
+                          )),),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Container(
+                    margin: EdgeInsets.only(right: screenWidth / 40,left: screenWidth / 40),
+                    height: screenHeight / 6.6,
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.withOpacity(0.2),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(height: screenHeight / 80,),
+                        Row(
+                          children: [
+                            SizedBox(width: screenWidth / 40,),
+                            Text('Yunusobod football',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 40,fontWeight: FontWeight.w500)))
+                          ],
+                        ),
+                        SizedBox(height: screenHeight / 100,),
+                        Row(
+                          children: [
+                            SizedBox(width: screenWidth / 40,),
+                            const Icon(Icons.location_on,color: Colors.grey,),
+                            Text('Amirsoy',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w400,
+                                color: Colors.grey
+                            ))),
+                          ],
+                        ),
+                        SizedBox(height: screenHeight / 100,),
+                        Row(
+                          children: [
+                            SizedBox(width: screenWidth / 40,),
+                            const Icon(Icons.navigation_outlined,color: Colors.grey,),
+                            Text('Sizdan 3.6 km uzoqlikda',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w400,
+                                color: Colors.grey
+                            ))),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: screenHeight / 80,)
+                ],
+              ),
+            ):Text('no data')
           ],
         ),
       ),

@@ -14,20 +14,82 @@ class _SelectTimePageState extends State<SelectTimePage> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Выберите дату и время',style: GoogleFonts.roboto(
-          textStyle: TextStyle(
-            fontSize: screenHeight / 40,
-            fontWeight: FontWeight.w400,
-          ),
-        ),),
-      ),
-      body: Column(
-        children: [
 
-        ],
+    // List of days in Uzbek
+    final daysOfWeek = ['Bugun','Dushanba 1', 'Seshanba 2', 'Chorshanba 3', 'Payshanba 4', 'Juma 5', 'Shanba 6', 'Yakshanba 7'];
+
+    return DefaultTabController(
+      length: daysOfWeek.length, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            'Kun va Vaqtni tanlang',
+            style: GoogleFonts.roboto(
+              textStyle: TextStyle(
+                fontSize: screenHeight / 40,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          bottom: TabBar(
+            tabAlignment: TabAlignment.start,
+            indicatorColor: Colors.green,
+            labelStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w400,
+            color: Colors.green
+            )),
+            isScrollable: true,
+            padding: EdgeInsets.zero,
+            tabs: daysOfWeek.map((day) => Tab(text: day)).toList(),
+          ),
+        ),
+        body: TabBarView(
+          children: daysOfWeek.map((day) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Bo'sh joylar mavjud emas",
+                    style: GoogleFonts.roboto(
+                      textStyle: TextStyle(
+                        fontSize: screenHeight / 45,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight / 100,),
+                  Text(
+                    "Boshqa kunni tanlang",
+                    style: GoogleFonts.roboto(
+                      textStyle: TextStyle(
+                        fontSize: screenHeight / 50,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton.extended(
+          elevation: 0,
+          backgroundColor: Colors.green,
+          onPressed: () {
+
+          },
+          label: SizedBox(
+            width: screenWidth * .8,
+            child: Center(
+              child: Text('Tasdiqlash',style: GoogleFonts.roboto(textStyle: TextStyle(
+                  fontSize: screenHeight / 45,color: Colors.white,fontWeight: FontWeight.w400
+              )),),
+            ),
+          ),
+        ),
       ),
     );
   }

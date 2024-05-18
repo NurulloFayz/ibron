@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _fetchUserData();
-    _services = homePageController.postData(41.333787,  69.301298);
+    _services = homePageController.postData(41.333787, 69.301298);
   }
 
   Future<void> _fetchUserData() async {
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Планируйте развлечения',
+                            "O'yin-kulgi rejalashtiryapsizmi",
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
                                 fontSize: screenHeight / 45,
@@ -128,7 +128,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(height: screenHeight / 50),
                             Text(
-                              'На карте',
+                              'Xarita',
+                              maxLines: null,
                               style: GoogleFonts.roboto(
                                 textStyle: TextStyle(
                                     fontSize: screenHeight / 50,
@@ -161,7 +162,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: screenHeight / 50),
                           Text(
-                            'Выходные',
+                            'Hafta Oxiri',
+                            maxLines: null,
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
                                   fontSize: screenHeight / 50,
@@ -192,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: screenHeight / 50),
                           Text(
-                            'Рекомендуем',
+                            'Tavsiya',
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
                                   fontSize: screenHeight / 50,
@@ -222,7 +224,7 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 SizedBox(width: screenWidth / 30,),
-                Text('Активный отдых',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
+                Text('Katalog',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
                     fontWeight: FontWeight.w500
                 )),),
               ],
