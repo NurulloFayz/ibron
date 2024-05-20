@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ibron/controller/detailPage_controller.dart';
+import 'package:ibron/controller/detail_page_controller.dart';
 import 'package:ibron/view/map_page.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 

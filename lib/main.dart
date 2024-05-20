@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ibron/view/auth_pages/info_page.dart';
 import 'package:ibron/view/auth_pages/otp_page.dart';
-import 'package:ibron/view/auth_pages/signUp_page.dart';
+import 'package:ibron/view/auth_pages/sign_up_page.dart';
 import 'package:ibron/view/detail_pages/select_time_page.dart';
 import 'package:ibron/view/main_pages/home_pages/home_page.dart';
 import 'package:ibron/view/main_pages/home_pages/notification_page.dart';
