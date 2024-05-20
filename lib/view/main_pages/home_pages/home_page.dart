@@ -258,17 +258,17 @@ class _HomePageState extends State<HomePage> {
                             ));
                           },
                           child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 8.0),
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
                             width: screenWidth / 2.6,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
+                              boxShadow:  [
                                 BoxShadow(
                                   offset: const Offset(0, 2),
                                   blurRadius: 5,
                                   blurStyle: BlurStyle.normal,
-                                  color: Colors.grey.withOpacity(0.2),
+                                  color: Colors.grey.shade300,
                                   spreadRadius: 2,
                                 ),
                               ],
@@ -289,7 +289,7 @@ class _HomePageState extends State<HomePage> {
                                 Row(
                                   children: [
                                     SizedBox(width: screenWidth / 40),
-                                    const Icon(Icons.location_on_outlined, color: Color(0xFF98A2B3),),
+                                    Image.asset('assets/images/loc.png',color: const Color(0xFF98A2B3)),
                                     SizedBox(width: screenWidth / 40),
                                     Text(
                                       service.name,

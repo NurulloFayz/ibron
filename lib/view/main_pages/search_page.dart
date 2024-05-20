@@ -202,7 +202,7 @@ class _SearchPageState extends State<SearchPage> {
                               Row(
                                 children: [
                                   SizedBox(width: screenWidth / 40),
-                                  const Icon(Icons.location_on_outlined, color: Color(0xFF98A2B3),),
+                                  Image.asset('assets/images/loc.png',color: const Color(0xFF98A2B3)),
                                   SizedBox(width: screenWidth / 40),
                                   Text(
                                     service.name,

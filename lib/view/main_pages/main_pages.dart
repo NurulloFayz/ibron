@@ -5,7 +5,6 @@ import 'package:ibron/controller/main_pages_controller.dart';
 import 'package:ibron/view/main_pages/profile_pages/profile_page.dart';
 import 'package:ibron/view/main_pages/record_page.dart';
 import 'package:ibron/view/main_pages/search_page.dart';
-
 import 'home_pages/home_page.dart';
 
 class MainPages extends StatefulWidget {

@@ -181,7 +181,7 @@ class _RecordPageState extends State<RecordPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Kun',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: Colors.grey)),),
+                          Text('Kun',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color:const Color(0xFF98A2B3))),),
                           Text('Ertaga',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
                           fontWeight: FontWeight.w500
                           )),),
@@ -194,7 +194,7 @@ class _RecordPageState extends State<RecordPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Vaqt',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: Colors.grey)),),
+                          Text('Vaqt',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color:const Color(0xFF98A2B3))),),
                           Text('17:00',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
                               fontWeight: FontWeight.w500
                           )),),
@@ -207,7 +207,7 @@ class _RecordPageState extends State<RecordPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Davomiylik',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: Colors.grey)),),
+                          Text('Davomiylik',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: const Color(0xFF98A2B3))),),
                           Text('60 мин',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
                               fontWeight: FontWeight.w500
                           )),),
@@ -220,7 +220,7 @@ class _RecordPageState extends State<RecordPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Narxi',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color: Colors.grey)),),
+                          Text('Narxi',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,color:const Color(0xFF98A2B3))),),
                           Text('200 000 сум',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,
                               fontWeight: FontWeight.w500
                           )),),
@@ -250,7 +250,8 @@ class _RecordPageState extends State<RecordPage> {
                         Row(
                           children: [
                             SizedBox(width: screenWidth / 40,),
-                            const Icon(Icons.location_on,color: Color(0xFF98A2B3),),
+                            Image.asset('assets/images/loc.png',color: const Color(0xFF98A2B3)),
+                            SizedBox(width: screenWidth / 45,),
                             Text('Amirsoy',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w400,
                                 color: Colors.grey
                             ))),
@@ -260,8 +261,9 @@ class _RecordPageState extends State<RecordPage> {
                         Row(
                           children: [
                             SizedBox(width: screenWidth / 40,),
-                            const Icon(Icons.navigation_outlined,color: Color(0xFF98A2B3),),
-                            Text('Sizdan 3.6 km uzoqlikda',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w400,
+                            Image.asset('assets/images/Icon.png',color: const Color(0xFF98A2B3)),
+                            SizedBox(width: screenWidth / 50,),
+                            Text('sizdan 3.6 km uzoqlikda',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w400,
                                 color: Colors.grey
                             ))),
                           ],
