@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -8,7 +6,7 @@ import 'package:ibron/view/auth_pages/otp_page.dart';
 class SignUpPageController {
 
   var phone = TextEditingController();
-   String typedText = '';
+  String typedText = '';
 
   Future<void> registerUser(BuildContext context,String number) async {
     var url = Uri.parse('https://lms-back.nvrbckdown.uz/lms/api/v1/ib/registration');

@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // Check if userId is available
-      home:SelectTimePage(),
-      // userId != null && userId!.isNotEmpty ? const MainPages() :
-      // const SignUpPage(),
+      home:
+      userId != null && userId!.isNotEmpty ? const MainPages() :
+      const SignUpPage(),
       routes: {
         MainPages.id: (context) => const MainPages(),
         SignUpPage.id: (context) => const SignUpPage(),

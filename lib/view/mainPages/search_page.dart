@@ -40,7 +40,7 @@ class _SearchPageState extends State<SearchPage> {
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               fontSize: screenHeight / 40,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -56,13 +56,13 @@ class _SearchPageState extends State<SearchPage> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(screenHeight / 90),
                 filled: true,
-                fillColor: Colors.grey.withOpacity(0.2),
+                fillColor: const Color(0xFFF2F4F7),
                 hintStyle: GoogleFonts.roboto(
-                  textStyle: TextStyle(fontSize: screenHeight / 45, color: Colors.grey),
+                  textStyle: TextStyle(fontSize: screenHeight / 45, color: const Color(0xFF98A2B3)),
                 ),
                 hintText: 'Qidiruv',
-                prefixIcon: const Icon(Icons.search_outlined, color: Colors.grey),
-                suffixIcon: const Icon(Icons.tune_rounded, color: Colors.grey),
+                prefixIcon: const Icon(Icons.search_outlined, color: Color(0xFF98A2B3)),
+                suffixIcon: const Icon(Icons.tune_rounded, color: Color(0xFF98A2B3)),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(10),
@@ -85,7 +85,7 @@ class _SearchPageState extends State<SearchPage> {
                   width: screenWidth / 2.4,
                   height: screenHeight / 20,
                   decoration: BoxDecoration(
-                    color: isNearbySelected ? Colors.green : Colors.grey.withOpacity(0.2),
+                    color: isNearbySelected ? Colors.green : const Color(0xFFF2F4F7),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Center(
@@ -111,7 +111,7 @@ class _SearchPageState extends State<SearchPage> {
                   width: screenWidth / 2.4,
                   height: screenHeight / 20,
                   decoration: BoxDecoration(
-                    color: isRecommendedSelected ? Colors.green : Colors.grey.withOpacity(0.2),
+                    color: isRecommendedSelected ? Colors.green : const Color(0xFFF2F4F7),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Center(
@@ -196,16 +196,13 @@ class _SearchPageState extends State<SearchPage> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 clipBehavior: Clip.antiAlias,
-                                child: Image.asset(
-                                  'assets/images/fotball.jpg',
-                                  fit: BoxFit.cover,
-                                ),
+                                child: Image.asset('assets/images/fotball.jpg',fit: BoxFit.cover,),
                               ),
                               SizedBox(height: screenHeight / 80),
                               Row(
                                 children: [
                                   SizedBox(width: screenWidth / 40),
-                                  const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                  const Icon(Icons.location_on_outlined, color: Color(0xFF98A2B3),),
                                   SizedBox(width: screenWidth / 40),
                                   Text(
                                     service.name,
@@ -213,7 +210,7 @@ class _SearchPageState extends State<SearchPage> {
                                       textStyle: TextStyle(
                                         fontSize: screenHeight / 50,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.grey,
+                                        color: const Color(0xFF98A2B3),
                                       ),
                                     ),
                                   ),
@@ -223,15 +220,16 @@ class _SearchPageState extends State<SearchPage> {
                               Row(
                                 children: [
                                   SizedBox(width: screenWidth / 40),
-                                  const Icon(Icons.navigation_outlined, color: Colors.grey),
-                                  SizedBox(width: screenWidth / 40),
+                                  Image.asset('assets/images/Icon.png',color: const Color(0xFF98A2B3),
+                                  ),
+                                  SizedBox(width: screenWidth / 25),
                                   Text(
                                     service.distance.toString(),
                                     style: GoogleFonts.roboto(
                                       textStyle: TextStyle(
                                         fontSize: screenHeight / 50,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.grey,
+                                        color: const Color(0xFF98A2B3),
                                       ),
                                     ),
                                   ),

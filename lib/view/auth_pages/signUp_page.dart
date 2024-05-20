@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           SizedBox(height: screenHeight / 30,),
           ListTile(
-            title: Text("Telefon raqamingiz",style: GoogleFonts.roboto(textStyle: TextStyle(
+            title: Text("Telefo'n raqamingiz",style: GoogleFonts.roboto(textStyle: TextStyle(
               fontSize: screenHeight / 50,fontWeight: FontWeight.w400
             )),),
           ),

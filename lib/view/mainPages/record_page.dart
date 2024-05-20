@@ -34,7 +34,7 @@ class _RecordPageState extends State<RecordPage> {
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               fontSize: screenHeight / 40,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -47,7 +47,7 @@ class _RecordPageState extends State<RecordPage> {
               height: screenHeight / 18,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.grey.withOpacity(0.2),
+                color: const Color(0xFFF2F4F7),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -235,7 +235,7 @@ class _RecordPageState extends State<RecordPage> {
                     width: screenWidth,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.2),
+                      color:  const Color(0xFFF2F4F7),
                     ),
                     child: Column(
                       children: [
@@ -250,7 +250,7 @@ class _RecordPageState extends State<RecordPage> {
                         Row(
                           children: [
                             SizedBox(width: screenWidth / 40,),
-                            const Icon(Icons.location_on,color: Colors.grey,),
+                            const Icon(Icons.location_on,color: Color(0xFF98A2B3),),
                             Text('Amirsoy',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w400,
                                 color: Colors.grey
                             ))),
@@ -260,7 +260,7 @@ class _RecordPageState extends State<RecordPage> {
                         Row(
                           children: [
                             SizedBox(width: screenWidth / 40,),
-                            const Icon(Icons.navigation_outlined,color: Colors.grey,),
+                            const Icon(Icons.navigation_outlined,color: Color(0xFF98A2B3),),
                             Text('Sizdan 3.6 km uzoqlikda',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w400,
                                 color: Colors.grey
                             ))),

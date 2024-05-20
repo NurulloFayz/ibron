@@ -15,7 +15,7 @@ class ProfilePageController {
 
   Future<User> fetchUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? phoneNumber = prefs.getString('phone');
+    String? phoneNumber = prefs.getString('phone_number');
     if (phoneNumber != null && phoneNumber.isNotEmpty) {
       try {
         final user = await fetchUserByPhoneNumber(phoneNumber);

@@ -101,7 +101,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       )),
                       contentPadding: EdgeInsets.all(screenHeight / 60),
                       filled: true,
-                      fillColor: Colors.grey.withOpacity(0.2),
+                      fillColor:const Color(0xFFF2F4F7),
                       border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(10)
@@ -130,7 +130,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       )),
                       contentPadding: EdgeInsets.all(screenHeight / 60),
                       filled: true,
-                      fillColor: Colors.grey.withOpacity(0.2),
+                      fillColor: const Color(0xFFF2F4F7),
                       border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(10)
@@ -159,7 +159,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       )),
                       contentPadding: EdgeInsets.all(screenHeight / 60),
                       filled: true,
-                      fillColor: Colors.grey.withOpacity(0.2),
+                      fillColor: const Color(0xFFF2F4F7),
                       suffixIcon: IconButton(
                         onPressed: () {
                         },
@@ -244,7 +244,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       contentPadding: EdgeInsets.all(screenHeight / 60),
                       suffixIcon: const Icon(Icons.create,color: Colors.grey,),
                       filled: true,
-                      fillColor: Colors.grey.withOpacity(0.2),
+                      fillColor:const Color(0xFFF2F4F7),
                       border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(10)

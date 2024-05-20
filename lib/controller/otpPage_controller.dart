@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:ibron/view/auth_pages/info_page.dart';
+import 'package:ibron/view/mainPages/main_pages.dart';
 import 'package:ibron/view/mainPages/profile_pages/edit_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpPageController extends ChangeNotifier {
   String typedText = '';
@@ -43,11 +45,17 @@ class OtpPageController extends ChangeNotifier {
         })
     );
     if (response.statusCode == 200) {
-      print(response.body);
       Navigator.push(context, MaterialPageRoute(builder: (context) => InfoPage(number)));
-    } else {
-      print('Login failed: ${response.body}');
+      //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainPages()), (route) => false);
+      // var prefs = await SharedPreferences.getInstance();
+      // prefs.setString('phone_number', number);
+      print(response.body);
+    } else if(response.statusCode == 400){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => InfoPage(number)));
+      print('need to sign up: ${response.body}');
       return;
+    } else {
+      print('login failed ${response.statusCode}');
     }
   }
 }

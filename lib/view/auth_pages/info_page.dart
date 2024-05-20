@@ -81,10 +81,10 @@ class _InfoPageState extends State<InfoPage> {
                 controller: controller.firstname,
                 decoration: InputDecoration(
                     hintText: 'Ismingizni kiriting',
-                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,fontWeight: FontWeight.w400)),
+                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color:const Color(0xFF98A2B3),fontWeight: FontWeight.w400)),
                     contentPadding: EdgeInsets.all(screenHeight / 60),
                     filled: true,
-                    fillColor: Colors.grey.withOpacity(0.2),
+                    fillColor: const Color(0xFFF2F4F7),
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(10)
@@ -108,10 +108,10 @@ class _InfoPageState extends State<InfoPage> {
                 controller: controller.lastname,
                 decoration: InputDecoration(
                     hintText: 'Familiyangizni kiritng',
-                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: Colors.grey,fontWeight: FontWeight.w400)),
+                    hintStyle: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,color: const Color(0xFF98A2B3),fontWeight: FontWeight.w400)),
                     contentPadding: EdgeInsets.all(screenHeight / 60),
                     filled: true,
-                    fillColor: Colors.grey.withOpacity(0.2),
+                    fillColor: const Color(0xFFF2F4F7),
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(10)
@@ -136,7 +136,7 @@ class _InfoPageState extends State<InfoPage> {
                   width: screenWidth,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.2)
+                      color: const Color(0xFFF2F4F7),
                   ),
                   child: Row(
                     children: [
@@ -148,13 +148,13 @@ class _InfoPageState extends State<InfoPage> {
                         style: GoogleFonts.roboto(
                             textStyle: TextStyle(
                                 fontSize: screenHeight / 45,
-                                color: Colors.grey,
+                                color: const Color(0xFF98A2B3),
                                 fontWeight: FontWeight.w400)),
                       ),
                       const Spacer(),
                       IconButton(
                         onPressed: () => _selectDate(context),
-                        icon: const Icon(Icons.calendar_month, color: Colors.grey),
+                        icon: const Icon(Icons.calendar_month, color:  Color(0xFF98A2B3),),
                       ),
                     ],
                   ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/view/mainPages/profile_pages/language_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/profilePage_controller.dart';
 import '../../../models/user_model.dart';
 
@@ -42,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               fontSize: screenHeight / 40,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -69,8 +68,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(width: screenWidth / 30),
                         CircleAvatar(
                           radius: screenHeight / 20,
-                          backgroundColor: Colors.grey.withOpacity(0.2),
-                          child: Icon(Icons.person,color: Colors.grey,size: screenHeight / 20,),
+                          backgroundColor: const Color(0xFFF2F4F7),
+                          child: Icon(Icons.person,color: const Color(0xFF98A2B3),size: screenHeight / 20,),
                           // Display user's profile image here
                           // backgroundImage: NetworkImage(user.profileImageUrl),
                         ),
@@ -83,18 +82,18 @@ class _ProfilePageState extends State<ProfilePage> {
                               style: GoogleFonts.roboto(
                                 textStyle: TextStyle(
                                   fontSize: screenHeight / 45,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
                             SizedBox(width: screenWidth / 70),
                             Text(
-                              '+998 ${user.phoneNumber}' ?? '',
+                              '${user.phoneNumber}' ?? '',
                               style: GoogleFonts.roboto(
                                 textStyle: TextStyle(
                                   fontSize: screenHeight / 45,
                                   fontWeight: FontWeight.w500,
-                                  color: Colors.grey,
+                                  color: const Color(0xFF667085)
                                 ),
                               ),
                             ),
@@ -111,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListTile(
                     leading: CircleAvatar(
                       radius: screenHeight / 30,
-                      backgroundColor: Colors.grey.withOpacity(0.1),
+                      backgroundColor: const Color(0xFFF2F4F7),
                       child: Icon(Icons.bookmark_outline_rounded, color: Colors.green),
                     ),
                     title: Text(
@@ -134,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListTile(
                     leading: CircleAvatar(
                       radius: screenHeight / 30,
-                      backgroundColor: Colors.grey.withOpacity(0.1),
+                      backgroundColor: const Color(0xFFF2F4F7),
                       child: Icon(Icons.headphones, color: Colors.green),
                     ),
                     title: Text(
@@ -160,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                     leading: CircleAvatar(
                       radius: screenHeight / 30,
-                      backgroundColor: Colors.grey.withOpacity(0.1),
+                      backgroundColor: const Color(0xFFF2F4F7),
                       child: Icon(Icons.language, color: Colors.green),
                     ),
                     title: Text(
@@ -186,7 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                     leading: CircleAvatar(
                       radius: screenHeight / 30,
-                      backgroundColor: Colors.grey.withOpacity(0.1),
+                      backgroundColor: const Color(0xFFF2F4F7),
                       child: Icon(Icons.logout, color: Colors.green),
                     ),
                     title: Text(

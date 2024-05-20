@@ -46,13 +46,13 @@ class _MainPagesState extends State<MainPages> {
         iconSize: screenHeight / 28,
         selectedColor: Colors.green,
         strokeColor: Colors.white,
-        unSelectedColor: Colors.grey,
+        unSelectedColor: const Color(0xFF98A2B3),
         backgroundColor: Colors.white,
         items: [
           CustomNavigationBarItem(
             icon: const Icon(Icons.home_filled),
             title: Text("Bosh sahifa",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w500,color: const Color(0xFF98A2B3),
             )),),
             selectedTitle: Text("Bosh sahifa",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500,color: Colors.green
@@ -61,7 +61,7 @@ class _MainPagesState extends State<MainPages> {
           CustomNavigationBarItem(
             icon: const Icon(Icons.search_outlined),
             title: Text("Qidiruv",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w500,color: const Color(0xFF98A2B3),
             ))),
             selectedTitle: Text("Qidiruv",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500,color: Colors.green
@@ -70,7 +70,7 @@ class _MainPagesState extends State<MainPages> {
           CustomNavigationBarItem(
             icon: const Icon(Icons.calendar_month),
             title: Text("Jadval",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w500,color: const Color(0xFF98A2B3),
             ))),
             selectedTitle: Text("Jadval",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500,color: Colors.green
@@ -79,7 +79,7 @@ class _MainPagesState extends State<MainPages> {
           CustomNavigationBarItem(
             icon: const Icon(Icons.person_outline_outlined),
             title: Text("Profil",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w500,color: const Color(0xFF98A2B3),
             ))),
             selectedTitle: Text("Profil",style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,
                 fontWeight: FontWeight.w500,color: Colors.green

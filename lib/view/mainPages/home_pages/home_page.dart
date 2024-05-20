@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                           right: screenWidth / 100, left: screenWidth / 100),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey.withOpacity(0.2),
+                        color: const Color(0xFFF2F4F7),
                       ),
                       child: Center(
                         child: Column(
@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                         right: screenWidth / 100, left: screenWidth / 100),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Color(0xFFF2F4F7),
                     ),
                     child: Center(
                       child: Column(
@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                         right: screenWidth / 120, left: screenWidth / 120),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Color(0xFFF2F4F7),
                     ),
                     child: Center(
                       child: Column(
@@ -289,7 +289,7 @@ class _HomePageState extends State<HomePage> {
                                 Row(
                                   children: [
                                     SizedBox(width: screenWidth / 40),
-                                    const Icon(Icons.location_on_outlined, color: Colors.grey),
+                                    const Icon(Icons.location_on_outlined, color: Color(0xFF98A2B3),),
                                     SizedBox(width: screenWidth / 40),
                                     Text(
                                       service.name,
@@ -297,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                                         textStyle: TextStyle(
                                           fontSize: screenHeight / 50,
                                           fontWeight: FontWeight.w500,
-                                          color: Colors.grey,
+                                          color: const Color(0xFF98A2B3),
                                         ),
                                       ),
                                     ),
@@ -307,15 +307,16 @@ class _HomePageState extends State<HomePage> {
                                 Row(
                                   children: [
                                     SizedBox(width: screenWidth / 40),
-                                    const Icon(Icons.navigation_outlined, color: Colors.grey),
-                                    SizedBox(width: screenWidth / 40),
+                                    Image.asset('assets/images/Icon.png',color: const Color(0xFF98A2B3),
+                                    ),
+                                    SizedBox(width: screenWidth / 25),
                                     Text(
                                       service.distance.toString(),
                                       style: GoogleFonts.roboto(
                                         textStyle: TextStyle(
                                           fontSize: screenHeight / 50,
                                           fontWeight: FontWeight.w500,
-                                          color: Colors.grey,
+                                          color: const Color(0xFF98A2B3),
                                         ),
                                       ),
                                     ),

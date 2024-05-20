@@ -135,7 +135,11 @@ class _OtpPageState extends State<OtpPage> {
         elevation: 0,
         backgroundColor: fabColor,
         onPressed: () {
-          controller.verifyUser(context,widget.number);
+          if(controller.decrement == 0) {
+            return;
+          } else {
+            controller.verifyUser(context,widget.number);
+          }
         },
         label: SizedBox(
           width: screenWidth * .8,
