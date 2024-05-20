@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ibron/view/mainPages/profile_pages/language_page.dart';
-import '../../../controller/profilePage_controller.dart';
+import '../../../controller/profile_page_controller.dart';
 import '../../../models/user_model.dart';
+import 'language_page.dart';
 
 class ProfilePage extends StatefulWidget {
   static const String id = 'profilePage';

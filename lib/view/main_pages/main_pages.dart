@@ -1,11 +1,12 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ibron/controller/mainPages_controller.dart';
-import 'package:ibron/view/mainPages/home_pages/home_page.dart';
-import 'package:ibron/view/mainPages/profile_pages/profile_page.dart';
-import 'package:ibron/view/mainPages/record_page.dart';
-import 'package:ibron/view/mainPages/search_page.dart';
+import 'package:ibron/controller/main_pages_controller.dart';
+import 'package:ibron/view/main_pages/profile_pages/profile_page.dart';
+import 'package:ibron/view/main_pages/record_page.dart';
+import 'package:ibron/view/main_pages/search_page.dart';
+
+import 'home_pages/home_page.dart';
 
 class MainPages extends StatefulWidget {
   static const String id = 'mainPages';

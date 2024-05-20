@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:ibron/view/auth_pages/signUp_page.dart';
-import 'package:ibron/view/mainPages/main_pages.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart'; // Import the intl package for date formatting
+import 'package:intl/intl.dart';
+
+import '../view/main_pages/main_pages.dart'; // Import the intl package for date formatting
 
 class InfoPageController {
   var firstname = TextEditingController();

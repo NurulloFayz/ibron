@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-import '../../controller/homePage_controller.dart';
+import '../../controller/home_page_controller.dart';
 import '../detail_pages/detail_page.dart';
 
 class SearchPage extends StatefulWidget {

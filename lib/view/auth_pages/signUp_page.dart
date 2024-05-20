@@ -4,7 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ibron/controller/signUp_controller.dart';
+import 'package:ibron/controller/sign_up_controller.dart';
 
 class SignUpPage extends StatefulWidget {
   static const String id = 'signUpPage';

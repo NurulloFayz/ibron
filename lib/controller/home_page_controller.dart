@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import '../view/mainPages/home_pages/notification_page.dart';
+
+import '../view/main_pages/home_pages/notification_page.dart';
 
 class ServiceModel {
   final String name;

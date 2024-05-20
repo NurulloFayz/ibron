@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ibron/controller/recordPage_controller.dart';
+import 'package:ibron/controller/record_page_controller.dart';
 
 class RecordPage extends StatefulWidget {
   static const String id = 'recordPage';

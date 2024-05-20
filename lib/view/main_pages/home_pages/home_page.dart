@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ibron/controller/profilePage_controller.dart';
+import 'package:ibron/controller/profile_page_controller.dart';
 import 'package:ibron/models/user_model.dart';
-import 'package:ibron/controller/homePage_controller.dart';
+import 'package:ibron/controller/home_page_controller.dart';
 import 'package:ibron/view/detail_pages/detail_page.dart';
 import 'package:ibron/view/map_page.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';

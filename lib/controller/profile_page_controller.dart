@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_model.dart';
-import '../view/mainPages/profile_pages/edit_page.dart';
+import '../view/main_pages/profile_pages/edit_page.dart';
 
 class ProfilePageController {
   void navigateToEditPage(BuildContext context,) {

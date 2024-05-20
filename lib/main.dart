@@ -3,11 +3,12 @@ import 'package:ibron/view/auth_pages/info_page.dart';
 import 'package:ibron/view/auth_pages/otp_page.dart';
 import 'package:ibron/view/auth_pages/signUp_page.dart';
 import 'package:ibron/view/detail_pages/select_time_page.dart';
-import 'package:ibron/view/mainPages/home_pages/home_page.dart';
-import 'package:ibron/view/mainPages/home_pages/notification_page.dart';
-import 'package:ibron/view/mainPages/main_pages.dart';
-import 'package:ibron/view/mainPages/profile_pages/edit_page.dart';
-import 'package:ibron/view/mainPages/profile_pages/language_page.dart';
+import 'package:ibron/view/main_pages/home_pages/home_page.dart';
+import 'package:ibron/view/main_pages/home_pages/notification_page.dart';
+import 'package:ibron/view/main_pages/main_pages.dart';
+import 'package:ibron/view/main_pages/profile_pages/edit_page.dart';
+import 'package:ibron/view/main_pages/profile_pages/language_page.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
