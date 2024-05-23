@@ -39,18 +39,8 @@ class InfoPageController {
       prefs.setString('id', userId);
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainPages()), (route) => false);
     } else {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('phone', phoneNumber);
       print(response.body);
       print(response.statusCode);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      print('<<<${response.statusCode}');
-      print('Adding user info failed: ${response.body}');
     }
   }
 }

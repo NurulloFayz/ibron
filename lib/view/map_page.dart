@@ -32,6 +32,11 @@ class _MapPageState extends State<MapPage> {
     );
   }
   @override
+  void initState() {
+    mapObjects = [getPlaceMark()];
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
@@ -64,13 +69,6 @@ class _MapPageState extends State<MapPage> {
             mode2DEnabled: true,
             fastTapEnabled: true,
           ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Icon(Icons.location_on,color: Colors.green,size:screenHeight / 15,),
-          )
         ],
       ),
     );

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -19,20 +18,45 @@ class _SearchPageState extends State<SearchPage> {
   final HomePageController homePageController = HomePageController();
   bool isNearbySelected = true; // Track if "Поблизости" is selected
   bool isRecommendedSelected = false; // Track if "Рекомендуем" is selected
+  TextEditingController _searchController = TextEditingController();
+  List<ServiceModel> _filteredServices = [];
 
   @override
   void initState() {
     super.initState();
     bool isNearbySelected = true;
     _services = homePageController.postData(41.333787, 69.301298);
+    _searchController.addListener(_filterServices);
   }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterServices);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterServices() {
+    setState(() {
+      final String searchText = _searchController.text.toLowerCase();
+      _services.then((services) {
+        _filteredServices = services.where((service) {
+          // Filter by the first letter only
+          return service.name.toLowerCase().startsWith(searchText.substring(0, 1));
+        }).toList();
+      });
+    });
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         title: Text(
@@ -50,6 +74,7 @@ class _SearchPageState extends State<SearchPage> {
           Container(
             margin: EdgeInsets.only(right: screenWidth / 40, left: screenWidth / 40),
             child: TextField(
+              controller: _searchController,
               style: GoogleFonts.roboto(
                 textStyle: TextStyle(fontSize: screenHeight / 45),
               ),
@@ -156,9 +181,9 @@ class _SearchPageState extends State<SearchPage> {
                   height: screenHeight / 4,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: services.length,
+                    itemCount: _searchController.text.isEmpty ? services.length : _filteredServices.length,
                     itemBuilder: (context, index) {
-                      ServiceModel service = services[index];
+                      ServiceModel service = _searchController.text.isEmpty ? services[index] : _filteredServices[index];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) =>
@@ -171,18 +196,17 @@ class _SearchPageState extends State<SearchPage> {
                           ));
                         },
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8.0),
-                          width: screenWidth / 2.6,
+                          margin: EdgeInsets.symmetric(horizontal: screenWidth / 30),
+                          width: screenWidth / 2.4,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
-                                offset: const Offset(0, 2),
-                                blurRadius: 5,
-                                blurStyle: BlurStyle.normal,
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 2,
+                                color: Color(0x1A000000), // This is #0000001A in ARGB format
+                                offset: Offset(0, 2),
+                                blurRadius: 27,
+                                spreadRadius: 0,
                               ),
                             ],
                           ),
@@ -199,41 +223,47 @@ class _SearchPageState extends State<SearchPage> {
                                 child: Image.asset('assets/images/fotball.jpg',fit: BoxFit.cover,),
                               ),
                               SizedBox(height: screenHeight / 80),
-                              Row(
-                                children: [
-                                  SizedBox(width: screenWidth / 40),
-                                  Image.asset('assets/images/loc.png',color: const Color(0xFF98A2B3)),
-                                  SizedBox(width: screenWidth / 40),
-                                  Text(
-                                    service.name,
-                                    style: GoogleFonts.roboto(
-                                      textStyle: TextStyle(
-                                        fontSize: screenHeight / 50,
-                                        fontWeight: FontWeight.w500,
-                                        color: const Color(0xFF98A2B3),
+
+                              SizedBox(height: screenHeight / 100),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: screenWidth / 40),
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/images/loc.png',color: const Color(0xFF98A2B3)),
+                                    SizedBox(width: screenWidth / 40),
+                                    Text(
+                                      service.name,
+                                      style: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                          fontSize: screenHeight / 50,
+                                          fontWeight: FontWeight.w500,
+                                          color: const Color(0xFF98A2B3),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                               SizedBox(height: screenHeight / 100),
-                              Row(
-                                children: [
-                                  SizedBox(width: screenWidth / 40),
-                                  Image.asset('assets/images/Icon.png',color: const Color(0xFF98A2B3),
-                                  ),
-                                  SizedBox(width: screenWidth / 25),
-                                  Text(
-                                    service.distance.toString(),
-                                    style: GoogleFonts.roboto(
-                                      textStyle: TextStyle(
-                                        fontSize: screenHeight / 50,
-                                        fontWeight: FontWeight.w500,
-                                        color: const Color(0xFF98A2B3),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: screenWidth / 40),
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/images/Icon.png',color: const Color(0xFF98A2B3),
+                                    ),
+                                    SizedBox(width: screenWidth / 25),
+                                    Text(
+                                      service.distance.toString(),
+                                      style: GoogleFonts.roboto(
+                                        textStyle: TextStyle(
+                                          fontSize: screenHeight / 50,
+                                          fontWeight: FontWeight.w500,
+                                          color: const Color(0xFF98A2B3),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -245,7 +275,6 @@ class _SearchPageState extends State<SearchPage> {
               }
             },
           ) : Text('No Data Yet')
-
         ],
       ),
     );

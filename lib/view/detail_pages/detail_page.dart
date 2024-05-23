@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/detail_page_controller.dart';
-import 'package:ibron/view/map_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class DetailPage extends StatefulWidget {
@@ -11,6 +11,7 @@ class DetailPage extends StatefulWidget {
   final String? address;
   final String? name;
   final String? price;
+  final String? image;
 
   const DetailPage({
     super.key,
@@ -19,6 +20,7 @@ class DetailPage extends StatefulWidget {
     this.name,
     this.price,
     this.point,
+    this.image,
     // Add this line
   });
 
@@ -50,8 +52,7 @@ class _DetailPageState extends State<DetailPage> {
       ),
     );
   }
-
-
+  bool likeButton = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -83,8 +84,8 @@ class _DetailPageState extends State<DetailPage> {
                         end: Alignment.topCenter,
                       ),
                     ),
-                    child: Image.asset(
-                      'assets/images/fotball.jpg',
+                    child: Image.network(
+                      widget.image.toString() ?? 'no image',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -108,25 +109,34 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Positioned(
                   top: screenHeight / 15,
-                  left: screenWidth / 1.4,
-                  child: const Row(
+                  left: screenWidth / 1.3,
+                  child: Row(
                     children: [
                       Icon(
                         Icons.share,
                         color: Colors.white,
+                        size: screenHeight / 30,
                       ),
                     ],
                   ),
                 ),
                 Positioned(
                   top: screenHeight / 15,
-                  left: screenWidth / 1.2,
-                  child: const Row(
+                  left: screenWidth / 1.1,
+                  child: Row(
                     children: [
-                      Icon(
-                        Icons.favorite_border,
-                        color: Colors.white,
-                      ),
+                      GestureDetector(
+                        onTap: () {
+                         setState(() {
+                           likeButton = !likeButton;
+                         });
+                        },
+                        child:  Icon(
+                          likeButton  ? Icons.favorite :Icons.favorite_border,
+                          color: Colors.white,
+                          size: screenHeight / 30,
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -170,13 +180,13 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     Text(
-                      'Sizdan (${widget.distanceMile}) km uzoqlikda',
+                      'sizdan (${widget.distanceMile}) km uzoqlikda',
                       maxLines: null,
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                           fontSize: screenHeight / 50,
                           fontWeight: FontWeight.w500,
-                          color: Colors.grey,
+                          color: const Color(0xFF667085)
                         ),
                       ),
                     ),
@@ -184,7 +194,8 @@ class _DetailPageState extends State<DetailPage> {
                       height: screenHeight / 70,
                     ),
                     Divider(
-                      color: Colors.grey.withOpacity(0.4),
+                      thickness: 2,
+                      color: const Color(0xFFF2F4F7),
                       endIndent: screenWidth / 20,
                       indent: screenWidth / 20,
                     ),
@@ -195,36 +206,31 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                controller.navigateToSelectTimePage(context);
-              },
-              child: Container(
-                height: screenHeight / 10,
-                width: screenWidth / 1.1,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey.withOpacity(0.2),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth / 40,
-                    ),
-                    const Icon(
-                      Icons.access_time_rounded,
-                      color: Colors.green,
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      Icons.navigate_next,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(
-                      width: screenWidth / 20,
-                    )
-                  ],
-                ),
+            Container(
+              height: screenHeight / 10,
+              width: screenWidth / 1.1,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color:  const Color(0xFFF2F4F7),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: screenWidth / 40,
+                  ),
+                  const Icon(
+                    Icons.access_time_rounded,
+                    color: Colors.green,
+                  ),
+                  const Spacer(),
+                  const Icon(
+                    Icons.navigate_next,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(
+                    width: screenWidth / 20,
+                  )
+                ],
               ),
             ),
             SizedBox(height: screenHeight / 30),
@@ -357,7 +363,8 @@ class _DetailPageState extends State<DetailPage> {
               height: screenHeight / 70,
             ),
             Divider(
-              color: Colors.grey.withOpacity(0.4),
+              thickness: 2,
+              color: const Color(0xFFF2F4F7),
               endIndent: screenWidth / 20,
               indent: screenWidth / 20,
             ),
@@ -378,15 +385,18 @@ class _DetailPageState extends State<DetailPage> {
             Container(
               height: screenHeight / 1.7,
               width: screenWidth / 1.1,
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        offset: const Offset(0, 3),
-                        blurStyle: BlurStyle.normal,
-                        blurRadius: 5,
-                        spreadRadius: 2,
-                        color: Colors.grey.withOpacity(0.2))
-                  ]),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x1A000000), // This is #0000001A in ARGB format
+                    offset: Offset(0, 2),
+                    blurRadius: 27,
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
               child: Stack(
                 children: [
                   Center(
@@ -454,10 +464,7 @@ class _DetailPageState extends State<DetailPage> {
                               SizedBox(
                                 width: screenWidth / 40,
                               ),
-                              const Icon(
-                                Icons.navigation_outlined,
-                                color: Colors.grey,
-                              ),
+                              Image.asset('assets/images/Icon.png',color: const Color(0xFF98A2B3)),
                               SizedBox(
                                 width: screenWidth / 40,
                               ),
@@ -468,7 +475,8 @@ class _DetailPageState extends State<DetailPage> {
                                   textStyle: TextStyle(
                                       fontSize: screenHeight / 50,
                                       fontWeight: FontWeight.w400,
-                                      color: Colors.grey),
+                                      color: const Color(0xFF667085)
+                                  ),
                                 ),
                               ),
 
@@ -479,16 +487,26 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                           Expanded(
                             child: Divider(
-                              color: Colors.grey.withOpacity(0.4),
+                              thickness: 2,
+                              color: const Color(0xFFF2F4F7),
                               endIndent: screenWidth / 20,
                               indent: screenWidth / 20,
                             ),
                           ),
                           ListTile(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MapPage(Point(
-                                  latitude: widget.point!.latitude, longitude: widget.point!.longitude
-                              ))));
+                            onTap: () async {
+                              final double latitude = widget.point!.latitude;
+                              final double longitude = widget.point!.longitude;
+                              final String googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+                              final String yandexMapsUrl = 'yandexmaps://maps.yandex.ru/?pt=$longitude,$latitude&z=12&l=map';
+
+                              if (await canLaunch(yandexMapsUrl)) {
+                                await launch(yandexMapsUrl);
+                              } else if (await canLaunch(googleMapsUrl)) {
+                                await launch(googleMapsUrl);
+                              } else {
+                                throw 'Could not launch maps';
+                              }
                             },
                             title: Text('Построить маршрут',style: GoogleFonts.roboto(textStyle: TextStyle(
                                 fontSize: screenHeight / 50,color: Colors.green,fontWeight: FontWeight.w500
@@ -513,31 +531,43 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Expanded(
                   flex: 2,
-                  child: Container(
-                    height: screenHeight / 18,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.grey.withOpacity(0.2)),
-                    child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.call_outlined,
-                              color: Colors.green,
-                            ),
-                            SizedBox(
-                              width: screenWidth / 30,
-                            ),
-                            Text(
-                              "Bog'lanish",
-                              style: GoogleFonts.roboto(
-                                  textStyle: TextStyle(
-                                      fontSize: screenHeight / 50,
-                                      fontWeight: FontWeight.w400)),
-                            )
-                          ],
-                        )),
+                  child: GestureDetector(
+                    onTap: () async {
+                      final String phoneNumber = '+998941222233'; // replace with the actual phone number
+                      final String telUrl = 'tel:$phoneNumber';
+
+                      if (await canLaunch(telUrl)) {
+                        await launch(telUrl);
+                      } else {
+                        throw 'Could not launch $telUrl';
+                      }
+                    },
+                    child: Container(
+                      height: screenHeight / 18,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: const Color(0xFFF2F4F7)),
+                      child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.call_outlined,
+                                color: Colors.green,
+                              ),
+                              SizedBox(
+                                width: screenWidth / 30,
+                              ),
+                              Text(
+                                "Bog'lanish",
+                                style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        fontSize: screenHeight / 50,
+                                        fontWeight: FontWeight.w400)),
+                              )
+                            ],
+                          )),
+                    ),
                   ),
                 ),
                 const Spacer(),
@@ -607,7 +637,9 @@ class _DetailPageState extends State<DetailPage> {
               label: ''),
           BottomNavigationBarItem(
               icon: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  controller.navigateToSelectTimePage(context);
+                },
                 child: Container(
                   margin: EdgeInsets.only(
                       right: screenWidth / 40, left: screenWidth / 40),

@@ -28,6 +28,7 @@ class _MainPagesState extends State<MainPages> {
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: controller.controller,
         onPageChanged: (index) {
           setState(() {

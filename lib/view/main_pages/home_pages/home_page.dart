@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/profile_page_controller.dart';
@@ -6,6 +7,8 @@ import 'package:ibron/controller/home_page_controller.dart';
 import 'package:ibron/view/detail_pages/detail_page.dart';
 import 'package:ibron/view/map_page.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
+
+import '../../../models/banner_model.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'homePage';
@@ -19,15 +22,16 @@ class _HomePageState extends State<HomePage> {
   final ProfilePageController _profilePageController = ProfilePageController();
   final HomePageController homePageController = HomePageController();
   Future<User>? _userData;
-  late Future<List<ServiceModel>> _services;
+  late Future<BannerModel> _banners;
+  late Future<List<ServiceModel>> services;
 
   @override
   void initState() {
     super.initState();
     _fetchUserData();
-    _services = homePageController.postData(41.333787, 69.301298);
+    services = homePageController.postData(41.333787, 69.301298);
+    _banners = HomePageController.getBanner();
   }
-
   Future<void> _fetchUserData() async {
     try {
       final user = await _profilePageController.fetchUserData();
@@ -44,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Colors.white,
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -107,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const MapPage(Point(latitude: 41.333787, longitude:  69.301298))));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const MapPage(Point(latitude:41.333787 , longitude:  69.301298))));
                     },
                     child: Container(
                       height: screenHeight / 6.5,
@@ -182,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                         right: screenWidth / 120, left: screenWidth / 120),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color(0xFFF2F4F7),
+                      color: const Color(0xFFF2F4F7),
                     ),
                     child: Center(
                       child: Column(
@@ -210,17 +214,58 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             SizedBox(height: screenHeight / 40),
-            Container(
-              height: screenHeight / 5,
-              width: screenWidth,
-              clipBehavior: Clip.antiAlias,
-              margin: EdgeInsets.only(right: screenWidth / 30,left: screenWidth / 30),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Image.asset('assets/images/fotball.jpg',fit: BoxFit.cover,),
+            FutureBuilder<BannerModel>(
+              future: _banners,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.banners.isEmpty) {
+                  return Text('No banners available');
+                } else {
+                  return SizedBox(
+                    height: screenHeight / 4.5,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data!.banners.length,
+                      itemBuilder: (context, index) {
+                        final banner = snapshot.data!.banners[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(
+                              distanceMile: banner.service.distance.toString(),
+                              point: Point(latitude: banner.service.latitude, longitude: banner.service.longitude),
+                              address: banner.service.address,
+                              name: banner.service.name,
+                              price: banner.service.price.toString(),
+                              image: banner.url,
+                            //  distanceMile;
+                            //  Point? point;
+                            // String? address;
+                            //  String? name;
+                            //  String? price;
+                            //  String? image;
+                            ) ));
+                          },
+                          child: Container(
+                            width: screenWidth / 1.2,
+                            margin: EdgeInsets.only(right: screenWidth / 100,left: screenWidth / 100),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: Image.network(banner.url,fit: BoxFit.cover,),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
             ),
-            SizedBox(height: screenHeight / 20),
+            SizedBox(height: screenHeight / 40),
             Row(
               children: [
                 SizedBox(width: screenWidth / 30,),
@@ -231,7 +276,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: screenHeight / 80),
             FutureBuilder<List<ServiceModel>>(
-              future: _services,
+              future: services,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -258,20 +303,28 @@ class _HomePageState extends State<HomePage> {
                             ));
                           },
                           child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            margin: EdgeInsets.symmetric(horizontal: screenWidth / 30),
                             width: screenWidth / 2.6,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
-                              boxShadow:  [
+                              boxShadow: const [
                                 BoxShadow(
-                                  offset: const Offset(0, 2),
-                                  blurRadius: 5,
-                                  blurStyle: BlurStyle.normal,
-                                  color: Colors.grey.shade300,
-                                  spreadRadius: 2,
+                                  color: Color(0x1A000000), // This is #0000001A in ARGB format
+                                  offset: Offset(0, 2),
+                                  blurRadius: 27,
+                                  spreadRadius: 0,
                                 ),
                               ],
+                              // boxShadow:  [
+                              //   BoxShadow(
+                              //     offset: const Offset(0, 2),
+                              //     blurRadius: 5,
+                              //     blurStyle: BlurStyle.normal,
+                              //     color: Colors.grey.shade300,
+                              //     spreadRadius: 2,
+                              //   ),
+                              // ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

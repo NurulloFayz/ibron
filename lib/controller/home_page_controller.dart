@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:ibron/models/banner_model.dart';
 
 import '../view/main_pages/home_pages/notification_page.dart';
 
@@ -67,5 +68,24 @@ class HomePageController {
   void navigateToNotificationPage(BuildContext context) {
     Navigator.pushNamed(context, NotificationPage.id);
   }
+  static Future<BannerModel> getBanner() async {
+    final url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/banner');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        final BannerModel bannerModel = BannerModel.fromJson(data);
+        return bannerModel;
+      } else {
+        print(response.body);
+        print(response.statusCode);
+        throw Exception('Failed to load banners: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load banners: $e');
+    }
+  }
+
+
 
 }

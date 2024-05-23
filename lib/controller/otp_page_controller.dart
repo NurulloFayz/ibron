@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:ibron/view/auth_pages/info_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../view/main_pages/main_pages.dart';
 
 class OtpPageController extends ChangeNotifier {
   String typedText = '';
@@ -43,10 +46,10 @@ class OtpPageController extends ChangeNotifier {
     );
     if (response.statusCode == 200) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => InfoPage(number)));
-      //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainPages()), (route) => false);
-      // var prefs = await SharedPreferences.getInstance();
-      // prefs.setString('phone_number', number);
-      print(response.body);
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString('phone_number', number);
+      print('OTP response ${response.body}');
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainPages()), (route) => false);
     } else if(response.statusCode == 400){
       Navigator.push(context, MaterialPageRoute(builder: (context) => InfoPage(number)));
       print('need to sign up: ${response.body}');
