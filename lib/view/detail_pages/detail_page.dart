@@ -533,8 +533,8 @@ class _DetailPageState extends State<DetailPage> {
                   flex: 2,
                   child: GestureDetector(
                     onTap: () async {
-                      final String phoneNumber = '+998941222233'; // replace with the actual phone number
-                      final String telUrl = 'tel:$phoneNumber';
+                      const String phoneNumber = '+998941222233'; // replace with the actual phone number
+                      const String telUrl = 'tel:$phoneNumber';
 
                       if (await canLaunch(telUrl)) {
                         await launch(telUrl);
