@@ -8,7 +8,7 @@ import 'package:ibron/view/main_pages/home_pages/notification_page.dart';
 import 'package:ibron/view/main_pages/main_pages.dart';
 import 'package:ibron/view/main_pages/profile_pages/edit_page.dart';
 import 'package:ibron/view/main_pages/profile_pages/language_page.dart';
-
+import 'package:ibron/view/main_pages/profile_pages/saved_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -22,7 +22,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final String? userId;
 
-  const MyApp({Key? key, this.userId}) : super(key: key);
+  const MyApp({super.key, this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +33,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // Check if userId is available
-      home: const MainPages(),
-      // userId != null && userId!.isNotEmpty ? const MainPages() :
-      // const SignUpPage(),
+      home:
+      userId != null && userId!.isNotEmpty ? const MainPages() : const SignUpPage(),
       routes: {
         MainPages.id: (context) => const MainPages(),
         SignUpPage.id: (context) => const SignUpPage(),
@@ -44,9 +42,9 @@ class MyApp extends StatelessWidget {
         HomePage.id: (context) => const HomePage(),
         EditProfilePage.id: (context) => const EditProfilePage(),
         OtpPage.id: (context) => const OtpPage(''),
-        SelectTimePage.id: (context) => const SelectTimePage(),
         NotificationPage.id: (context) => const NotificationPage(),
         LanguagePage.id: (context) => const LanguagePage(),
+        SavedPage.id: (context) => SavedPage(),
       },
     );
   }

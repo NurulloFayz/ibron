@@ -48,6 +48,7 @@ class OtpPageController extends ChangeNotifier {
       Navigator.push(context, MaterialPageRoute(builder: (context) => InfoPage(number)));
       var prefs = await SharedPreferences.getInstance();
       prefs.setString('phone_number', number);
+      prefs.setString('id', number);
       print('OTP response ${response.body}');
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainPages()), (route) => false);
     } else if(response.statusCode == 400){

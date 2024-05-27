@@ -47,6 +47,7 @@ dependencies:
   intl:
   cached_network_image: any
   url_launcher:
+  smooth_page_indicator: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

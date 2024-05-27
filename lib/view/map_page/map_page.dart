@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage(this.point,{super.key});
+  const MapPage({super.key,required this.point});
   final Point? point;
 
   @override
@@ -14,7 +14,7 @@ class _MapPageState extends State<MapPage> {
 
   PlacemarkMapObject getPlaceMark() {
     final point0 = Point(
-      latitude: widget.point!.latitude,
+      latitude: widget.point!.longitude,
       longitude: widget.point!.longitude,
     );
     return PlacemarkMapObject(

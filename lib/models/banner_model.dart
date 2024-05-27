@@ -32,7 +32,7 @@ class Banner {
   String id;
   String serviceId;
   String url;
-  Service service;
+  dynamic service;
   String createdAt;
   String updatedAt;
 
@@ -49,7 +49,7 @@ class Banner {
     id: json["id"],
     serviceId: json["service_id"],
     url: json["url"],
-    service: Service.fromJson(json["service"]),
+    service: json["service"],
     createdAt: json["created_at"],
     updatedAt: json["updated_at"],
   );
@@ -58,75 +58,7 @@ class Banner {
     "id": id,
     "service_id": serviceId,
     "url": url,
-    "service": service.toJson(),
-    "created_at": createdAt,
-    "updated_at": updatedAt,
-  };
-}
-
-class Service {
-  String id;
-  String categoryId;
-  String businessMerchantId;
-  String name;
-  int duration;
-  int price;
-  String address;
-  double latitude;
-  double longitude;
-  int distance;
-  dynamic url;
-  dynamic amenities;
-  String createdAt;
-  String updatedAt;
-
-  Service({
-    required this.id,
-    required this.categoryId,
-    required this.businessMerchantId,
-    required this.name,
-    required this.duration,
-    required this.price,
-    required this.address,
-    required this.latitude,
-    required this.longitude,
-    required this.distance,
-    required this.url,
-    required this.amenities,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
-    id: json["id"],
-    categoryId: json["category_id"],
-    businessMerchantId: json["business_merchant_id"],
-    name: json["name"],
-    duration: json["duration"],
-    price: json["price"],
-    address: json["address"],
-    latitude: json["latitude"]?.toDouble(),
-    longitude: json["longitude"]?.toDouble(),
-    distance: json["distance"],
-    url: json["url"],
-    amenities: json["amenities"],
-    createdAt: json["created_at"],
-    updatedAt: json["updated_at"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "category_id": categoryId,
-    "business_merchant_id": businessMerchantId,
-    "name": name,
-    "duration": duration,
-    "price": price,
-    "address": address,
-    "latitude": latitude,
-    "longitude": longitude,
-    "distance": distance,
-    "url": url,
-    "amenities": amenities,
+    "service": service,
     "created_at": createdAt,
     "updated_at": updatedAt,
   };

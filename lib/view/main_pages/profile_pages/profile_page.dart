@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ibron/view/main_pages/profile_pages/saved_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../controller/profile_page_controller.dart';
 import '../../../models/user_model.dart';
 import 'language_page.dart';
@@ -27,12 +29,10 @@ class _ProfilePageState extends State<ProfilePage> {
       _userData = controller.fetchUserData();
     });
   }
-
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -108,6 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   // Other ListTile items...
                   SizedBox(height: screenHeight / 20),
                   ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, SavedPage.id);
+                    },
                     leading: CircleAvatar(
                       radius: screenHeight / 30,
                       backgroundColor: const Color(0xFFF2F4F7),

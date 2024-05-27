@@ -1,8 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/detail_page_controller.dart';
+import 'package:ibron/view/detail_pages/select_time_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'package:http/http.dart' as http;
+
 
 class DetailPage extends StatefulWidget {
   static String? id;
@@ -12,7 +17,12 @@ class DetailPage extends StatefulWidget {
   final String? name;
   final String? price;
   final String? image;
-
+  final String? serviceId;
+  final String? userId;
+  final String? day;
+  final String? startTime;
+  final String? endTime;
+  final String? ameneties;
   const DetailPage({
     super.key,
     this.distanceMile,
@@ -21,6 +31,12 @@ class DetailPage extends StatefulWidget {
     this.price,
     this.point,
     this.image,
+    this.serviceId,
+    this.userId,
+    this.day,
+    this.startTime,
+    this.endTime,
+    this.ameneties,
     // Add this line
   });
 
@@ -58,8 +74,99 @@ class _DetailPageState extends State<DetailPage> {
     // TODO: implement initState
     super.initState();
     mapObjects = [getPlaceMark()];
+    print('userId is passed ${widget.userId}');
+    print('serviceId is passed ${widget.serviceId}');
   }
-
+  Future<void> showMapSelectionDialog(BuildContext context, double latitude, double longitude) async {
+    showModalBottomSheet(
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (BuildContext context) {
+          var screenWidth = MediaQuery.of(context).size.width;
+          var screenHeight = MediaQuery.of(context).size.height;
+          return Container(
+            height: screenHeight / 5,
+            width: screenWidth,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                color: Colors.white
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ListTile(
+                  leading: Image.asset('assets/images/googlemaps.png', height: 24),
+                  title: Text('Google xarita', style: TextStyle(fontSize: screenHeight / 45, fontWeight: FontWeight.w500)),
+                  onTap: () async {
+                    final String googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+                    if (await canLaunch(googleMapsUrl)) {
+                      await launch(googleMapsUrl);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Sizda Google xarita topilmadi',
+                              style: TextStyle(fontSize: screenHeight / 50, fontWeight: FontWeight.w500)
+                          ),
+                          duration: const Duration(seconds: 2),
+                          action: SnackBarAction(
+                            label: '',
+                            onPressed: () {
+                              // Perform undo functionality here
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset('assets/images/yandexLogo.png', height: 24),
+                  title: Text('Yandex xarita', style: TextStyle(fontSize: screenHeight / 45, fontWeight: FontWeight.w500)),
+                  onTap: () async {
+                    final String yandexMapsUrl = 'yandexmaps://maps.yandex.ru/?pt=$longitude,$latitude&z=12&l=map';
+                    if (await canLaunch(yandexMapsUrl)) {
+                      await launch(yandexMapsUrl);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Sizda Yandex xarita topilmadi',
+                              style: TextStyle(fontSize: screenHeight / 50, fontWeight: FontWeight.w500)
+                          ),
+                          duration: const Duration(seconds: 4),
+                          action: SnackBarAction(
+                            label: '',
+                            onPressed: () {
+                              // Perform undo functionality here
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        }
+    );
+  }
+  Future<void> addToFavorite(String serviceId) async {
+    try {
+      var prefs = await SharedPreferences.getInstance();
+      String userId = prefs.getString('id') ?? '';
+      await controller.postFavorite(serviceId, userId);
+      print('Service $serviceId added to favorites');
+      // You can update UI here to reflect the favorite status
+    } catch (e) {
+      print('Error adding to favorite: $e');
+      // Handle error
+    }
+  }
+  List<dynamic> data = [];
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -128,7 +235,9 @@ class _DetailPageState extends State<DetailPage> {
                       GestureDetector(
                         onTap: () {
                          setState(() {
-                           likeButton = !likeButton;
+                           controller.postFavorite(widget.serviceId ??'', widget.userId ??'');
+                           //addToFavorite(widget.serviceId.toString());
+                         //  likeButton = !likeButton;
                          });
                         },
                         child:  Icon(
@@ -222,6 +331,19 @@ class _DetailPageState extends State<DetailPage> {
                     Icons.access_time_rounded,
                     color: Colors.green,
                   ),
+                  SizedBox(
+                    width: screenWidth / 40,
+                  ),
+                  Text('${widget.day}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w500)),),
+                  SizedBox(width: screenWidth / 40,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('${widget.startTime}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w400)),),
+                      SizedBox(width: screenHeight / 40,),
+                      Text('${widget.endTime}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w400)),),
+                    ],
+                  ),
                   const Spacer(),
                   const Icon(
                     Icons.navigate_next,
@@ -257,76 +379,22 @@ class _DetailPageState extends State<DetailPage> {
                 crossAxisSpacing: screenWidth / 100,
                 mainAxisSpacing: screenHeight / 100,
                 childAspectRatio: 2.8,
-                children: [
-                  Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          'Wi-Fi',
-                          maxLines: null,
-                          style: GoogleFonts.roboto(
-                            textStyle: TextStyle(
-                              fontSize: screenHeight / 50,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        leading: const Icon(Icons.wifi, color: Colors.green),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          'Televizor',
-                          maxLines: null,
-                          style: GoogleFonts.roboto(
-                            textStyle: TextStyle(
-                              fontSize: screenHeight / 50,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        leading: const Icon(Icons.tv, color: Colors.green),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.local_parking, color: Colors.green),
-                        title: Text(
-                          'Tekin avtoturargoh',
-                          maxLines: null,
-                          style: GoogleFonts.roboto(
-                            textStyle: TextStyle(
-                              fontSize: screenHeight / 50,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                children: (widget.ameneties!.split(',')).map<Widget>((service) {
+                  return ListTile(
+                    title: Text(
+                      service.trim(), // Trim to remove any leading or trailing spaces
+                      maxLines: null,
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle(
+                          fontSize: screenHeight / 50,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.local_parking, color: Colors.green),
-                        title: Text(
-                          'Avtoturargoh',
-                          maxLines: null,
-                          style: GoogleFonts.roboto(
-                            textStyle: TextStyle(
-                              fontSize: screenHeight / 50,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    leading: Icon(Icons.info, color: Colors.green), // You can assign icons based on amenity names
+                  );
+                }).toList(),
+
               ),
             ),
             SizedBox(height: screenHeight / 40),
@@ -495,18 +563,19 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                           ListTile(
                             onTap: () async {
-                              final double latitude = widget.point!.latitude;
-                              final double longitude = widget.point!.longitude;
-                              final String googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-                              final String yandexMapsUrl = 'yandexmaps://maps.yandex.ru/?pt=$longitude,$latitude&z=12&l=map';
-
-                              if (await canLaunch(yandexMapsUrl)) {
-                                await launch(yandexMapsUrl);
-                              } else if (await canLaunch(googleMapsUrl)) {
-                                await launch(googleMapsUrl);
-                              } else {
-                                throw 'Could not launch maps';
-                              }
+                              showMapSelectionDialog(context,widget.point!.latitude, widget.point!.longitude);
+                              // final double latitude = widget.point!.latitude;
+                              // final double longitude = widget.point!.longitude;
+                              // final String googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+                              // final String yandexMapsUrl = 'yandexmaps://maps.yandex.ru/?pt=$longitude,$latitude&z=12&l=map';
+                              //
+                              // if (await canLaunch(yandexMapsUrl)) {
+                              //   await launch(yandexMapsUrl);
+                              // } else if (await canLaunch(googleMapsUrl)) {
+                              //   await launch(googleMapsUrl);
+                              // } else {
+                              //   throw 'Could not launch maps';
+                              // }
                             },
                             title: Text('Построить маршрут',style: GoogleFonts.roboto(textStyle: TextStyle(
                                 fontSize: screenHeight / 50,color: Colors.green,fontWeight: FontWeight.w500
@@ -638,7 +707,9 @@ class _DetailPageState extends State<DetailPage> {
           BottomNavigationBarItem(
               icon: GestureDetector(
                 onTap: () {
-                  controller.navigateToSelectTimePage(context);
+                  controller.navigateToSelectTimePage(context,widget.startTime.toString(),widget.endTime.toString(),widget.serviceId.toString(),
+                    widget.userId.toString(),widget.price.toString()
+                  );
                 },
                 child: Container(
                   margin: EdgeInsets.only(

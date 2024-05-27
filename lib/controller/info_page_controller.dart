@@ -36,7 +36,8 @@ class InfoPageController {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('phone_number', phoneNumber);
       print('phone saved $phoneNumber');
-      prefs.setString('id', userId);
+      prefs.setString('id', id);
+      print('phone saved $id');
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainPages()), (route) => false);
     } else {
       print(response.body);
