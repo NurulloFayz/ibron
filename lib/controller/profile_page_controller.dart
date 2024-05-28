@@ -98,7 +98,7 @@ class ProfilePageController {
           backgroundColor: Colors.white,
           elevation: 5,
           content: Text(
-            'Chiqshni xohlaysizmi',
+            'Chiqishni xohlaysizmi',
             style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50, fontWeight: FontWeight.w500, color: Colors.grey)),
           ),
           actions: [

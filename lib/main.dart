@@ -15,14 +15,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? userId = prefs.getString('phone_number');
+  String? id = prefs.getString('id');
+  print('userId in main dart >>>>>>>>>> $id');
 
-  runApp(MyApp(userId: userId));
+  runApp(MyApp(userId: userId,));
 }
 
 class MyApp extends StatelessWidget {
   final String? userId;
+  final String? id;
 
-  const MyApp({super.key, this.userId});
+  const MyApp({super.key, this.userId,this.id});
 
   @override
   Widget build(BuildContext context) {

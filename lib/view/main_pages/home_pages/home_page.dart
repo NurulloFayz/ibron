@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   Future<User>? _userData;
   late Future<BannerModel> _banners;
   late Future<List<ServiceModel>> services;
+  late Future<List<LocationModel>> locations;
   late Future<List<Map<String, dynamic>>> scheduleData;
 
   @override
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     services = homePageController.postData(41.333787, 69.301298);
     _banners = HomePageController.getBanner();
+    locations = homePageController.postLocations(41.333787, 69.301298);
     scheduleData = fetchScheduleData();
     fetchUserData();
     //getUserid();
@@ -127,115 +129,179 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             SizedBox(height: screenHeight / 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(width: screenWidth / 60),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const MapPage(
-                          point:Point(latitude:41.333787,longitude:  69.301298))));
-                    },
-                    child: Container(
-                      height: screenHeight / 6.5,
-                      width: screenWidth / 3.2,
-                      margin: EdgeInsets.only(
-                          right: screenWidth / 100, left: screenWidth / 100),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xFFF2F4F7),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/circle.png',
-                              height: screenHeight / 20,
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     SizedBox(width: screenWidth / 60),
+            //     Expanded(
+            //       child: GestureDetector(
+            //         onTap: () {
+            //           Navigator.push(context, MaterialPageRoute(builder: (context) => MapPage(
+            //             point: Point(latitude: location.lat, longitude: location.long),
+            //           )));
+            //         },
+            //         child: Container(
+            //           height: screenHeight / 6.5,
+            //           width: screenWidth / 3.2,
+            //           margin: EdgeInsets.only(
+            //               right: screenWidth / 100, left: screenWidth / 100),
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(10),
+            //             color: const Color(0xFFF2F4F7),
+            //           ),
+            //           child: Center(
+            //             child: Column(
+            //               mainAxisAlignment: MainAxisAlignment.center,
+            //               children: [
+            //                 Image.asset(
+            //                   'assets/images/circle.png',
+            //                   height: screenHeight / 20,
+            //                 ),
+            //                 SizedBox(height: screenHeight / 50),
+            //                 Text(
+            //                   'Xarita',
+            //                   maxLines: null,
+            //                   style: GoogleFonts.roboto(
+            //                     textStyle: TextStyle(
+            //                         fontSize: screenHeight / 50,
+            //                         fontWeight: FontWeight.w500),
+            //                   ),
+            //                 )
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     Expanded(
+            //       child: Container(
+            //         height: screenHeight / 6.5,
+            //         width: screenWidth / 3.2,
+            //         margin: EdgeInsets.only(
+            //             right: screenWidth / 100, left: screenWidth / 100),
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(10),
+            //           color: Color(0xFFF2F4F7),
+            //         ),
+            //         child: Center(
+            //           child: Column(
+            //             mainAxisAlignment: MainAxisAlignment.center,
+            //             children: [
+            //               Image.asset(
+            //                 'assets/images/calendar (2).png',
+            //                 height: screenHeight / 20,
+            //               ),
+            //               SizedBox(height: screenHeight / 50),
+            //               Text(
+            //                 'Hafta Oxiri',
+            //                 maxLines: null,
+            //                 style: GoogleFonts.roboto(
+            //                   textStyle: TextStyle(
+            //                       fontSize: screenHeight / 50,
+            //                       fontWeight: FontWeight.w500),
+            //                 ),
+            //               )
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     Expanded(
+            //       child: Container(
+            //         height: screenHeight / 6.5,
+            //         margin: EdgeInsets.only(
+            //             right: screenWidth / 120, left: screenWidth / 120),
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(10),
+            //           color: const Color(0xFFF2F4F7),
+            //         ),
+            //         child: Center(
+            //           child: Column(
+            //             mainAxisAlignment: MainAxisAlignment.center,
+            //             children: [
+            //               Image.asset(
+            //                 'assets/images/image 446.png',
+            //                 height: screenHeight / 20,
+            //               ),
+            //               SizedBox(height: screenHeight / 50),
+            //               Text(
+            //                 'Tavsiya',
+            //                 style: GoogleFonts.roboto(
+            //                   textStyle: TextStyle(
+            //                       fontSize: screenHeight / 50,
+            //                       fontWeight: FontWeight.w500),
+            //                 ),
+            //               )
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(width: screenWidth / 60),
+            //   ],
+            // ),
+            ///
+            FutureBuilder<List<LocationModel>>(
+              future: locations,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  List<LocationModel> services = snapshot.data!;
+                  return Container(
+                    height: screenHeight / 6,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: services.length,
+                      itemBuilder: (context, index) {
+                        LocationModel service = services[index];
+                        return GestureDetector(
+                          onTap: () async {
+                            Navigator.push(context,MaterialPageRoute(builder: (context) =>
+                                MapPage(
+                                  point: Point(latitude: service.lat.toDouble(), longitude: service.long.toDouble()),
+                                )
+                            ));
+                          },
+                          child: Container(
+                            height: screenHeight / 6.5,
+                            width: screenWidth / 3.2,
+                            margin: EdgeInsets.only(
+                                right: screenWidth / 100, left: screenWidth / 100),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color(0xFFF2F4F7),
                             ),
-                            SizedBox(height: screenHeight / 50),
-                            Text(
-                              'Xarita',
-                              maxLines: null,
-                              style: GoogleFonts.roboto(
-                                textStyle: TextStyle(
-                                    fontSize: screenHeight / 50,
-                                    fontWeight: FontWeight.w500),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/circle.png',
+                                    height: screenHeight / 20,
+                                  ),
+                                  SizedBox(height: screenHeight / 50),
+                                  Text(
+                                    'Xarita',
+                                    maxLines: null,
+                                    style: GoogleFonts.roboto(
+                                      textStyle: TextStyle(
+                                          fontSize: screenHeight / 50,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: screenHeight / 6.5,
-                    width: screenWidth / 3.2,
-                    margin: EdgeInsets.only(
-                        right: screenWidth / 100, left: screenWidth / 100),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color(0xFFF2F4F7),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/calendar (2).png',
-                            height: screenHeight / 20,
-                          ),
-                          SizedBox(height: screenHeight / 50),
-                          Text(
-                            'Hafta Oxiri',
-                            maxLines: null,
-                            style: GoogleFonts.roboto(
-                              textStyle: TextStyle(
-                                  fontSize: screenHeight / 50,
-                                  fontWeight: FontWeight.w500),
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: screenHeight / 6.5,
-                    margin: EdgeInsets.only(
-                        right: screenWidth / 120, left: screenWidth / 120),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xFFF2F4F7),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/image 446.png',
-                            height: screenHeight / 20,
                           ),
-                          SizedBox(height: screenHeight / 50),
-                          Text(
-                            'Tavsiya',
-                            style: GoogleFonts.roboto(
-                              textStyle: TextStyle(
-                                  fontSize: screenHeight / 50,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  ),
-                ),
-                SizedBox(width: screenWidth / 60),
-              ],
+                  );
+                }
+              },
             ),
             SizedBox(height: screenHeight / 40),
             FutureBuilder<BannerModel>(
@@ -309,7 +375,6 @@ class _HomePageState extends State<HomePage> {
                   itemCount: services.length,
                   itemBuilder: (context, index) {
                     ServiceModel service = services[index];
-
                     return GestureDetector(
                       onTap: () async {
                         final List<Map<String, dynamic>> schedule = await scheduleData;
@@ -402,7 +467,8 @@ class _HomePageState extends State<HomePage> {
               );
             }
           },
-        )
+        ),
+            SizedBox(height: screenHeight / 20,),
         ],
         ),
       ),

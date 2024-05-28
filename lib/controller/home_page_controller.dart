@@ -43,6 +43,24 @@ class ServiceModel {
   }
 
 }
+class LocationModel {
+  final double lat;
+  final double long;
+
+  LocationModel({
+    required this.lat,
+    required this.long,
+
+  });
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    return LocationModel(
+      lat: (json['latitude'] ?? 0).toDouble(),
+      long: (json['longitude'] ?? 0).toDouble(),
+    );
+  }
+
+}
 
 class Url {
   final String url;
@@ -139,6 +157,42 @@ class HomePageController {
       }
     } catch (e) {
       throw Exception('Failed to load banners: $e');
+    }
+  }
+
+  Future<List<LocationModel>> postLocations(double latitude, double longitude) async {
+    var url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/closest-service');
+    var data = {
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+
+    var body = jsonEncode(data);
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      print('service post method $responseData');
+      List<LocationModel> services = [];
+      for (var item in responseData) {
+        LocationModel service = LocationModel.fromJson(item);
+        LocationModel locationModel = LocationModel(lat: service.lat, long: service.long);
+        services.add(locationModel);
+      }
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString('id', serviceId);
+      print('the service values are $services');
+      return services;
+    } else {
+      print('Failed to post data, HTTP status code: ${response.statusCode}');
+      throw Exception('Failed to load services');
     }
   }
 }

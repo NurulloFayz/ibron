@@ -15,6 +15,18 @@ class SavedPage extends StatelessWidget {
     var screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 2.5,
+        shadowColor: Colors.grey.withOpacity(0.2),
+        centerTitle: true,
+        title: Text('Saqlanganlar',style: GoogleFonts.roboto(
+          textStyle: TextStyle(
+            fontSize: screenHeight / 40,
+            fontWeight: FontWeight.w500,
+          ),
+        ),),
+      ),
       body: FutureBuilder<List<FavouriteModel>>(
         future: _detailPageController.getServicesByUserId(),
         builder: (BuildContext context, AsyncSnapshot<List<FavouriteModel>> snapshot) {
