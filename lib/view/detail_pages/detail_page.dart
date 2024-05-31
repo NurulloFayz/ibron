@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/detail_page_controller.dart';
-import 'package:ibron/view/detail_pages/select_time_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
-import 'package:http/http.dart' as http;
+
+import '../../controller/home_page_controller.dart';
 
 
 class DetailPage extends StatefulWidget {
@@ -22,7 +22,7 @@ class DetailPage extends StatefulWidget {
   final String? day;
   final String? startTime;
   final String? endTime;
-  final String? ameneties;
+  final List<Amenity> amenities;
   const DetailPage({
     super.key,
     this.distanceMile,
@@ -36,7 +36,7 @@ class DetailPage extends StatefulWidget {
     this.day,
     this.startTime,
     this.endTime,
-    this.ameneties,
+    required this.amenities,
     // Add this line
   });
 
@@ -371,32 +371,34 @@ class _DetailPageState extends State<DetailPage> {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(top: screenHeight / 100, bottom: screenHeight / 80, left: screenWidth / 20, right: screenWidth / 20),
-              child: GridView.count(
+              margin: EdgeInsets.only(
+                top: screenHeight / 100,
+                bottom: screenHeight / 80,
+                left: screenWidth / 20,
+                right: screenWidth / 20,
+              ),
+              child: GridView.builder(
                 primary: false,
                 shrinkWrap: true,
-                crossAxisCount: 2,
-                crossAxisSpacing: screenWidth / 100,
-                mainAxisSpacing: screenHeight / 100,
-                childAspectRatio: 2.8,
-                children: (widget.ameneties!.split(',')).map<Widget>((service) {
+                itemCount: widget.amenities.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: screenWidth / 100,
+                  mainAxisSpacing: screenHeight / 100,
+                  childAspectRatio: 2.8,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  Amenity amenity = widget.amenities[index];
                   return ListTile(
-                    title: Text(
-                      service.trim(), // Trim to remove any leading or trailing spaces
-                      maxLines: null,
-                      style: GoogleFonts.roboto(
-                        textStyle: TextStyle(
-                          fontSize: screenHeight / 50,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    leading: Icon(Icons.info, color: Colors.green), // You can assign icons based on amenity names
+                    leading: const Icon(Icons.local_parking_outlined),
+                    title: Text(amenity.name.trim(),style: GoogleFonts.roboto(textStyle: TextStyle(
+                        fontSize: screenHeight / 50,fontWeight: FontWeight.w400
+                    )),),
                   );
-                }).toList(),
-
+                },
               ),
             ),
+
             SizedBox(height: screenHeight / 40),
             ListTile(
               title: Text(
@@ -593,80 +595,80 @@ class _DetailPageState extends State<DetailPage> {
               height: screenHeight / 40,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: screenWidth / 20,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: GestureDetector(
-                    onTap: () async {
-                      const String phoneNumber = '+998941222233'; // replace with the actual phone number
-                      const String telUrl = 'tel:$phoneNumber';
+                SizedBox(width: screenWidth / 20,),
+                GestureDetector(
+                  onTap: () async {
+                    const String phoneNumber = '+998941222233'; // replace with the actual phone number
+                    const String telUrl = 'tel:$phoneNumber';
 
-                      if (await canLaunch(telUrl)) {
-                        await launch(telUrl);
-                      } else {
-                        throw 'Could not launch $telUrl';
-                      }
-                    },
-                    child: Container(
-                      height: screenHeight / 18,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: const Color(0xFFF2F4F7)),
-                      child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.call_outlined,
-                                color: Colors.green,
-                              ),
-                              SizedBox(
-                                width: screenWidth / 30,
-                              ),
-                              Text(
-                                "Bog'lanish",
-                                style: GoogleFonts.roboto(
-                                    textStyle: TextStyle(
-                                        fontSize: screenHeight / 50,
-                                        fontWeight: FontWeight.w400)),
-                              )
-                            ],
-                          )),
+                    if (await canLaunch(telUrl)) {
+                      await launch(telUrl);
+                    } else {
+                      throw 'Could not launch $telUrl';
+                    }
+                  },
+                  child: Container(
+                    height: screenHeight / 18,
+                    width: screenWidth / 2.5,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: const Color(0xFFF2F4F7)),
+                    child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.call_outlined,
+                              color: Colors.green,
+                            ),
+                            SizedBox(
+                              width: screenWidth / 30,
+                            ),
+                            Text(
+                              "Bog'lanish",
+                              style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                      fontSize: screenHeight / 50,
+                                      fontWeight: FontWeight.w400)),
+                            )
+                          ],
+                        )
                     ),
                   ),
                 ),
                 const Spacer(),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                      height: screenHeight / 15,
+                Row(
+                  children: [
+                    Container(
+                      clipBehavior: Clip.antiAlias,
+                      height: screenHeight / 18,
+                      width: screenWidth / 9, // Adjust width to fit properly
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white.withOpacity(0.2)),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/detailPage/instagram (2).png',
-                            height: screenHeight / 28,
-                          ),
-                          SizedBox(
-                            width: screenWidth / 20,
-                          ),
-                          Icon(
-                            Icons.telegram,
-                            color: Colors.blue,
-                            size: screenHeight / 28,
-                          ),
-                          SizedBox(
-                            width: screenWidth / 30,
-                          ),
-                        ],
-                      )),
-                )
+                          shape: BoxShape.circle,
+                          border: Border.all(color: const Color(0xFFF2F4F7))
+                      ),
+                      child: Center(
+                        child: Image.asset('assets/images/Icon (3).png', fit: BoxFit.cover,),
+                      ),
+                    ),
+                    SizedBox(width: screenWidth / 40), // Adjust this width
+                    Container(
+                      clipBehavior: Clip.antiAlias,
+                      height: screenHeight / 18,
+                      width: screenWidth / 9, // Adjust width to fit properly
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: const Color(0xFFF2F4F7))
+                      ),
+                      child: const Center(
+                        child: Icon(Icons.telegram,color: Colors.blue,)
+                        //Image.asset('assets/images/Telegram_2019_Logo.png', fit: BoxFit.cover,),
+                      ),
+                    ),
+                    SizedBox(width: screenWidth / 30,),
+                  ],
+                ),
               ],
             ),
             SizedBox(height: screenHeight / 30),

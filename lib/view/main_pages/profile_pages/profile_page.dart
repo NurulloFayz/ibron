@@ -50,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
         future: _userData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: Colors.green,));
           } else if (snapshot.hasError || snapshot.data == null) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {

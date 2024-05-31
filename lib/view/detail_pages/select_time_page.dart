@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -66,8 +64,8 @@ class _SelectTimePageState extends State<SelectTimePage>
     final List<DateTime> next7Days = [];
     DateTime now = DateTime.now();
 
-    // Start from the day before today
-    DateTime startDate = now.subtract(Duration(days: 1));
+    // Start from the current day
+    DateTime startDate = now.subtract(Duration(days: 4));
     for (int i = 0; i < 7; i++) {
       next7Days.add(startDate.add(Duration(days: i)));
     }
@@ -125,7 +123,12 @@ class _SelectTimePageState extends State<SelectTimePage>
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Time'),
+        title: Text('Kun va vaqtni tanlang', style: GoogleFonts.roboto(
+          textStyle: TextStyle(
+            fontSize: screenHeight / 40,
+            fontWeight: FontWeight.w500,
+          ),
+        ),),
         bottom: TabBar(
           controller: _tabController,
           tabs: _next7Days.map((day) => Tab(text: _formatDateForDisplay(day))).toList(),
@@ -143,12 +146,14 @@ class _SelectTimePageState extends State<SelectTimePage>
       floatingActionButton: FloatingActionButton.extended(
         elevation: 0,
         backgroundColor: Colors.green,
-        onPressed: _sendPostRequest,
+        onPressed: () {
+          _sendPostRequest();
+        },
         label: SizedBox(
           width: screenWidth * .8,
           child: Center(
-            child: Text('Tasdiqlash',style: GoogleFonts.roboto(textStyle: TextStyle(
-                fontSize: screenHeight / 45,color: Colors.white,fontWeight: FontWeight.w400
+            child: Text('Tasdiqlash', style: GoogleFonts.roboto(textStyle: TextStyle(
+                fontSize: screenHeight / 45, color: Colors.white, fontWeight: FontWeight.w400
             )),),
           ),
         ),
@@ -167,51 +172,72 @@ class _SelectTimePageState extends State<SelectTimePage>
           final freeTime = freeTimes[index];
           final timeSlot = '${freeTime.startTime} - ${freeTime.endTime}';
           final isSelected = _selectedTimeSlots[timeSlot] ?? false;
+          final isAvailable = freeTime.status;
+
           return Column(
             children: [
               Padding(
                 padding: EdgeInsets.all(screenHeight / 100),
-                child: Container(
-                  height: screenHeight / 16,
-                  width: screenWidth / 1.1,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF2F4F7),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(width: screenWidth / 40,),
-                      Text('${_formatDateForDisplay(day)} $timeSlot',
-                        style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w400)),
-                      ),
-                      const Spacer(),
-                      Checkbox(
-                        value: isSelected,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _selectedTimeSlots[timeSlot] = value!;
-                          });
-                        },
-                      ),
-                    ],
+                child: GestureDetector(
+                  onTap: isAvailable
+                      ? () {
+                    setState(() {
+                      _selectedTimeSlots[timeSlot] = !isSelected;
+                    });
+                  }
+                      : null,
+                  child: Container(
+                    height: screenHeight / 16,
+                    width: screenWidth / 1.1,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? Colors.green
+                          : isAvailable
+                          ? const Color(0xFFF2F4F7)
+                          : Colors.grey,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(width: screenWidth / 40,),
+                        Text('$timeSlot',
+                          style: GoogleFonts.roboto(textStyle: TextStyle(
+                            fontSize: screenHeight / 50,
+                            fontWeight: FontWeight.w400,
+                            color: isAvailable
+                                ? (isSelected ? Colors.white : Colors.black)
+                                : Colors.white,
+                          )),
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
                   ),
                 ),
               ),
-
             ],
           );
         },
       );
     } else {
       return Center(
-        child: CircularProgressIndicator(),
+        child: _freeTimesForDate[day] == null
+            ? Text("Bo'sh joylar mavjud emas")
+            : Text("Bo'sh joylar mavjud emas", style: GoogleFonts.roboto(textStyle: TextStyle(
+            fontSize: screenHeight / 45, fontWeight: FontWeight.w400
+        )),), // Show "No data" if there is no data available
       );
     }
   }
 
   String _formatDateForDisplay(DateTime date) {
     final uzbekWeekdays = ['Yak', 'Dush', 'Sesh', 'Chor', 'Pay', 'Jum', 'Shan'];
-    return '${_addLeadingZero(date.day)} ${uzbekWeekdays[date.weekday % 7]}';
+    DateTime now = DateTime.now();
+    if (date.year == now.year && date.month == now.month && date.day == now.day) {
+      return 'bugun';
+    } else {
+      return '${uzbekWeekdays[date.weekday % 7]}, ${(date.day)}';
+    }
   }
 
   String _addLeadingZero(int number) {

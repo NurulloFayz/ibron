@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -27,6 +29,9 @@ class _SearchPageState extends State<SearchPage> {
     bool isNearbySelected = true;
     _services = homePageController.postData(41.333787, 69.301298);
     _searchController.addListener(_filterServices);
+    Timer(Duration(seconds: 3), () {
+      CircularProgressIndicator();
+    });
   }
 
   @override
@@ -172,7 +177,7 @@ class _SearchPageState extends State<SearchPage> {
             future: _services,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(color: Colors.green,));
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
@@ -191,7 +196,7 @@ class _SearchPageState extends State<SearchPage> {
                                 distanceMile: service.distance.toString(),
                                 address: service.address,
                                 name: service.name,
-                                price: service.price.toString(),point: Point(latitude: service.lat.toDouble(),longitude: service.long.toDouble()),
+                                price: service.price.toString(),point: Point(latitude: service.lat.toDouble(),longitude: service.long.toDouble()), amenities: [],
                               )
                           ));
                         },

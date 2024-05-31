@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:ibron/view/auth_pages/sign_up_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_model.dart';
 import '../view/main_pages/profile_pages/edit_page.dart';
@@ -66,22 +67,10 @@ class ProfilePageController {
   }
 
   /// Deleting user
-  Future<void> deleteData(String id) async {
-    // Construct the URL with the ID parameter
-    final url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/user/$id');
-    try {
-      // Make the DELETE request
-      final response = await http.delete(url);
-
-      // Check if the request was successful (status code 200)
-      if (response.statusCode == 200) {
-        print('Data with ID $id deleted successfully');
-      } else {
-        print('Failed to delete data. Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
+  Future<void> removeValue(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('phone_number');
+    Navigator.pushReplacementNamed(context, SignUpPage.id);
   }
 
   void logout(BuildContext context) {
@@ -128,12 +117,7 @@ class ProfilePageController {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
-                      String? id = prefs.getString('id');
-                      if (id != null) {
-                        await deleteData(id);
-                      }
-                      Navigator.pop(context);
+                      removeValue(context);
                     },
                     child: Container(
                       height: screenHeight / 15,

@@ -98,7 +98,13 @@ class Amenity {
       updatedAt: json['updated_at'],
     );
   }
+
+  @override
+  String toString() {
+    return name;
+  }
 }
+
 
 String serviceId = '';
 

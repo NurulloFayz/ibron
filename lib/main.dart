@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:
-      userId != null && userId!.isNotEmpty ? const MainPages() : const SignUpPage(),
+      home:SignUpPage(),
+     // userId != null && userId!.isNotEmpty ? const MainPages() : const SignUpPage(),
       routes: {
         MainPages.id: (context) => const MainPages(),
         SignUpPage.id: (context) => const SignUpPage(),
