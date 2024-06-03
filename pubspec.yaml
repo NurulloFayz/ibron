@@ -43,8 +43,14 @@ dependencies:
   image_picker: any
   shared_preferences:
   yandex_mapkit:
+  firebase_core:
+  firebase_auth:
+  firebase_messaging:
+  firebase_core_platform_interface:
+  firebase_database:
   geolocator:
   intl:
+  fluttertoast:
   cached_network_image: any
   url_launcher:
   smooth_page_indicator: any

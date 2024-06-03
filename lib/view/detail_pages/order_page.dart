@@ -1,131 +1,171 @@
-// import 'dart:convert';
-//
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:http/http.dart' as http;
-//
-// class OrderPage extends StatefulWidget {
-//   static const String id = 'order_page';
-//   const OrderPage({
-//     Key? key,
-//     required this.startTime,
-//     required this.endTime,
-//     required this.date,
-//   }) : super(key: key);
-//
-//   final String startTime;
-//   final String endTime;
-//   final String date;
-//
-//   @override
-//   State<OrderPage> createState() => _OrderPageState();
-// }
-//
-// class _OrderPageState extends State<OrderPage> {
-//   Future<void> _postOrder() async {
-//     final String apiUrl = 'https://ibron.onrender.com/ibron/api/v1/request';
-//     final Map<String, dynamic> requestData = {
-//       'start_time': widget.startTime,
-//       'end_time': widget.endTime,
-//       'date': widget.date,
-//
-//       {
-//         "date": "dfsf",
-//         "end_time": "dsfds",
-//         "price": 0,
-//         "service_id": "fsd",
-//         "start_time": "sdf",
-//         "status": "sdf",
-//         "user_id": "sdf"
-//       }
-//       // Add other necessary fields
-//     };
-//
-//     try {
-//       final response = await http.post(
-//         Uri.parse(apiUrl),
-//         headers: {"Content-Type": "application/json"},
-//         body: jsonEncode(requestData),
-//       );
-//
-//       if (response.statusCode == 200) {
-//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Order placed successfully!')));
-//       } else {
-//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to place order.')));
-//       }
-//     } catch (e) {
-//       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     var screenWidth = MediaQuery.of(context).size.width;
-//     var screenHeight = MediaQuery.of(context).size.height;
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.white,
-//         centerTitle: true,
-//         title: Text("Buyurtmani tasdiqlang", style: GoogleFonts.roboto(
-//           textStyle: TextStyle(
-//             fontSize: screenHeight / 40,
-//             fontWeight: FontWeight.w500,
-//           ),
-//         )),
-//       ),
-//       body: Column(
-//         children: [
-//           Container(
-//             height: screenHeight / 3,
-//             width: screenWidth / 1.1,
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(10),
-//               color: const Color(0xFFF2F4F7),
-//             ),
-//             child: Column(
-//               children: [
-//                 Row(
-//                   children: [
-//                     SizedBox(width: screenWidth / 40,),
-//                     Container(
-//                       height: screenHeight / 10,
-//                       width: screenWidth / 6,
-//                       decoration: BoxDecoration(
-//                         borderRadius: BorderRadius.circular(10),
-//                         color: const Color(0xFFF2F4F7),
-//                       ),
-//                     ),
-//                     const Spacer(),
-//                     Column(
-//                       children: [
-//                         Text(widget.date),
-//                         Row(
-//                           children: [
-//                             Text('${widget.startTime} - ${widget.endTime}', style: GoogleFonts.roboto(
-//                               textStyle: TextStyle(fontSize: screenHeight / 47, fontWeight: FontWeight.w500),
-//                             )),
-//                           ],
-//                         ),
-//                         SizedBox(width: screenWidth / 40,),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//           ElevatedButton(
-//             onPressed: _postOrder,
-//             child: Text('Confirm Order', style: GoogleFonts.roboto(
-//               textStyle: TextStyle(
-//                 fontSize: screenHeight / 45,
-//                 color: Colors.white,
-//                 fontWeight: FontWeight.w400,
-//               ),
-//             )),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart'; // Add this import
+
+import 'package:ibron/view/main_pages/main_pages.dart';
+
+class OrderPage extends StatefulWidget {
+  static const String id = 'order_page';
+  final Map<String, dynamic> requestData;
+
+  const OrderPage({Key? key, required this.requestData}) : super(key: key);
+
+  @override
+  State<OrderPage> createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage> {
+  bool isLoading = false;
+
+  Future<void> postOrder() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://ibron.onrender.com/ibron/api/v1/request'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(widget.requestData),
+      );
+
+      if (response.statusCode == 201) {
+        // Handle successful response
+        print(response.statusCode);
+        print('Order posted successfully');
+        Fluttertoast.showToast( // Show toast message
+          msg: "Order posted successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: MediaQuery.of(context).size.height / 45,
+        );
+        Navigator.pushReplacementNamed(context, MainPages.id);
+      } else {
+        // Handle error response
+        print('Failed to post order: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle network error
+      print('Failed to post order: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Buyurtmani tasdiqlang',
+          style: GoogleFonts.roboto(
+            textStyle: TextStyle(
+              fontSize: screenHeight / 40,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: screenHeight / 30),
+          Container(
+            height: screenHeight / 5,
+            width: screenWidth,
+            margin: EdgeInsets.only(right: screenWidth / 50,left: screenWidth / 50),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: const Color(0xFFF7F7F7)
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(width: screenWidth / 40,),
+                    Container(
+                      height: screenHeight / 10,
+                      width: screenWidth / 4,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: const Color(0xFFF2F4F7),
+                      ),
+                    ),
+                    const Spacer(),
+                    Column(
+                      children: [
+                        Text(widget.requestData['date'],style: GoogleFonts.roboto(textStyle: TextStyle(
+                            fontSize: screenHeight / 35,fontWeight: FontWeight.w600
+                        )),),
+                        Text(widget.requestData['start_time']+"-"+widget.requestData['end_time'],style: GoogleFonts.roboto(textStyle: TextStyle(
+                            fontSize: screenHeight / 35,fontWeight: FontWeight.w600
+                        )),),
+                        SizedBox(height: screenHeight / 40,),
+                        Text(widget.requestData['price'].toString()+ " so'm 1 soat",style: GoogleFonts.roboto(textStyle: TextStyle(
+                            fontSize: screenHeight / 45,fontWeight: FontWeight.w600
+                        )),),
+                      ],
+                    ),
+                    SizedBox(width: screenWidth / 40,),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: screenHeight / 20,),
+          Container(
+            height: screenHeight / 16,
+            width: screenWidth,
+            margin: EdgeInsets.only(right: screenWidth / 50,left: screenWidth / 50),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: const Color(0xFFF7F7F7)
+            ),
+            child: Row(
+              children: [
+                SizedBox(width: screenWidth / 30,),
+                Icon(Icons.wallet),
+                SizedBox(width: screenWidth / 30,),
+                Text("Joyida to'lash",style: GoogleFonts.roboto(textStyle:TextStyle(
+                    fontSize: screenHeight / 45,fontWeight: FontWeight.w500
+                )),)
+              ],
+            ),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 0,
+        backgroundColor: Colors.green,
+        onPressed: () {
+          postOrder();
+        },
+        label: SizedBox(
+          width: screenWidth * .8,
+          child: Center(
+            child: Text(
+              'Tasdiqlash',
+              style: GoogleFonts.roboto(
+                textStyle: TextStyle(
+                  fontSize: screenHeight / 45,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -201,7 +201,7 @@ class _SearchPageState extends State<SearchPage> {
                           ));
                         },
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: screenWidth / 30),
+                          margin: EdgeInsets.only(right: screenWidth / 70,left: screenWidth / 70),
                           width: screenWidth / 2.4,
                           decoration: BoxDecoration(
                             color: Colors.white,

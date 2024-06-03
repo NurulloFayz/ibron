@@ -1,54 +1,40 @@
 class FavouriteModel {
-  final String id;
-  final String categoryId;
-  final String businessMerchantId;
   final String name;
-  final int duration;
-  final int price;
+  final String id;
   final String address;
-  final double latitude;
-  final double longitude;
+  final int price;
   final double distance;
-  final List<Url> url;
+  final double lat;
+  final double long;
+  final List<Url> urls;
   final List<Amenity> amenities;
-  final String createdAt;
-  final String? updatedAt;
 
   FavouriteModel({
-    required this.id,
-    required this.categoryId,
-    required this.businessMerchantId,
     required this.name,
-    required this.duration,
-    required this.price,
+    required this.id,
     required this.address,
-    required this.latitude,
-    required this.longitude,
+    required this.price,
     required this.distance,
-    required this.url,
+    required this.lat,
+    required this.long,
+    required this.urls,
     required this.amenities,
-    required this.createdAt,
-    this.updatedAt,
   });
 
   factory FavouriteModel.fromJson(Map<String, dynamic> json) {
     return FavouriteModel(
-      id: json['id'],
-      categoryId: json['category_id'],
-      businessMerchantId: json['business_merchant_id'],
-      name: json['name'],
-      duration: json['duration'],
-      price: json['price'],
-      address: json['address'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
+      name: json['name'] ?? '', // Provide default value if null
+      id: json['id'] ?? '', // Provide default value if null
+      address: json['address'] ?? '', // Provide default value if null
+      price: json['price'] ?? 0, // Provide default value if null
       distance: (json['distance'] ?? 0).toDouble(),
-      url: (json['url'] as List).map((i) => Url.fromJson(i)).toList(),
-      amenities: (json['amenities'] as List).map((i) => Amenity.fromJson(i)).toList(),
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      lat: (json['latitude'] ?? 0).toDouble(),
+      long: (json['longitude'] ?? 0).toDouble(),
+      urls: (json['url'] != null) ? List<Url>.from(json['url'].map((x) => Url.fromJson(x))) : [],
+      amenities: (json['amenities'] != null) ? List<Amenity>.from(json['amenities'].map((x) => Amenity.fromJson(x))) : [],
     );
   }
+
 }
 
 class Url {
@@ -85,6 +71,25 @@ class Amenity {
       url: json['url'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+    );
+  }
+
+  @override
+  String toString() {
+    return name;
+  }
+}
+
+class Response {
+  final int count;
+  final List<FavouriteModel> services;
+
+  Response({required this.count, required this.services});
+
+  factory Response.fromJson(Map<String, dynamic> json) {
+    return Response(
+      count: json['count'],
+      services: List<FavouriteModel>.from(json['services'].map((x) => FavouriteModel.fromJson(x))),
     );
   }
 }

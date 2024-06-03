@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,8 +7,8 @@ import 'package:ibron/controller/profile_page_controller.dart';
 import 'package:ibron/models/user_model.dart';
 import 'package:ibron/controller/home_page_controller.dart';
 import 'package:ibron/models/banner_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
-
 import '../../detail_pages/detail_page.dart';
 import '../../map_page/map_page.dart';
 
@@ -23,11 +24,19 @@ class _HomePageState extends State<HomePage> {
   final ProfilePageController _profilePageController = ProfilePageController();
   final HomePageController homePageController = HomePageController();
   late Future<Map<String, dynamic>> _allDataFuture;
-
+  String token = '';
+  getToken() async {
+    var prefs = await SharedPreferences.getInstance();
+    token = await FirebaseMessaging.instance.getToken() ?? '';
+    prefs.setString('token', token);
+    print('token is saved $token');
+    print('your device token is $token');
+  }
   @override
   void initState() {
     super.initState();
     _allDataFuture = fetchAllData();
+    getToken();
   }
 
   Future<Map<String, dynamic>> fetchAllData() async {
@@ -131,55 +140,129 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(height: screenHeight / 30),
-                  Container(
-                    height: screenHeight / 6,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: locations.length,
-                      itemBuilder: (context, index) {
-                        LocationModel location = locations[index];
-                        return GestureDetector(
-                          onTap: () async {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                MapPage(
-                                  point: Point(latitude: location.lat.toDouble(), longitude: location.long.toDouble()),
-                                )
-                            ));
-                          },
-                          child: Container(
-                            height: screenHeight / 6.5,
-                            width: screenWidth / 3.2,
-                            margin: EdgeInsets.only(
-                                right: screenWidth / 100, left: screenWidth / 100),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: const Color(0xFFF2F4F7),
-                            ),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/circle.png',
-                                    height: screenHeight / 20,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: screenWidth / 40),
+                      Expanded(
+                        child: Container(
+                          height: screenHeight / 6,
+                          margin: EdgeInsets.symmetric(horizontal: screenWidth / 100),
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 1,
+                            itemBuilder: (context, index) {
+                              LocationModel location = locations[1];
+                              return GestureDetector(
+                                onTap: () async {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                      MapPage(
+                                        point: Point(
+                                            latitude: location.lat.toDouble(),
+                                            longitude: location.long.toDouble()),
+                                      )
+                                  ));
+                                },
+                                child: Container(
+                                  height: screenHeight / 6.5,
+                                  width: screenWidth / 3.3,
+                                  margin: EdgeInsets.only(
+                                      right: screenWidth / 100, left: screenWidth / 100),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: const Color(0xFFF2F4F7),
                                   ),
-                                  SizedBox(height: screenHeight / 50),
-                                  Text(
-                                    'Xarita',
-                                    maxLines: null,
-                                    style: GoogleFonts.roboto(
-                                      textStyle: TextStyle(
-                                          fontSize: screenHeight / 50,
-                                          fontWeight: FontWeight.w500),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/circle.png',
+                                          height: screenHeight / 20,
+                                        ),
+                                        SizedBox(height: screenHeight / 50),
+                                        Text(
+                                          'Xarita',
+                                          maxLines: null,
+                                          style: GoogleFonts.roboto(
+                                            textStyle: TextStyle(
+                                                fontSize: screenHeight / 50,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: screenHeight / 6,
+                          margin: EdgeInsets.symmetric(horizontal: screenWidth / 100), // Uniform margins
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xFFF2F4F7),
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/calendar (2).png',
+                                  height: screenHeight / 20,
+                                ),
+                                SizedBox(height: screenHeight / 50),
+                                Text(
+                                  'Hafta oxiri',
+                                  maxLines: null,
+                                  style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        fontSize: screenHeight / 50,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: screenHeight / 6,
+                          margin: EdgeInsets.symmetric(horizontal: screenWidth / 100), // Uniform margins
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xFFF2F4F7),
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/image 446.png',
+                                  height: screenHeight / 20,
+                                ),
+                                SizedBox(height: screenHeight / 50),
+                                Text(
+                                  'Tavsiya',
+                                  maxLines: null,
+                                  style: GoogleFonts.roboto(
+                                    textStyle: TextStyle(
+                                        fontSize: screenHeight / 50,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: screenWidth / 40),
+                    ],
                   ),
                   SizedBox(height: screenHeight / 40),
                   SizedBox(
@@ -255,8 +338,8 @@ class _HomePageState extends State<HomePage> {
                             ));
                           },
                           child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: screenWidth / 30),
-                            width: screenWidth / 2.6,
+                            margin: EdgeInsets.only(right: screenWidth / 70,left: screenWidth / 70),
+                            width: screenWidth / 2.4,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),

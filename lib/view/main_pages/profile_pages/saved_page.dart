@@ -1,106 +1,92 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../../controller/detail_page_controller.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
 import '../../../models/favourite_model.dart';
 
-class SavedPage extends StatelessWidget {
+class SavedPage extends StatefulWidget {
   static const String id = 'saved_page';
-  final DetailPageController _detailPageController = DetailPageController();
 
-  SavedPage({super.key});
+  SavedPage({Key? key});
+
+  @override
+  _SavedPageState createState() => _SavedPageState();
+}
+
+class _SavedPageState extends State<SavedPage> {
+  late Future<List<FavouriteModel>> futureFavouriteModels;
+
+  @override
+  void initState() {
+    super.initState();
+    futureFavouriteModels = getId().then((userId) {
+      return fetchFavouriteModels(userId);
+    });
+  }
+
+  Future<String> getId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('id') ?? 'no id';
+    print('id is $userId');
+    return userId;
+  }
+
+  Future<List<FavouriteModel>> fetchFavouriteModels(String userId) async {
+    try {
+      final response = await http.get(
+          Uri.parse('https://ibron.onrender.com/ibron/api/v1/favorites?user_id=$userId'));
+
+      if (response.statusCode == 200) {
+        List<FavouriteModel> favouriteModels = [];
+        final jsonData = jsonDecode(response.body);
+        if (jsonData is List) {
+          for (var favouriteJson in jsonData) {
+            favouriteModels.add(FavouriteModel.fromJson(favouriteJson));
+          }
+        }
+        return favouriteModels;
+      } else {
+        throw Exception('Failed to load favourite models: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load favourite models: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 2.5,
-        shadowColor: Colors.grey.withOpacity(0.2),
-        centerTitle: true,
-        title: Text('Saqlanganlar',style: GoogleFonts.roboto(
-          textStyle: TextStyle(
-            fontSize: screenHeight / 40,
-            fontWeight: FontWeight.w500,
-          ),
-        ),),
+        title: Text('Saved Services'),
       ),
-      body: FutureBuilder<List<FavouriteModel>>(
-        future: _detailPageController.getServicesByUserId(),
-        builder: (BuildContext context, AsyncSnapshot<List<FavouriteModel>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error fetching services: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
-              child: Text(
-                'No services available',
-                style: GoogleFonts.roboto(
-                  textStyle: TextStyle(
-                    fontSize: screenHeight / 50,
-                    color: const Color(0xFF98A2B3),
-                  ),
-                ),
-              ),
-            );
-          } else {
-            List<FavouriteModel> services = snapshot.data!;
-            return ListView.builder(
-              itemCount: services.length,
-              itemBuilder: (context, index) {
-                FavouriteModel service = services[index];
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: screenHeight / 50, horizontal: screenWidth / 40),
-                  child: Container(
-                    height: screenHeight / 5,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x1A000000), // This is #0000001A in ARGB format
-                          offset: Offset(0, 2),
-                          blurRadius: 27,
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: screenHeight / 8,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey.withOpacity(0.2),
-                          ),
-                        ),
-                        SizedBox(height: screenHeight / 50),
-                        Row(
-                          children: [
-                            SizedBox(width: screenWidth / 40),
-                            Text(
-                              service.name,
-                              style: GoogleFonts.roboto(
-                                textStyle: TextStyle(
-                                  fontSize: screenHeight / 45,
-                                  fontWeight: FontWeight.w400,
-                                  color: const Color(0xFF98A2B3),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+      body: Center(
+        child: FutureBuilder<List<FavouriteModel>>(
+          future: futureFavouriteModels,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              if (snapshot.data!.isEmpty) {
+                return Text('No saved services found.');
+              } else {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(snapshot.data![index].name),
+                      subtitle: Text(snapshot.data![index].address),
+                      // You can display more details as needed
+                    );
+                  },
                 );
-              },
-            );
-          }
-        },
+              }
+            }
+          },
+        ),
       ),
     );
   }

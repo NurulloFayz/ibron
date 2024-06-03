@@ -17,11 +17,11 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final ProfilePageController controller = ProfilePageController();
   late Future<User> _userData;
-
   @override
   void initState() {
     super.initState();
     _fetchUserData();
+
   }
 
   Future<void> _fetchUserData() async {
@@ -29,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _userData = controller.fetchUserData();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;

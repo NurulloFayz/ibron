@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:ibron/view/auth_pages/sign_up_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/favourite_model.dart';
 import '../models/user_model.dart';
 import '../view/main_pages/profile_pages/edit_page.dart';
 
@@ -160,6 +161,23 @@ class ProfilePageController {
     } else {
       print('Failed to add favorite, HTTP status code: ${response.statusCode}');
       throw Exception('Failed to add favorite');
+    }
+  }
+  Future<List<FavouriteModel>> getFavByUserId() async {
+    try {
+      final response = await http.get(Uri.parse('https://ibron.onrender.com/ibron/api/v1/favorites?user_id=$id'));
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load services: ${response.statusCode}');
+      }
+
+      final List<dynamic> data = jsonDecode(response.body)['services'];
+
+      List<FavouriteModel> services = data.map((json) => FavouriteModel.fromJson(json)).toList();
+
+      return services;
+    } catch (e) {
+      throw Exception('Failed to load services: $e');
     }
   }
 

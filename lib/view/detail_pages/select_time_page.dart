@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import '../../controller/request_controller.dart';
+import 'order_page.dart';
 
 class SelectTimePage extends StatefulWidget {
   static const String id = 'selectTimePage';
@@ -32,7 +33,7 @@ class _SelectTimePageState extends State<SelectTimePage>
   late int _selectedTabIndex;
   late Map<DateTime, List<FreeTime>> _freeTimesForDate;
   late ApiService _apiService;
-  late Map<String, bool> _selectedTimeSlots;
+  late String _selectedTimeSlot;
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _SelectTimePageState extends State<SelectTimePage>
     _freeTimesForDate = {};
     _next7Days = _calculateNext7Days();
     _selectedTabIndex = 0;
-    _selectedTimeSlots = {};
+    _selectedTimeSlot = '';
     _tabController = TabController(length: _next7Days.length, vsync: this);
     _tabController.addListener(_handleTabSelection);
     _apiService = ApiService();
@@ -65,7 +66,7 @@ class _SelectTimePageState extends State<SelectTimePage>
     DateTime now = DateTime.now();
 
     // Start from the current day
-    DateTime startDate = now.subtract(Duration(days: 4));
+    DateTime startDate = now.subtract(Duration(days: 6));
     for (int i = 0; i < 7; i++) {
       next7Days.add(startDate.add(Duration(days: i)));
     }
@@ -88,32 +89,36 @@ class _SelectTimePageState extends State<SelectTimePage>
   }
 
   Future<void> _sendPostRequest() async {
+    if (_selectedTimeSlot.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please select a time slot.')));
+      return;
+    }
+
     DateTime selectedDate = _next7Days[_selectedTabIndex];
+    List<String> times = _selectedTimeSlot.split(" - ");
+    String selectedStartTime = times[0];
+    String selectedEndTime = times[1];
 
-    for (var entry in _selectedTimeSlots.entries) {
-      if (entry.value) {
-        List<String> times = entry.key.split(" - ");
-        String selectedStartTime = times[0];
-        String selectedEndTime = times[1];
-
-        final requestData = {
-          'date': '${selectedDate.year}-${_addLeadingZero(selectedDate.month)}-${_addLeadingZero(selectedDate.day)}',
-          'end_time': selectedEndTime,
-          'price': double.parse(widget.price),
-          'service_id': widget.serviceId,
-          'start_time': selectedStartTime,
-          'status': 'approved',
-          'user_id': widget.userId,
-        };
-
-        try {
-          await _apiService.postRequest(requestData);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Request sent successfully!')));
-        } catch (e) {
-          print('Error sending request: $e');
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to send request.')));
-        }
-      }
+    final requestData = {
+      'date': '${selectedDate.year}-${_addLeadingZero(selectedDate.month)}-${_addLeadingZero(selectedDate.day)}',
+      'end_time': selectedEndTime,
+      'price': double.parse(widget.price),
+      'service_id': widget.serviceId,
+      'start_time': selectedStartTime,
+      'status': 'approved',
+      'user_id': widget.userId,
+    };
+    try {
+      // Navigate to OrderPage and pass requestData
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderPage(requestData: requestData),
+        ),
+      );
+    } catch (e) {
+      print('Error sending request: $e');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to send request.')));
     }
   }
 
@@ -123,12 +128,15 @@ class _SelectTimePageState extends State<SelectTimePage>
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kun va vaqtni tanlang', style: GoogleFonts.roboto(
-          textStyle: TextStyle(
-            fontSize: screenHeight / 40,
-            fontWeight: FontWeight.w500,
+        title: Text(
+          'Kun va vaqtni tanlang',
+          style: GoogleFonts.roboto(
+            textStyle: TextStyle(
+              fontSize: screenHeight / 40,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),),
+        ),
         bottom: TabBar(
           controller: _tabController,
           tabs: _next7Days.map((day) => Tab(text: _formatDateForDisplay(day))).toList(),
@@ -152,9 +160,16 @@ class _SelectTimePageState extends State<SelectTimePage>
         label: SizedBox(
           width: screenWidth * .8,
           child: Center(
-            child: Text('Tasdiqlash', style: GoogleFonts.roboto(textStyle: TextStyle(
-                fontSize: screenHeight / 45, color: Colors.white, fontWeight: FontWeight.w400
-            )),),
+            child: Text(
+              'Tasdiqlash',
+              style: GoogleFonts.roboto(
+                textStyle: TextStyle(
+                  fontSize: screenHeight / 45,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -164,68 +179,71 @@ class _SelectTimePageState extends State<SelectTimePage>
   Widget _buildTabContentForDate(DateTime day) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+
     if (_freeTimesForDate.containsKey(day)) {
       final freeTimes = _freeTimesForDate[day]!;
-      return ListView.builder(
+      return GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // Adjust the number of columns as needed
+          crossAxisSpacing: screenWidth / 50,
+          mainAxisSpacing: screenHeight / 100,
+          childAspectRatio: (screenWidth / 2) / (screenHeight / 17), // Adjust the aspect ratio as needed
+        ),
         itemCount: freeTimes.length,
         itemBuilder: (context, index) {
           final freeTime = freeTimes[index];
           final timeSlot = '${freeTime.startTime} - ${freeTime.endTime}';
-          final isSelected = _selectedTimeSlots[timeSlot] ?? false;
+          final isSelected = _selectedTimeSlot == timeSlot;
           final isAvailable = freeTime.status;
 
-          return Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(screenHeight / 100),
-                child: GestureDetector(
-                  onTap: isAvailable
-                      ? () {
-                    setState(() {
-                      _selectedTimeSlots[timeSlot] = !isSelected;
-                    });
-                  }
-                      : null,
-                  child: Container(
-                    height: screenHeight / 16,
-                    width: screenWidth / 1.1,
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? Colors.green
-                          : isAvailable
-                          ? const Color(0xFFF2F4F7)
-                          : Colors.grey,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: screenWidth / 40,),
-                        Text('$timeSlot',
-                          style: GoogleFonts.roboto(textStyle: TextStyle(
-                            fontSize: screenHeight / 50,
-                            fontWeight: FontWeight.w400,
-                            color: isAvailable
-                                ? (isSelected ? Colors.white : Colors.black)
-                                : Colors.white,
-                          )),
-                        ),
-                        const Spacer(),
-                      ],
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                if (isAvailable) {
+                  _selectedTimeSlot = timeSlot;
+                }
+              });
+            },
+            child: Container(
+              margin: EdgeInsets.only(
+                  top: screenHeight / 100, right: screenWidth / 50, left: screenWidth / 50),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.green
+                    : isAvailable
+                    ? const Color(0xFFF2F4F7)
+                    : Colors.grey,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Center(
+                child: Text(
+                  timeSlot,
+                  style: GoogleFonts.roboto(
+                    textStyle: TextStyle(
+                      fontSize: screenHeight / 50,
+                      fontWeight: FontWeight.w400,
+                      color: isAvailable
+                          ? (isSelected ? Colors.white : Colors.black)
+                          : Colors.white,
                     ),
                   ),
                 ),
               ),
-            ],
+            ),
           );
         },
       );
     } else {
       return Center(
-        child: _freeTimesForDate[day] == null
-            ? Text("Bo'sh joylar mavjud emas")
-            : Text("Bo'sh joylar mavjud emas", style: GoogleFonts.roboto(textStyle: TextStyle(
-            fontSize: screenHeight / 45, fontWeight: FontWeight.w400
-        )),), // Show "No data" if there is no data available
+        child: Text(
+          "Bo'sh joylar mavjud emas",
+          style: GoogleFonts.roboto(
+            textStyle: TextStyle(
+              fontSize: screenHeight / 45,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
       );
     }
   }
