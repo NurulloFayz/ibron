@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-
 import '../../controller/request_controller.dart';
 import 'order_page.dart';
 
@@ -66,7 +64,7 @@ class _SelectTimePageState extends State<SelectTimePage>
     DateTime now = DateTime.now();
 
     // Start from the current day
-    DateTime startDate = now.subtract(Duration(days: 6));
+    DateTime startDate = now.subtract(const Duration(days: 0));
     for (int i = 0; i < 7; i++) {
       next7Days.add(startDate.add(Duration(days: i)));
     }

@@ -43,7 +43,7 @@ class ProfilePageController {
 
   Future<User> fetchUserByPhoneNumber(String phoneNumber) async {
     try {
-      final encodedPhoneNumber = Uri.encodeComponent('+998$phoneNumber');
+      final encodedPhoneNumber = Uri.encodeComponent('+998948850677');
       final response = await http.get(Uri.parse("https://ibron.onrender.com/ibron/api/v1/user/by-phone-number?phone_number=$encodedPhoneNumber"));
 
       if (response.statusCode == 200) {

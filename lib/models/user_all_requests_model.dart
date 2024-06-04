@@ -1,22 +1,20 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+class Request {
+  String id;
+  String serviceId;
+  String userId;
+  String clientId;
+  String userName;
+  String startTime;
+  String endTime;
+  int price;
+  String status;
+  String date;
+  String day;
+  Service service;
+  int duration;
+  String createdAt;
 
-class ServiceRequest {
-  final String id;
-  final String serviceId;
-  final String userId;
-  final String clientId;
-  final String userName;
-  final String startTime;
-  final String endTime;
-  final int price;
-  final String status;
-  final String date;
-  final String day;
-  final List<URL>? url;
-  final String createdAt;
-
-  ServiceRequest({
+  Request({
     required this.id,
     required this.serviceId,
     required this.userId,
@@ -28,12 +26,13 @@ class ServiceRequest {
     required this.status,
     required this.date,
     required this.day,
-    this.url,
+    required this.service,
+    required this.duration,
     required this.createdAt,
   });
 
-  factory ServiceRequest.fromJson(Map<String, dynamic> json) {
-    return ServiceRequest(
+  factory Request.fromJson(Map<String, dynamic> json) {
+    return Request(
       id: json['id'],
       serviceId: json['service_id'],
       userId: json['user_id'],
@@ -45,55 +44,94 @@ class ServiceRequest {
       status: json['status'],
       date: json['date'],
       day: json['day'],
-      url: json['url'] != null ? List<URL>.from(json['url'].map((x) => URL.fromJson(x))) : null,
+      service: Service.fromJson(json['service']),
+      duration: json['duration'],
       createdAt: json['created_at'],
     );
   }
 }
 
-class URL {
-  final String? url;
+class Service {
+  String id;
+  String categoryId;
+  String businessMerchantId;
+  String name;
+  int duration;
+  int price;
+  String address;
+  double latitude;
+  double longitude;
+  List<Url> url;
+  List<Amenity> amenities;
+  String createdAt;
 
-  URL({this.url});
+  Service({
+    required this.id,
+    required this.categoryId,
+    required this.businessMerchantId,
+    required this.name,
+    required this.duration,
+    required this.price,
+    required this.address,
+    required this.latitude,
+    required this.longitude,
+    required this.url,
+    required this.amenities,
+    required this.createdAt,
+  });
 
-  factory URL.fromJson(Map<String, dynamic> json) {
-    return URL(
+  factory Service.fromJson(Map<String, dynamic> json) {
+    return Service(
+      id: json['id'],
+      categoryId: json['category_id'],
+      businessMerchantId: json['business_merchant_id'],
+      name: json['name'],
+      duration: json['duration'],
+      price: json['price'],
+      address: json['address'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      url: List<Url>.from(json['url'].map((x) => Url.fromJson(x))),
+      amenities: List<Amenity>.from(json['amenities'].map((x) => Amenity.fromJson(x))),
+      createdAt: json['created_at'],
+    );
+  }
+}
+
+class Url {
+  String url;
+
+  Url({required this.url});
+
+  factory Url.fromJson(Map<String, dynamic> json) {
+    return Url(
       url: json['url'],
     );
   }
 }
 
-class ServiceRequestData {
-  final int count;
-  final List<ServiceRequest> requests;
+class Amenity {
+  String id;
+  String name;
+  String url;
+  String createdAt;
+  String updatedAt;
 
-  ServiceRequestData({
-    required this.count,
-    required this.requests,
+  Amenity({
+    required this.id,
+    required this.name,
+    required this.url,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  factory ServiceRequestData.fromJson(Map<String, dynamic> json) {
-    List<ServiceRequest> serviceRequests = [];
-    if (json['requests'] != null) {
-      serviceRequests = List<ServiceRequest>.from(json['requests'].map((x) => ServiceRequest.fromJson(x)));
-    }
-    return ServiceRequestData(
-      count: json['count'],
-      requests: serviceRequests,
+  factory Amenity.fromJson(Map<String, dynamic> json) {
+    return Amenity(
+      id: json['id'],
+      name: json['name'],
+      url: json['url'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
-  }
-}
-
-class ServiceRequestAPI {
-  static const String baseUrl = 'https://ibron.onrender.com/ibron/api/v1';
-
-  static Future<ServiceRequestData> fetchApprovedRequests(String userId) async {
-    final response = await http.get(Uri.parse('$baseUrl/approved-requests?user_id=$userId'));
-
-    if (response.statusCode == 200) {
-      return ServiceRequestData.fromJson(json.decode(response.body));
-    } else {
-      throw Exception('Failed to load service requests');
-    }
   }
 }

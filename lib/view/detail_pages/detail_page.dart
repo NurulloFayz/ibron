@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/detail_page_controller.dart';
@@ -334,12 +335,12 @@ class _DetailPageState extends State<DetailPage> {
                   SizedBox(
                     width: screenWidth / 40,
                   ),
-                  Text('${widget.day}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w500)),),
+                  Text('${widget.day}' ?? '',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w500)),),
                   SizedBox(width: screenWidth / 40,),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('${widget.startTime}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w400)),),
+                      Text('${widget.startTime}' ??'',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w400)),),
                       SizedBox(width: screenHeight / 40,),
                       Text('${widget.endTime}',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 50,fontWeight: FontWeight.w400)),),
                     ],
@@ -391,7 +392,7 @@ class _DetailPageState extends State<DetailPage> {
                   Amenity amenity = widget.amenities[index];
                   return ListTile(
                     leading: const Icon(Icons.local_parking_outlined),
-                    title: Text(amenity.name.trim(),style: GoogleFonts.roboto(textStyle: TextStyle(
+                    title: Text(amenity.name.trim() ??'',style: GoogleFonts.roboto(textStyle: TextStyle(
                         fontSize: screenHeight / 50,fontWeight: FontWeight.w400
                     )),),
                   );
@@ -477,7 +478,7 @@ class _DetailPageState extends State<DetailPage> {
                         controller.moveCamera(
                           CameraUpdate.newCameraPosition(
                             CameraPosition(
-                              target: widget.point!,
+                              target: widget.point! ?? Point(latitude: 0, longitude: 0),
                               // zoom: 12,
                             ),
                           ),

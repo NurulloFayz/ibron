@@ -51,6 +51,7 @@ dependencies:
   geolocator:
   intl:
   fluttertoast:
+  qr_flutter: ^4.0.0
   cached_network_image: any
   url_launcher:
   smooth_page_indicator: any

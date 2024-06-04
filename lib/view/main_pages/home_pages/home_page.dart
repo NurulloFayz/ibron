@@ -46,7 +46,6 @@ class _HomePageState extends State<HomePage> {
       final services = homePageController.postData(41.333787, 69.301298);
       final locations = homePageController.postLocations(41.333787, 69.301298);
       final scheduleData = fetchScheduleData();
-
       final results = await Future.wait([userData, banners, services, locations, scheduleData]);
 
       return {
@@ -345,11 +344,13 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: const [
                                 BoxShadow(
-                                  color: Color(0x1A000000), // This is #0000001A in ARGB format
-                                  offset: Offset(0, 2),
-                                  blurRadius: 27,
-                                  spreadRadius: 0,
-                                ),
+                                    offset: Offset(0,2),
+                                    blurRadius: 5,
+                                    color:
+                                    Color(0x1A000000),
+                                    spreadRadius: 2,
+                                    blurStyle: BlurStyle.normal
+                                )
                               ],
                             ),
                             child: Column(
@@ -362,7 +363,12 @@ class _HomePageState extends State<HomePage> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   clipBehavior: Clip.antiAlias,
-                                  child: Image.network(service.urls[0].url),
+                                  child:  ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        service.urls[0].url,
+                                      )
+                                  )
                                 ),
                                 SizedBox(height: screenHeight / 80),
                                 Row(

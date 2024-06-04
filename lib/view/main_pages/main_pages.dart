@@ -43,7 +43,7 @@ class _MainPagesState extends State<MainPages> {
         ],
       ),
       bottomNavigationBar: CustomNavigationBar(
-        elevation: 5,
+        elevation: 10,
         iconSize: screenHeight / 28,
         selectedColor: Colors.green,
         strokeColor: Colors.white,

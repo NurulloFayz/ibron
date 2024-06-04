@@ -182,8 +182,8 @@ class _SearchPageState extends State<SearchPage> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 List<ServiceModel> services = snapshot.data!;
-                return Container(
-                  height: screenHeight / 4,
+                return SizedBox(
+                  height:  screenHeight / 4,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _searchController.text.isEmpty ? services.length : _filteredServices.length,
@@ -200,20 +200,23 @@ class _SearchPageState extends State<SearchPage> {
                               )
                           ));
                         },
-                        child: Container(
-                          margin: EdgeInsets.only(right: screenWidth / 70,left: screenWidth / 70),
+                        child:
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: screenHeight / 100),
                           width: screenWidth / 2.4,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: const [
                               BoxShadow(
-                                color: Color(0x1A000000), // This is #0000001A in ARGB format
-                                offset: Offset(0, 2),
-                                blurRadius: 27,
-                                spreadRadius: 0,
-                              ),
-                            ],
+                                offset: Offset(0,2),
+                                blurRadius: 5,
+                                color:
+                                Color(0x1A000000),
+                                spreadRadius: 2,
+                                blurStyle: BlurStyle.normal
+                              )
+                            ]
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,13 +240,13 @@ class _SearchPageState extends State<SearchPage> {
                                     Image.asset('assets/images/loc.png',color: const Color(0xFF98A2B3)),
                                     SizedBox(width: screenWidth / 40),
                                     Text(
-                                      service.name,
+                                      service.address,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.roboto(
-                                        textStyle: TextStyle(
-                                          fontSize: screenHeight / 50,
-                                          fontWeight: FontWeight.w500,
-                                          color: const Color(0xFF98A2B3),
-                                        ),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF98A2B3),
                                       ),
                                     ),
                                   ],
