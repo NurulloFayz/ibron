@@ -3,12 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:ibron/models/banner_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/amenety.dart';
 import '../view/main_pages/home_pages/notification_page.dart';
+
+// lib/controller/home_page_controller.dart
 
 class ServiceModel {
   final String name;
   final String id;
   final String address;
+  final String description;
   final int price;
   final double distance;
   final double lat;
@@ -26,6 +30,7 @@ class ServiceModel {
     required this.long,
     required this.urls,
     required this.amenities,
+    required this.description,
   });
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) {
@@ -39,10 +44,11 @@ class ServiceModel {
       long: (json['longitude'] ?? 0).toDouble(),
       urls: (json['url'] != null) ? List<Url>.from(json['url'].map((x) => Url.fromJson(x))) : [],
       amenities: (json['amenities'] != null) ? List<Amenity>.from(json['amenities'].map((x) => Amenity.fromJson(x))) : [],
+      description: json['description'] ?? '',
     );
   }
-
 }
+
 class LocationModel {
   final double lat;
   final double long;
@@ -50,7 +56,6 @@ class LocationModel {
   LocationModel({
     required this.lat,
     required this.long,
-
   });
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
@@ -59,7 +64,6 @@ class LocationModel {
       long: (json['longitude'] ?? 0).toDouble(),
     );
   }
-
 }
 
 class Url {
@@ -74,36 +78,6 @@ class Url {
   }
 }
 
-class Amenity {
-  final String id;
-  final String name;
-  final String url;
-  final String createdAt;
-  final String? updatedAt;
-
-  Amenity({
-    required this.id,
-    required this.name,
-    required this.url,
-    required this.createdAt,
-    this.updatedAt,
-  });
-
-  factory Amenity.fromJson(Map<String, dynamic> json) {
-    return Amenity(
-      id: json['id'],
-      name: json['name'],
-      url: json['url'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-    );
-  }
-
-  @override
-  String toString() {
-    return name;
-  }
-}
 
 
 String serviceId = '';

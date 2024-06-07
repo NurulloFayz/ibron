@@ -33,7 +33,7 @@ class OtpPageController extends ChangeNotifier {
     Navigator.pushNamed(context, InfoPage.id);
   }
   Future<void> verifyUser(BuildContext context,String number) async {
-    var url = Uri.parse('https://lms-back.nvrbckdown.uz/lms/api/v1/ib/verification');
+    var url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/verify-code');
     var response = await http.post(
         url,
         headers: <String, String>{

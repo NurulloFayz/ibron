@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class MapPage extends StatefulWidget {
@@ -43,6 +44,7 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        title: Text('Xarita',style: GoogleFonts.roboto(textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w500)),),
       ),
       body: Stack(
         children: [

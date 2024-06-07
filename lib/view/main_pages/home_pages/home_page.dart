@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> {
     final url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/schedules');
     try {
       final response = await http.get(url);
-
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body)['schedule'];
         return jsonData.cast<Map<String, dynamic>>();
@@ -275,13 +274,16 @@ class _HomePageState extends State<HomePage> {
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(
-                              distanceMile: banner.service.distance.toString(),
-                              point: Point(latitude: banner.service.latitude, longitude: banner.service.longitude),
-                              address: banner.service.address,
-                              name: banner.service.name,
-                              price: banner.service.price.toString(),
+                              description: banner.service?.description,
+                              serviceId: banner.serviceId,
+                              distanceMile: '',
+                              point:
+                              Point(latitude: 0, longitude: 0),
+                              address:'',
+                              name: banner.service?.name,
+                              price: banner.service?.price.toString(),
                               image: banner.url,
-                              amenities: [],
+                              amenities: banner.service!.amenities,
                             )));
                           },
                           child: Container(
@@ -311,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: screenHeight / 80),
                   Container(
-                    height: screenHeight / 4,
+                    height: screenHeight / 3.3,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: services.length,
@@ -338,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                           },
                           child: Container(
                             margin: EdgeInsets.only(right: screenWidth / 70,left: screenWidth / 70),
-                            width: screenWidth / 2.4,
+                            width: screenWidth / 2.2,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
@@ -357,8 +359,8 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: screenHeight / 7,
-                                  width: screenWidth,
+                                  height: 120,
+                                  width: 300,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -370,14 +372,22 @@ class _HomePageState extends State<HomePage> {
                                       )
                                   )
                                 ),
-                                SizedBox(height: screenHeight / 80),
+                                ListTile(
+                                  title:  Text(service.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style:  GoogleFonts.roboto(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),),
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(width: screenWidth / 40),
                                     Image.asset('assets/images/loc.png', color: const Color(0xFF98A2B3)),
                                     SizedBox(width: screenWidth / 40),
                                     Text(
-                                      service.name,
+                                      service.address,
                                       style: GoogleFonts.roboto(
                                         textStyle: TextStyle(
                                           fontSize: screenHeight / 50,
@@ -414,6 +424,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   ),
+                  SizedBox(height: screenHeight / 20,),
                 ],
               ),
             );

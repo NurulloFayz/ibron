@@ -5,58 +5,59 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/request_model.dart';
-import '../models/user_all_requests_model.dart';
-import '../view/main_pages/qr_page.dart'; // Import your model here
+import '../view/main_pages/qr_page.dart';
 
 class RecordPageController {
-  Future<String> getUserId() async {
+  Future<String?> getUserId() async {
     var prefs = await SharedPreferences.getInstance();
-    return prefs.getString('id') ?? '';
+    return prefs.getString('id');
   }
 
   Future<String> fetchUserID() async {
     try {
-      return await getUserId();
+      String? userId = await getUserId();
+      if (userId != null) {
+        return userId;
+      } else {
+        throw Exception('User ID not available');
+      }
     } catch (e) {
       throw Exception('Failed to fetch user ID');
     }
   }
 
-  Future<ServiceRequestData> fetchServiceRequestsByUserId(String userId) async {
-    final Uri url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/approved-requests?user_id=$userId');
+
+  Future<ServiceRequest> fetchServiceRequestsByUserId() async {
+    final Uri url = Uri.parse(
+        'https://ibron.onrender.com/ibron/api/v1/approved-requests');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON
-      return ServiceRequestData.fromJson(json.decode(response.body));
+      return ServiceRequest.fromJson(json.decode(response.body));
     } else {
       // If the server did not return a 200 OK response, throw an exception.
       throw Exception('Failed to load service requests');
     }
   }
 
-  Widget requestTexts(BuildContext context,{required String dataText,required IconData iconData}) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
-    return Row(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(iconData,color:const Color(0xFF98A2B3),size: screenHeight / 42,),
-            SizedBox(width: screenWidth / 50,),
-            Text(dataText,style: GoogleFonts.roboto(textStyle: TextStyle(
-                fontSize: screenHeight / 50,fontWeight: FontWeight.w500,
-                color:const Color(0xFF98A2B3)
-            ))),
-          ],
-        )
-      ],
-    );
-  }
 
-  Future<void> fetchData(String id,BuildContext context) async {
+  Future<void> fetchDataByUserId(BuildContext context) async {
+    try {
+      String? userId = await fetchUserID();
+      if (userId != null) {
+        ServiceRequest serviceRequest =
+        await fetchServiceRequestsByUserId();
+        // Handle the fetched data
+      } else {
+        throw Exception('User ID not available');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+      // Handle error, show error message, etc.
+    }
+  }
+  Future<void> openQr(String id,BuildContext context) async {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     // Replace {id} with the actual ID
@@ -80,15 +81,15 @@ class RecordPageController {
         String responseBody = jsonDecode(response.body); // Decode the response body
         await prefs.setString('response', responseBody);
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => QRDisplayPage(url: url),
-            ),);
+          context,
+          MaterialPageRoute(
+            builder: (context) => QRDisplayPage(url: url),
+          ),);
         print('Response: $responseBody');
       } else {
         final snackdemo = SnackBar(
           content: Text('Sizning vaqtingiz boshlanmadi',style: GoogleFonts.roboto(
-            textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w500,color: Colors.white)
+              textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w500,color: Colors.white)
           ),),
           backgroundColor: Colors.green,
           elevation: 10,
@@ -104,4 +105,6 @@ class RecordPageController {
     }
   }
 
+  bool firstButton = false;
+  bool secondButton = false;
 }

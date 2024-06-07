@@ -88,7 +88,9 @@ class _SelectTimePageState extends State<SelectTimePage>
 
   Future<void> _sendPostRequest() async {
     if (_selectedTimeSlot.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please select a time slot.')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Iltimos vaqtni tanlang',
+        style: GoogleFonts.roboto(textStyle:TextStyle(fontSize: 20)),
+      )));
       return;
     }
 
@@ -135,9 +137,21 @@ class _SelectTimePageState extends State<SelectTimePage>
             ),
           ),
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: _next7Days.map((day) => Tab(text: _formatDateForDisplay(day))).toList(),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: Container(
+            color: Colors.white,
+            child: TabBar(
+              labelStyle: GoogleFonts.roboto(textStyle:TextStyle(fontSize: screenHeight / 52,fontWeight: FontWeight.w500,
+              )),
+              controller: _tabController,
+              indicatorColor: Colors.green,
+              labelColor: Colors.green,
+              unselectedLabelColor: Colors.grey,
+              isScrollable: true,
+              tabs: _next7Days.map((day) => Tab(text: _formatDateForDisplay(day))).toList(),
+            ),
+          ),
         ),
       ),
       body: TabBarView(
@@ -252,7 +266,7 @@ class _SelectTimePageState extends State<SelectTimePage>
     if (date.year == now.year && date.month == now.month && date.day == now.day) {
       return 'bugun';
     } else {
-      return '${uzbekWeekdays[date.weekday % 7]}, ${(date.day)}';
+      return '${uzbekWeekdays[date.weekday % 7]} ${(date.day)},';
     }
   }
 

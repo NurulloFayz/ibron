@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/controller/detail_page_controller.dart';
@@ -7,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-import '../../controller/home_page_controller.dart';
+import '../../models/amenety.dart';
 
 
 class DetailPage extends StatefulWidget {
@@ -23,6 +21,7 @@ class DetailPage extends StatefulWidget {
   final String? day;
   final String? startTime;
   final String? endTime;
+  final String? description;
   final List<Amenity> amenities;
   const DetailPage({
     super.key,
@@ -37,6 +36,7 @@ class DetailPage extends StatefulWidget {
     this.day,
     this.startTime,
     this.endTime,
+    this.description,
     required this.amenities,
     // Add this line
   });
@@ -77,6 +77,7 @@ class _DetailPageState extends State<DetailPage> {
     mapObjects = [getPlaceMark()];
     print('userId is passed ${widget.userId}');
     print('serviceId is passed ${widget.serviceId}');
+    print('amenties are ${widget.amenities}');
   }
   Future<void> showMapSelectionDialog(BuildContext context, double latitude, double longitude) async {
     showModalBottomSheet(
@@ -161,12 +162,17 @@ class _DetailPageState extends State<DetailPage> {
       String userId = prefs.getString('id') ?? '';
       await controller.postFavorite(serviceId, userId);
       print('Service $serviceId added to favorites');
-      // You can update UI here to reflect the favorite status
+      // Update likeButton state and save it to shared preferences
+      setState(() {
+        likeButton = true; // Set likeButton to true
+        prefs.setBool('favorite_$serviceId', true); // Save state to shared preferences
+      });
     } catch (e) {
       print('Error adding to favorite: $e');
       // Handle error
     }
   }
+
   List<dynamic> data = [];
   @override
   Widget build(BuildContext context) {
@@ -179,8 +185,8 @@ class _DetailPageState extends State<DetailPage> {
             Stack(
               children: [
                 Container(
-                  width: screenWidth,
-                  height: screenHeight / 3,
+                  width: 500,
+                  height: 250,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -236,6 +242,7 @@ class _DetailPageState extends State<DetailPage> {
                       GestureDetector(
                         onTap: () {
                          setState(() {
+
                            controller.postFavorite(widget.serviceId ??'', widget.userId ??'');
                            //addToFavorite(widget.serviceId.toString());
                          //  likeButton = !likeButton;
@@ -418,7 +425,7 @@ class _DetailPageState extends State<DetailPage> {
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'null',
+                  widget.description.toString(),
                   maxLines: null,
                   style: GoogleFonts.roboto(
                     textStyle: TextStyle(
@@ -458,7 +465,7 @@ class _DetailPageState extends State<DetailPage> {
               width: screenWidth / 1.1,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+
                 boxShadow: const [
                   BoxShadow(
                     color: Color(0x1A000000), // This is #0000001A in ARGB format
@@ -468,7 +475,8 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ],
               ),
-              child: Stack(
+              child:
+              Stack(
                 children: [
                   Center(
                     child: YandexMap(

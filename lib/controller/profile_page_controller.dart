@@ -14,7 +14,7 @@ class ProfilePageController {
   void navigateToEditPage(BuildContext context) {
     Navigator.pushNamed(context, EditProfilePage.id);
   }
-  String id = '';
+  String id = 'a2bf4004-c316-4d61-8330-b63bd019772a';
 
   getUserid() async {
     var prefs = await SharedPreferences.getInstance();

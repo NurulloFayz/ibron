@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:ibron/view/auth_pages/info_page.dart';
 import 'package:ibron/view/auth_pages/otp_page.dart';
 import 'package:ibron/view/auth_pages/sign_up_page.dart';
-import 'package:ibron/view/detail_pages/order_page.dart';
 import 'package:ibron/view/main_pages/home_pages/home_page.dart';
 import 'package:ibron/view/main_pages/home_pages/notification_page.dart';
 import 'package:ibron/view/main_pages/main_pages.dart';
@@ -57,8 +56,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:const MainPages(),
-      //phoneNumber != null && phoneNumber!.isNotEmpty ? const MainPages() : const SignUpPage(),
+      home:
+      //const MainPages(),
+      phoneNumber != null && phoneNumber!.isNotEmpty ? const MainPages() : const SignUpPage(),
       routes: {
         MainPages.id: (context) => const MainPages(),
         SignUpPage.id: (context) => const SignUpPage(),

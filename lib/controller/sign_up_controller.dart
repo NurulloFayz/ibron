@@ -9,7 +9,7 @@ class SignUpPageController {
   String typedText = '';
 
   Future<void> registerUser(BuildContext context,String number) async {
-    var url = Uri.parse('https://lms-back.nvrbckdown.uz/lms/api/v1/ib/registration');
+    var url = Uri.parse('https://ibron.onrender.com/ibron/api/v1/send-otp');
     var response = await http.post(
         url,
         headers: <String, String>{
