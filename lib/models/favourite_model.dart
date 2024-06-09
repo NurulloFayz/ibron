@@ -1,95 +1,86 @@
+
+
+import 'package:ibron/models/amenety.dart';
+
 class FavouriteModel {
-  final String name;
-  final String id;
-  final String address;
-  final int price;
-  final double distance;
-  final double lat;
-  final double long;
-  final List<Url> urls;
-  final List<Amenity> amenities;
+  int count;
+  List<Service?> services;
 
   FavouriteModel({
-    required this.name,
-    required this.id,
-    required this.address,
-    required this.price,
-    required this.distance,
-    required this.lat,
-    required this.long,
-    required this.urls,
-    required this.amenities,
+    required this.count,
+    required this.services,
   });
 
   factory FavouriteModel.fromJson(Map<String, dynamic> json) {
     return FavouriteModel(
-      name: json['name'] ?? '', // Provide default value if null
-      id: json['id'] ?? '', // Provide default value if null
-      address: json['address'] ?? '', // Provide default value if null
-      price: json['price'] ?? 0, // Provide default value if null
-      distance: (json['distance'] ?? 0).toDouble(),
-      lat: (json['latitude'] ?? 0).toDouble(),
-      long: (json['longitude'] ?? 0).toDouble(),
-      urls: (json['url'] != null) ? List<Url>.from(json['url'].map((x) => Url.fromJson(x))) : [],
-      amenities: (json['amenities'] != null) ? List<Amenity>.from(json['amenities'].map((x) => Amenity.fromJson(x))) : [],
+      count: json["count"],
+      services: json["services"] == null
+          ? []
+          : List<Service?>.from(json["services"].map((x) => x == null ? null : Service.fromJson(x))),
     );
   }
 
+  Map<String, dynamic> toJson() => {
+    "count": count,
+    "services": List<dynamic>.from(services.map((x) => x?.toJson())),
+  };
 }
 
-class Url {
-  final String url;
-
-  Url({required this.url});
-
-  factory Url.fromJson(Map<String, dynamic> json) {
-    return Url(
-      url: json['url'],
-    );
-  }
-}
-
-class Amenity {
+class Service {
   final String id;
   final String name;
-  final String url;
+  final String description;
+  final int duration;
+  final int price;
+  final String address;
+  final double latitude;
+  final double longitude;
+  final List<String> urls;
+  final List<Amenity> amenities;
   final String createdAt;
-  final String? updatedAt;
 
-  Amenity({
+  Service({
     required this.id,
     required this.name,
-    required this.url,
+    required this.description,
+    required this.duration,
+    required this.price,
+    required this.address,
+    required this.latitude,
+    required this.longitude,
+    required this.urls,
+    required this.amenities,
     required this.createdAt,
-    this.updatedAt,
   });
 
-  factory Amenity.fromJson(Map<String, dynamic> json) {
-    return Amenity(
+  factory Service.fromJson(Map<String, dynamic> json) {
+    return Service(
       id: json['id'],
       name: json['name'],
-      url: json['url'],
+      description: json['description'] ?? '',
+      duration: json['duration'],
+      price: json['price'],
+      address: json['address'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      urls: json['url'] == null ? [] : List<String>.from(json['url'].map((x) => x['url'])),
+      amenities: json['amenities'] == null ? [] : List<Amenity>.from(json['amenities'].map((x) => Amenity.fromJson(x))),
       createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
     );
   }
 
-  @override
-  String toString() {
-    return name;
-  }
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'description': description,
+    'duration': duration,
+    'price': price,
+    'address': address,
+    'latitude': latitude,
+    'longitude': longitude,
+    'url': List<dynamic>.from(urls.map((x) => {'url': x})),
+    'amenities': List<dynamic>.from(amenities.map((x) => x.toJson())),
+    'created_at': createdAt,
+  };
 }
 
-class Response {
-  final int count;
-  final List<FavouriteModel> services;
-
-  Response({required this.count, required this.services});
-
-  factory Response.fromJson(Map<String, dynamic> json) {
-    return Response(
-      count: json['count'],
-      services: List<FavouriteModel>.from(json['services'].map((x) => FavouriteModel.fromJson(x))),
-    );
-  }
-}

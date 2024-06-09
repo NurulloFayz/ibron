@@ -22,6 +22,8 @@ class DetailPage extends StatefulWidget {
   final String? startTime;
   final String? endTime;
   final String? description;
+  final String? amenityUrl;
+  final String? amenityName;
   final List<Amenity> amenities;
   const DetailPage({
     super.key,
@@ -37,6 +39,8 @@ class DetailPage extends StatefulWidget {
     this.startTime,
     this.endTime,
     this.description,
+    this.amenityUrl,
+    this.amenityName,
     required this.amenities,
     // Add this line
   });
@@ -78,6 +82,7 @@ class _DetailPageState extends State<DetailPage> {
     print('userId is passed ${widget.userId}');
     print('serviceId is passed ${widget.serviceId}');
     print('amenties are ${widget.amenities}');
+    _loadLikeButtonState();
   }
   Future<void> showMapSelectionDialog(BuildContext context, double latitude, double longitude) async {
     showModalBottomSheet(
@@ -156,22 +161,27 @@ class _DetailPageState extends State<DetailPage> {
         }
     );
   }
+  Future<void> _loadLikeButtonState() async {
+    var prefs = await SharedPreferences.getInstance();
+    setState(() {
+      likeButton = prefs.getBool('favorite_${widget.serviceId}') ?? false;
+    });
+  }
   Future<void> addToFavorite(String serviceId) async {
     try {
       var prefs = await SharedPreferences.getInstance();
       String userId = prefs.getString('id') ?? '';
       await controller.postFavorite(serviceId, userId);
       print('Service $serviceId added to favorites');
-      // Update likeButton state and save it to shared preferences
       setState(() {
-        likeButton = true; // Set likeButton to true
-        prefs.setBool('favorite_$serviceId', true); // Save state to shared preferences
+        likeButton = !likeButton;
+        prefs.setBool('favorite_$serviceId', likeButton);
       });
     } catch (e) {
       print('Error adding to favorite: $e');
-      // Handle error
     }
   }
+
 
   List<dynamic> data = [];
   @override
@@ -185,8 +195,7 @@ class _DetailPageState extends State<DetailPage> {
             Stack(
               children: [
                 Container(
-                  width: 500,
-                  height: 250,
+                  height: screenHeight * 0.3,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -239,18 +248,15 @@ class _DetailPageState extends State<DetailPage> {
                   left: screenWidth / 1.1,
                   child: Row(
                     children: [
+
                       GestureDetector(
                         onTap: () {
-                         setState(() {
-
-                           controller.postFavorite(widget.serviceId ??'', widget.userId ??'');
-                           //addToFavorite(widget.serviceId.toString());
-                         //  likeButton = !likeButton;
-                         });
+                          setState(() {
+                            controller.postFavorite(widget.serviceId ??'', widget.userId ??'');                          });
                         },
-                        child:  Icon(
-                          likeButton  ? Icons.favorite :Icons.favorite_border,
-                          color: Colors.white,
+                        child: Icon(
+                          !likeButton ? Icons.favorite : Icons.favorite_border,
+                          color: likeButton ? Colors.white : Colors.grey,
                           size: screenHeight / 30,
                         ),
                       )
@@ -261,7 +267,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             ListTile(
               title: Text(
-                'Futbol maydoni',
+                '${widget.name}',
                 style: GoogleFonts.roboto(
                   textStyle: TextStyle(
                     fontSize: screenHeight / 45,
@@ -286,27 +292,34 @@ class _DetailPageState extends State<DetailPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.address ?? '',
-                      maxLines: null,
-                      style: GoogleFonts.roboto(
-                        textStyle: TextStyle(
-                          fontSize: screenHeight / 50,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "${widget.address} ",
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                fontSize: screenHeight / 50,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: " (sizdan ${widget.distanceMile} km uzoqlikda)",
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                fontSize: screenHeight / 50,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Text(
-                      'sizdan (${widget.distanceMile}) km uzoqlikda',
-                      maxLines: null,
-                      style: GoogleFonts.roboto(
-                        textStyle: TextStyle(
-                          fontSize: screenHeight / 50,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF667085)
-                        ),
-                      ),
-                    ),
+
+
                     SizedBox(
                       height: screenHeight / 70,
                     ),
@@ -398,9 +411,9 @@ class _DetailPageState extends State<DetailPage> {
                 itemBuilder: (BuildContext context, int index) {
                   Amenity amenity = widget.amenities[index];
                   return ListTile(
-                    leading: const Icon(Icons.local_parking_outlined),
+                    leading: Image.network(widget.amenityUrl.toString(),height: 22,),
                     title: Text(amenity.name.trim() ??'',style: GoogleFonts.roboto(textStyle: TextStyle(
-                        fontSize: screenHeight / 50,fontWeight: FontWeight.w400
+                        fontSize: screenHeight / 50,fontWeight: FontWeight.w500
                     )),),
                   );
                 },

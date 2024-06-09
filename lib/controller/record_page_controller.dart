@@ -27,9 +27,9 @@ class RecordPageController {
   }
 
 
-  Future<ServiceRequest> fetchServiceRequestsByUserId() async {
+  Future<ServiceRequest> fetchServiceRequestsByUserId(String userId) async {
     final Uri url = Uri.parse(
-        'https://ibron.onrender.com/ibron/api/v1/approved-requests');
+        'https://ibron.onrender.com/ibron/api/v1/approved-requests?user_id=$userId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -42,12 +42,13 @@ class RecordPageController {
   }
 
 
+
   Future<void> fetchDataByUserId(BuildContext context) async {
     try {
       String? userId = await fetchUserID();
       if (userId != null) {
         ServiceRequest serviceRequest =
-        await fetchServiceRequestsByUserId();
+        await fetchServiceRequestsByUserId(userId);
         // Handle the fetched data
       } else {
         throw Exception('User ID not available');
@@ -57,7 +58,8 @@ class RecordPageController {
       // Handle error, show error message, etc.
     }
   }
-  Future<void> openQr(String id,BuildContext context) async {
+
+  Future<void> openQr(String id, BuildContext context) async {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     // Replace {id} with the actual ID
@@ -78,19 +80,27 @@ class RecordPageController {
       // Check if the request was successful (status code 200)
       if (response.statusCode == 200) {
         var prefs = await SharedPreferences.getInstance();
-        String responseBody = jsonDecode(response.body); // Decode the response body
+        String responseBody = response.body; // Get the response body directly
         await prefs.setString('response', responseBody);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => QRDisplayPage(url: url),
-          ),);
+          ),
+        );
         print('Response: $responseBody');
       } else {
         final snackdemo = SnackBar(
-          content: Text('Sizning vaqtingiz boshlanmadi',style: GoogleFonts.roboto(
-              textStyle: TextStyle(fontSize: screenHeight / 45,fontWeight: FontWeight.w500,color: Colors.white)
-          ),),
+          content: Text(
+            'Sizning vaqtingiz boshlanmadi',
+            style: GoogleFonts.roboto(
+              textStyle: TextStyle(
+                fontSize: screenHeight / 45,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ),
           backgroundColor: Colors.green,
           elevation: 10,
           behavior: SnackBarBehavior.floating,
@@ -104,6 +114,7 @@ class RecordPageController {
       print('Error: $error');
     }
   }
+
 
   bool firstButton = false;
   bool secondButton = false;

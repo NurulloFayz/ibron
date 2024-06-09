@@ -24,7 +24,10 @@ class _HomePageState extends State<HomePage> {
   final ProfilePageController _profilePageController = ProfilePageController();
   final HomePageController homePageController = HomePageController();
   late Future<Map<String, dynamic>> _allDataFuture;
+  late PageController _pageController;
+  int _currentPage = 0;
   String token = '';
+
   getToken() async {
     var prefs = await SharedPreferences.getInstance();
     token = await FirebaseMessaging.instance.getToken() ?? '';
@@ -32,11 +35,13 @@ class _HomePageState extends State<HomePage> {
     print('token is saved $token');
     print('your device token is $token');
   }
+
   @override
   void initState() {
     super.initState();
     _allDataFuture = fetchAllData();
     getToken();
+    _pageController = PageController(viewportFraction: 0.9);  // Set viewportFraction here
   }
 
   Future<Map<String, dynamic>> fetchAllData() async {
@@ -84,7 +89,7 @@ class _HomePageState extends State<HomePage> {
         future: _allDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: Colors.green,));
+            return const Center(child: CircularProgressIndicator(color: Colors.green));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
@@ -264,45 +269,76 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: screenHeight / 40),
                   SizedBox(
-                    height: screenHeight / 4.5,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
+                    height: 200,
+                    child: PageView.builder(
+                      controller: _pageController,
                       itemCount: banners.banners.length,
-                      itemBuilder: (context, index) {
-                        final banner = banners.banners[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(
-                              description: banner.service?.description,
-                              serviceId: banner.serviceId,
-                              distanceMile: '',
-                              point:
-                              Point(latitude: 0, longitude: 0),
-                              address:'',
-                              name: banner.service?.name,
-                              price: banner.service?.price.toString(),
-                              image: banner.url,
-                              amenities: banner.service!.amenities,
-                            )));
-                          },
-                          child: Container(
-                            width: screenWidth / 1.2,
-                            margin: EdgeInsets.only(right: screenWidth / 100, left: screenWidth / 100),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: Image.network(banner.url, fit: BoxFit.cover),
-                          ),
-                        );
+                      onPageChanged: (int index) {
+                        setState(() {
+                          _currentPage = index;
+                        });
                       },
+                      itemBuilder: (context, index) {
+                        if (index == null) {
+                          return const Center(
+                            child: CircularProgressIndicator(),);
+                        } else {
+                          final banner = banners.banners[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) =>
+                                      DetailPage(
+                                        description: banner.service
+                                            ?.description,
+                                        serviceId: banner.serviceId,
+                                        distanceMile: '',
+                                        point: Point(latitude: 0, longitude: 0),
+                                        address: '',
+                                        name: banner.service?.name,
+                                        price: banner.service?.price.toString(),
+                                        image: banner.url,
+                                        amenities: banner.service!.amenities,
+                                      )));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Container(
+                                width: 380,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                clipBehavior: Clip.antiAlias,
+                                child: Image.network(
+                                    banner.url, fit: BoxFit.cover),
+                              ),
+                            ),
+                          );
+                        }
+                      }
                     ),
                   ),
                   SizedBox(height: screenHeight / 40),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(banners.banners.length, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Container(
+                          width: 8.0,
+                          height: 8.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _currentPage == index ? Colors.green : Colors.grey,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                  SizedBox(height: screenHeight / 40),
+                  Row(
                     children: [
-                      SizedBox(width: screenWidth / 30,),
+                      SizedBox(width: screenWidth / 30),
                       Text('Katalog', style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                           fontSize: screenHeight / 45,
@@ -313,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: screenHeight / 80),
                   Container(
-                    height: screenHeight / 3.3,
+                    height: screenHeight / 3.6,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: services.length,
@@ -334,13 +370,16 @@ class _HomePageState extends State<HomePage> {
                                   startTime: scheduleData[index]['start_time'] ?? '',
                                   endTime: scheduleData[index]['end_time'] ?? '',
                                   image: service.urls[0].url,
-                                  amenities: service.amenities,
+                                  amenityName: service.amenities[index].name,
+                                  amenityUrl: service.amenities[index].url, amenities: service.amenities,
                                 )
                             ));
                           },
                           child: Container(
-                            margin: EdgeInsets.only(right: screenWidth / 70,left: screenWidth / 70),
-                            width: screenWidth / 2.2,
+                            clipBehavior: Clip.antiAlias,
+                            margin:EdgeInsets.symmetric(
+                                horizontal: screenHeight / 100),
+                            width: 180,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
@@ -352,25 +391,25 @@ class _HomePageState extends State<HomePage> {
                                     Color(0x1A000000),
                                     spreadRadius: 2,
                                     blurStyle: BlurStyle.normal
-                                )
+                                ),
                               ],
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                  height: 120,
-                                  width: 300,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  clipBehavior: Clip.antiAlias,
-                                  child:  ClipRRect(
+                                    height: 110,
+                                    decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        service.urls[0].url,
-                                      )
-                                  )
+                                    ),
+                                    clipBehavior: Clip.antiAlias,
+                                    child:  ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          service.urls[0].url,
+                                          fit: BoxFit.cover,
+                                        )
+                                    )
                                 ),
                                 ListTile(
                                   title:  Text(service.name,
@@ -434,4 +473,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

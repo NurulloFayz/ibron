@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,7 +90,18 @@ class DetailPageController {
     if (response.statusCode == 201) {
       print('Favorite added successfully');
       print('Add to favourites >>>>>>>>>>>>>>> ${response.body}');
-    } else {
+    } else if(response.statusCode == 400) {
+      Fluttertoast.showToast(
+        msg: "Saqlanganlarda mavjud",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 20,
+      );
+    }
+    else {
       print('Failed to add favorite, HTTP status code: ${response.statusCode}');
       print(response.body);
       throw Exception('Failed to add favorite');

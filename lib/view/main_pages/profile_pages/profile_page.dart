@@ -21,13 +21,19 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _fetchUserData();
-
+    getUserid();
   }
 
   Future<void> _fetchUserData() async {
     setState(() {
       _userData = controller.fetchUserData();
     });
+  }
+  String id = '';
+  Future<void> getUserid() async {
+    var prefs = await SharedPreferences.getInstance();
+    id = await prefs.getString('id') ?? '';
+    print('user id is $id');
   }
 
   @override
@@ -110,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: screenHeight / 20),
                   ListTile(
                     onTap: () {
-                      Navigator.pushNamed(context, SavedPage.id);
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => SavedPage(userId: id)));
                     },
                     leading: CircleAvatar(
                       radius: screenHeight / 30,

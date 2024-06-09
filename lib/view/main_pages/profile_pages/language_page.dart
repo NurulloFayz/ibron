@@ -25,15 +25,14 @@ class _LanguagePageState extends State<LanguagePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 2.5,
-        shadowColor: Colors.grey.withOpacity(0.3),
+        elevation: 0,
         centerTitle: true,
         title: Text(
           'Til',
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               fontSize: screenHeight / 40,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

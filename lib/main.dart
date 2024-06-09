@@ -68,7 +68,6 @@ class MyApp extends StatelessWidget {
         OtpPage.id: (context) => const OtpPage(''),
         NotificationPage.id: (context) => const NotificationPage(),
         LanguagePage.id: (context) => const LanguagePage(),
-        SavedPage.id: (context) => SavedPage(),
       },
     );
   }

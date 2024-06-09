@@ -245,7 +245,7 @@ class _SearchPageState extends State<SearchPage> {
                               child: Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal: screenHeight / 100),
-                                width: screenWidth / 2.2,
+                                width: screenWidth / 2.4,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10),
@@ -261,14 +261,14 @@ class _SearchPageState extends State<SearchPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Container(
-                                      height: screenHeight / 7,
+                                      height:110,
                                       width: screenWidth,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       clipBehavior: Clip.antiAlias,
-                                      child: Image.asset(
-                                        'assets/images/fotball.jpg',
+                                      child: Image.network(
+                                        service.urls[0].url,
                                         fit: BoxFit.cover,
                                       ),
                                     ),

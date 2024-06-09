@@ -1,12 +1,14 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ibron/view/detail_pages/detail_page.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 import '../../controller/record_page_controller.dart';
-import '../../models/request_model.dart'; // Import your model
-import 'package:ibron/controller/home_page_controller.dart';
+import '../../models/request_model.dart';
+import 'package:contacts_service/contacts_service.dart';
+
 
 
 class RecordPage extends StatefulWidget {
@@ -32,18 +34,164 @@ class _RecordPageState extends State<RecordPage> {
 
   Future<void> _fetchData() async {
     try {
-      final String userId = await _controller.fetchUserID();
-      ServiceRequest fetchedServiceRequest =
-      await _controller.fetchServiceRequestsByUserId();
-      setState(() {
-        serviceRequest = fetchedServiceRequest;
-        isLoading = false;
-      });
+      final String? userId = await _controller.fetchUserID();
+      if (userId != null) {
+        final ServiceRequest fetchedServiceRequest =
+        await _controller.fetchServiceRequestsByUserId(userId);
+        setState(() {
+          serviceRequest = fetchedServiceRequest;
+          isLoading = false;
+        });
+      } else {
+        // Handle the case where the user ID is null
+        throw Exception('User ID is null');
+      }
     } catch (e) {
       print('Error fetching data: $e');
       setState(() {
         isLoading = false;
       });
+    }
+  }
+  Future<void> showMapSelectionDialog(BuildContext context, double latitude, double longitude) async {
+    showModalBottomSheet(
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (BuildContext context) {
+          var screenWidth = MediaQuery.of(context).size.width;
+          var screenHeight = MediaQuery.of(context).size.height;
+          return Container(
+            height: screenHeight / 5,
+            width: screenWidth,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                color: Colors.white
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ListTile(
+                  leading: Image.asset('assets/images/googlemaps.png', height: 24),
+                  title: Text('Google xarita', style: TextStyle(fontSize: screenHeight / 45, fontWeight: FontWeight.w500)),
+                  onTap: () async {
+                    final String googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+                    if (await canLaunch(googleMapsUrl)) {
+                      await launch(googleMapsUrl);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Sizda Google xarita topilmadi',
+                              style: TextStyle(fontSize: screenHeight / 50, fontWeight: FontWeight.w500)
+                          ),
+                          duration: const Duration(seconds: 2),
+                          action: SnackBarAction(
+                            label: '',
+                            onPressed: () {
+                              // Perform undo functionality here
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset('assets/images/yandexLogo.png', height: 24),
+                  title: Text('Yandex xarita', style: TextStyle(fontSize: screenHeight / 45, fontWeight: FontWeight.w500)),
+                  onTap: () async {
+                    final String yandexMapsUrl = 'yandexmaps://maps.yandex.ru/?pt=$longitude,$latitude&z=12&l=map';
+                    if (await canLaunch(yandexMapsUrl)) {
+                      await launch(yandexMapsUrl);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Sizda Yandex xarita topilmadi',
+                              style: TextStyle(fontSize: screenHeight / 50, fontWeight: FontWeight.w500)
+                          ),
+                          duration: const Duration(seconds: 4),
+                          action: SnackBarAction(
+                            label: '',
+                            onPressed: () {
+                              // Perform undo functionality here
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        }
+    );
+  }
+
+  void showContactsBottomSheet(BuildContext context, String serviceId) async {
+    // Request permission to access contacts
+    PermissionStatus permissionStatus = await Permission.contacts.request();
+    if (permissionStatus.isGranted) {
+      // Fetch contacts
+      Iterable<Contact> contacts = await ContactsService.getContacts();
+
+      // Convert contacts to list of names
+      List<String> contactNames = contacts.map((contact) => contact.displayName ?? '').toList();
+
+      // Show bottom modal sheet
+      await showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // Display list of contacts
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: contactNames.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text(contactNames[index]),
+                      onTap: () {
+                        // Handle contact selection here
+                        // You can send the selected contact and service ID to your app or service
+                        sendContactToApp(contactNames[index], serviceId); // Sending both contact and service ID
+                        Navigator.pop(context); // Close the bottom modal sheet
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      // Handle the case where permission is not granted
+      print('Permission to access contacts not granted');
+    }
+  }
+
+  void sendContactToApp(String contact, String serviceId) {
+    // Your logic to send contact and service ID to your app or service goes here
+    print('Sending contact: $contact, Service ID: $serviceId');
+
+    // Example: You can use a platform channel to send this data to native code or an API
+  }
+
+  Future<void> requestContactsPermission() async {
+    // Request permission to access contacts
+    final PermissionStatus status = await Permission.contacts.request();
+    if (status.isGranted) {
+      // Permission granted, proceed with accessing contacts
+      // You can call your function to show the contacts bottom sheet here
+    } else {
+      // Permission denied, handle accordingly (e.g., show a message to the user)
+      print('Permission to access contacts not granted');
     }
   }
 
@@ -149,7 +297,9 @@ class _RecordPageState extends State<RecordPage> {
               ListView.builder(
                 itemCount: serviceRequest?.requests.length ?? 0,
                 itemBuilder: (context, index) {
-                  if (serviceRequest == null || serviceRequest!.requests.isEmpty) {
+                  final request = serviceRequest?.requests[index];
+                  final service = request?.service;
+                  if (request == null || service == null) {
                     // Handle the case where serviceRequest is null
                     return SizedBox.shrink(); // Return an empty widget or a loading indicator
                   }
@@ -162,6 +312,8 @@ class _RecordPageState extends State<RecordPage> {
                           onTap:(){
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
                                 DetailPage(
+                                  amenityName: serviceRequest!.requests[index].service.amenities[index].name,
+                                  amenityUrl: serviceRequest!.requests[index].service.amenities[index].url,
                                   amenities:serviceRequest!.requests[index].service.amenities,
                                   description: serviceRequest!.requests[index].service.description,
                                   address: serviceRequest!.requests[index].service.address,
@@ -199,13 +351,14 @@ class _RecordPageState extends State<RecordPage> {
                             child: Column(
                               children: [
                                 Container(
-                                  height: screenHeight  / 7,
+                                  height: 150,
                                   width: screenWidth,
+                                  clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: const Color(0xFFF2F4F7),
                                   ),
-                                  child: Image.network(serviceRequest!.requests[index].service.url[0].url,),
+                                  child: Image.network(serviceRequest!.requests[index].service.url[0].url,fit: BoxFit.cover,),
                                 ),
                                  ListTile(
                                    title: Text(serviceRequest!.requests[index].service.name ??'',maxLines: 1,style: GoogleFonts.roboto(
@@ -290,9 +443,15 @@ class _RecordPageState extends State<RecordPage> {
                                         children: [
                                           Icon(Icons.person_add,color: Colors.green,),
                                           SizedBox(width: 5,),
-                                          Text('Taklif qilish',style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            fontSize: screenHeight  /50,fontWeight: FontWeight.w500,color: Colors.green
-                                          )),)
+                                          GestureDetector(
+                                            onTap:() async {
+                                              await requestContactsPermission();
+                                              showContactsBottomSheet(context, request.serviceId);
+                                            },
+                                            child: Text('Taklif qilish',style: GoogleFonts.roboto(textStyle:TextStyle(
+                                              fontSize: screenHeight  /50,fontWeight: FontWeight.w500,color: Colors.green
+                                            )),),
+                                          )
                                         ],
                                       ),
                                     ),
@@ -309,9 +468,16 @@ class _RecordPageState extends State<RecordPage> {
                                         children: [
                                           Icon(Icons.directions,color: Colors.green,),
                                           SizedBox(width: 5,),
-                                          Text("Yo'nalish",style: GoogleFonts.roboto(textStyle:TextStyle(
-                                            fontSize: screenHeight  /50,fontWeight: FontWeight.w500,color: Colors.green
-                                          )),)
+                                          GestureDetector(
+                                            onTap:(){
+                                              showMapSelectionDialog(context, serviceRequest!.requests[index].service.latitude,
+                                                  serviceRequest!.requests[index].service.longitude
+                                              );
+                                            },
+                                            child: Text("Yo'nalish",style: GoogleFonts.roboto(textStyle:TextStyle(
+                                              fontSize: screenHeight  /50,fontWeight: FontWeight.w500,color: Colors.green
+                                            )),),
+                                          )
                                         ],
                                       ),
                                     )

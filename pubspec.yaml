@@ -42,7 +42,7 @@ dependencies:
   http:
   image_picker: any
   shared_preferences:
-  yandex_mapkit:
+  yandex_mapkit: ^3.3.2
   firebase_core:
   firebase_auth:
   firebase_messaging:
@@ -51,9 +51,12 @@ dependencies:
   geolocator:
   intl:
   fluttertoast:
+  contacts_service: ^0.6.3
+  permission_handler:
   qr_flutter: ^4.0.0
   cached_network_image: any
   url_launcher:
+  dio:
   smooth_page_indicator: any
 dev_dependencies:
   flutter_test:
