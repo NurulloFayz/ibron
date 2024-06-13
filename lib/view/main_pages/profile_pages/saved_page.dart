@@ -8,12 +8,12 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 import 'dart:convert';
 
 import '../../../models/favourite_model.dart';
+import '../../../services/user_id.dart';
 
 class SavedPage extends StatefulWidget {
   static const String id = 'saved_page';
 
-  SavedPage({Key? key,required this.userId});
-  String userId = '';
+  SavedPage({Key? key});
 
   @override
   _SavedPageState createState() => _SavedPageState();
@@ -26,20 +26,15 @@ class _SavedPageState extends State<SavedPage> {
   @override
   void initState() {
     super.initState();
-    futureFavouriteServices = getId().then((userId) {
-      return fetchFavouriteServices(userId);
-    });
-    getId();
+    futureFavouriteServices = fetchFavouriteServices();
   }
 
-  Future<String> getId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.getString('id') ?? 'no id';
-    print('id is $userId');
-    return userId;
-  }
 
-  Future<List<Service>> fetchFavouriteServices(String userId) async {
+
+  String userId = '';
+
+  Future<List<Service>> fetchFavouriteServices() async {
+    GetUserId().getId(userId);
     try {
       final response = await http.get(
           Uri.parse('https://ibron.onrender.com/ibron/api/v1/favorites?user_id=$userId'));
@@ -206,7 +201,7 @@ class _SavedPageState extends State<SavedPage> {
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                          controller.deleteFavourite(context, widget.userId,"a72bfaf1-601e-4ca8-a599-ba9e82a01ec9");
+                                          controller.deleteFavourite(context,userId,"a72bfaf1-601e-4ca8-a599-ba9e82a01ec9");
                                         },
                                         icon: Icon(Icons.more_horiz),
                                       )

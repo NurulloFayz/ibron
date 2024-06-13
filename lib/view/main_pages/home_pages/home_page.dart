@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -267,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(width: screenWidth / 40),
                     ],
                   ),
-                  SizedBox(height: screenHeight / 40),
+                  const SizedBox(height: 8,),
                   SizedBox(
                     height: 200,
                     child: PageView.builder(
@@ -289,6 +290,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) =>
                                       DetailPage(
+
                                         description: banner.service
                                             ?.description,
                                         serviceId: banner.serviceId,
@@ -347,123 +349,137 @@ class _HomePageState extends State<HomePage> {
                       )),
                     ],
                   ),
-                  SizedBox(height: screenHeight / 80),
-                  Container(
-                    height: screenHeight / 3.6,
+                  SizedBox(
+                    height: 240,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: services.length,
-                      itemBuilder: (context, index) {
+                      itemBuilder: (context,index) {
                         ServiceModel service = services[index];
-                        return GestureDetector(
-                          onTap: () async {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                DetailPage(
-                                  distanceMile: service.distance.toString(),
-                                  address: service.address,
-                                  name: service.name,
-                                  price: service.price.toString(),
-                                  point: Point(latitude: service.lat.toDouble(), longitude: service.long.toDouble()),
-                                  userId: _profilePageController.id,
-                                  serviceId: service.id,
-                                  day: scheduleData[index]['day'] ?? '',
-                                  startTime: scheduleData[index]['start_time'] ?? '',
-                                  endTime: scheduleData[index]['end_time'] ?? '',
-                                  image: service.urls[0].url,
-                                  amenityName: service.amenities[index].name,
-                                  amenityUrl: service.amenities[index].url, amenities: service.amenities,
-                                )
-                            ));
-                          },
-                          child: Container(
-                            clipBehavior: Clip.antiAlias,
-                            margin:EdgeInsets.symmetric(
-                                horizontal: screenHeight / 100),
-                            width: 180,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: const [
-                                BoxShadow(
-                                    offset: Offset(0,2),
-                                    blurRadius: 5,
-                                    color:
-                                    Color(0x1A000000),
-                                    spreadRadius: 2,
-                                    blurStyle: BlurStyle.normal
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () async {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                  DetailPage(
+                                    distanceMile: service.distance.toString(),
+                                    address: service.address,
+                                    name: service.name,
+                                    price: service.price.toString(),
+                                    point: Point(latitude: service.lat.toDouble(), longitude: service.long.toDouble()),
+                                    userId: _profilePageController.id,
+                                    serviceId: service.id,
+                                    day: scheduleData[index]['day'] ?? '',
+                                    startTime: scheduleData[index]['start_time'] ?? '',
+                                    endTime: scheduleData[index]['end_time'] ?? '',
+                                    image: service.urls[0].url,
+                                    amenityName: service.amenities[index].name,
+                                    amenityUrl: service.amenities[index].url, amenities: service.amenities,
+                                  )
+                              ));
+                            },
+                            child: Container(
+                              width: 180,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                      offset: Offset(0,2),
+                                      blurRadius: 5,
+                                      color:
+                                      Color(0x1A000000),
+                                      spreadRadius: 2,
+                                      blurStyle: BlurStyle.normal
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                               mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
                                     height: 110,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                                    width: 180,
                                     clipBehavior: Clip.antiAlias,
-                                    child:  ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          service.urls[0].url,
-                                          fit: BoxFit.cover,
-                                        )
-                                    )
-                                ),
-                                ListTile(
-                                  title:  Text(service.name,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style:  GoogleFonts.roboto(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),),
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(width: screenWidth / 40),
-                                    Image.asset('assets/images/loc.png', color: const Color(0xFF98A2B3)),
-                                    SizedBox(width: screenWidth / 40),
-                                    Text(
-                                      service.address,
-                                      style: GoogleFonts.roboto(
-                                        textStyle: TextStyle(
-                                          fontSize: screenHeight / 50,
-                                          fontWeight: FontWeight.w500,
-                                          color: const Color(0xFF98A2B3),
-                                        ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Image.network(service.thumbnail,fit: BoxFit.cover,),
+                                  ),
+                                  const SizedBox(height: 15,),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          WidgetSpan(
+                                            child: SizedBox(width: 10,),
+                                          ),
+                                          TextSpan(
+                                              text: service.name,style: GoogleFonts.roboto(
+                                        textStyle: const TextStyle(fontSize: 15,color: Colors.black,fontWeight: FontWeight.w700),)
+                                          ),
+                                        ]
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: screenHeight / 100),
-                                Row(
-                                  children: [
-                                    SizedBox(width: screenWidth / 40),
-                                    Image.asset('assets/images/Icon.png', color: const Color(0xFF98A2B3)),
-                                    SizedBox(width: screenWidth / 40),
-                                    Text(
-                                      service.distance.toString(),
-                                      style: GoogleFonts.roboto(
-                                        textStyle: TextStyle(
-                                          fontSize: screenHeight / 55,
-                                          fontWeight: FontWeight.w700,
-                                          color: const Color(0xFF98A2B3),
-                                        ),
+                                  ),
+                                  const SizedBox(height: 15,),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          WidgetSpan(
+                                            child: SizedBox(width: 10,),
+                                          ),
+                                          WidgetSpan(
+                                            child: Image.asset('assets/images/loc.png', color: const Color(0xFF98A2B3)),
+                                          ),
+                                          WidgetSpan(
+                                            child: SizedBox(width: 5,),
+                                          ),
+                                          TextSpan(text: service.address,style: GoogleFonts.roboto(
+                                            textStyle: const TextStyle(fontSize: 15,color: Color(0xFF667085),fontWeight: FontWeight.w400,
+                                            overflow: TextOverflow.ellipsis
+                                            ),)
+                                          )
+                                        ]
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: screenHeight / 100),
-                              ],
+                                  ),
+                                  const SizedBox(height: 10,),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: RichText(
+                                      text: TextSpan(
+                                          children: [
+                                            WidgetSpan(
+                                              child: SizedBox(width: 7,),
+                                            ),
+                                            WidgetSpan(
+                                              child: Image.asset('assets/images/Icon.png', color: const Color(0xFF98A2B3)),
+                                            ),
+                                            WidgetSpan(
+                                              child: SizedBox(width: 7,),
+                                            ),
+                                            TextSpan(text: service.distance.toString(),style: GoogleFonts.roboto(
+                                              textStyle: const TextStyle(fontSize: 15,color: Color(0xFF667085),fontWeight: FontWeight.w400,
+                                                  overflow: TextOverflow.ellipsis
+                                              ),)
+                                            )
+                                          ]
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );
                       },
                     ),
                   ),
-                  SizedBox(height: screenHeight / 20,),
+                  const SizedBox(height: 20,),
                 ],
               ),
             );

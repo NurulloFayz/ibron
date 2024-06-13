@@ -116,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: screenHeight / 20),
                   ListTile(
                     onTap: () {
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => SavedPage(userId: id)));
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => SavedPage()));
                     },
                     leading: CircleAvatar(
                       radius: screenHeight / 30,

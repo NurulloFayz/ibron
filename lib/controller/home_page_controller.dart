@@ -10,6 +10,7 @@ import '../view/main_pages/home_pages/notification_page.dart';
 
 class ServiceModel {
   final String name;
+  final String thumbnail;
   final String id;
   final String address;
   final String description;
@@ -22,6 +23,7 @@ class ServiceModel {
 
   ServiceModel({
     required this.name,
+    required this.thumbnail,
     required this.id,
     required this.address,
     required this.price,
@@ -45,6 +47,7 @@ class ServiceModel {
       urls: (json['url'] != null) ? List<Url>.from(json['url'].map((x) => Url.fromJson(x))) : [],
       amenities: (json['amenities'] != null) ? List<Amenity>.from(json['amenities'].map((x) => Amenity.fromJson(x))) : [],
       description: json['description'] ?? '',
+      thumbnail: json['thumbnail'] ??'',
     );
   }
 }

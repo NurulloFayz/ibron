@@ -16,11 +16,6 @@ class ProfilePageController {
   }
   String id = '';
 
-  getUserid() async {
-    var prefs = await SharedPreferences.getInstance();
-    id = prefs.getString('id') ?? '';
-    print('user id is $id');
-  }
   Future<User> fetchUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? phoneNumber = prefs.getString('phone_number');
@@ -163,35 +158,38 @@ class ProfilePageController {
       throw Exception('Failed to add favorite');
     }
   }
-  Future<List<Service>> getFavByUserId() async {
-    try {
-      final response = await http.get(
-          Uri.parse('https://ibron.onrender.com/ibron/api/v1/favorites?user_id=$id')
-      );
 
-      if (response.statusCode != 200) {
-        throw Exception('Failed to load services: ${response.statusCode}');
-      }
+  // Future<List<Service>> getFavByUserId() async {
+  //
+  //   try {
+  //     final response = await http.get(
+  //         Uri.parse('https://ibron.onrender.com/ibron/api/v1/favorites?user_id=$id')
+  //     );
+  //
+  //     if (response.statusCode != 200) {
+  //       throw Exception('Failed to load services: ${response.statusCode}');
+  //     }
+  //
+  //     final data = jsonDecode(response.body);
+  //
+  //     // Ensure the 'services' key exists and is not null
+  //     if (data['services'] == null) {
+  //       return [];
+  //     }
+  //
+  //     List<Service?> services = List<Service?>.from(
+  //         data['services'].map((x) => x == null ? null : Service.fromJson(x))
+  //     );
+  //
+  //     // Filter out null services
+  //     List<Service> nonNullServices = services.where((service) => service != null).cast<Service>().toList();
+  //
+  //     return nonNullServices;
+  //   } catch (e) {
+  //     throw Exception('Failed to load services: $e');
+  //   }
+  // }
 
-      final data = jsonDecode(response.body);
-
-      // Ensure the 'services' key exists and is not null
-      if (data['services'] == null) {
-        return [];
-      }
-
-      List<Service?> services = List<Service?>.from(
-          data['services'].map((x) => x == null ? null : Service.fromJson(x))
-      );
-
-      // Filter out null services
-      List<Service> nonNullServices = services.where((service) => service != null).cast<Service>().toList();
-
-      return nonNullServices;
-    } catch (e) {
-      throw Exception('Failed to load services: $e');
-    }
-  }
   Future<void> deleteFavCache(String userId, String serviceId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String key = 'favorite_$serviceId';
